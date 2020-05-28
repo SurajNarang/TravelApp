@@ -3,11 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Google Maps API Location</title>
+  
+    <link rel="stylesheet" href="css/style.css"/>
+
+    <script src="js/jquery.min.js"></script>
+
+    <script>
+        
+        src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBsJE_kYF50GMAvqqiVvkcbecB6ft8hgiw"
+    
+        var searchInput = 'search_input';
+
+        $(document).ready(function () {
+            var autocomplete;
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+                types: ['geocode'],
+                componentRestrictions: {
+                    country: "USA"
+                 }
+            });
+            
+            google.maps.event.addListener(autocomplete, 'place_changed', function(){
+                var near_place = autocomplete.getPlace();
+                document.getElementById('latitude_input').value = near_place.geometry.location.lat();
+                document.getElementById('longitude_input').value = near_place.geometry.location.lng();
+
+                document.getElementById('latitude_view').innerHTML=near_place.geometry.location.lat();
+                document.getElementById('longitude_view').innerHTML=near_place.geometry.location.lng();
+
+            });
+    
+        });
+
+        $(document).on('change', '#'+searchInput, function(){
+            document.getElementById('latitude_input').value='';
+            document.getElementById('longitude_input').value='';
+            document.getElementById('latitude_view').innerHTML='';
+            document.getElementById('longitude_view ').innerHTML='';
+
+        });
+    </script>
 </head>
 <body>
-    <script>
-        var x =3;
-    </script>
+    <div class="container">
+        <label>Location:</label>
+        <input type="text" class="form-control" id="search_input" placeholder="Type address..." />
+        <input type="hidden" id="latitude_input"/>
+        <input type="hidden" id="longitude_input"/>
+    </div>
+
+    <div class="latlong-view">
+        <p><b>Latitude:</b> <span id="latitude_view"></span></p>
+        <p><b>Longitude</b> <span id="longitude_view"></span></p>
+
+    </div>
+
 </body>
 </html>
