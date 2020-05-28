@@ -9,9 +9,9 @@
 
     <script src="js/jquery.min.js"></script>
 
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBsJE_kYF50GMAvqqiVvkcbecB6ft8hgiw"></script>
+    
     <script>
-        
-        src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBsJE_kYF50GMAvqqiVvkcbecB6ft8hgiw"
     
         var searchInput = 'search_input';
 
@@ -19,9 +19,9 @@
             var autocomplete;
             autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
                 types: ['geocode'],
-                componentRestrictions: {
-                    country: "USA"
-                 }
+                // componentRestrictions: {
+                //     country: "USA"
+                //  }
             });
             
             google.maps.event.addListener(autocomplete, 'place_changed', function(){
@@ -41,7 +41,6 @@
             document.getElementById('longitude_input').value='';
             document.getElementById('latitude_view').innerHTML='';
             document.getElementById('longitude_view ').innerHTML='';
-            console.log("testing")
         });
     </script>
 </head>
