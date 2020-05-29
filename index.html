@@ -7,10 +7,10 @@
   
     <link rel="stylesheet" href="css/style.css"/>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBsJE_kYF50GMAvqqiVvkcbecB6ft8hgiw"></script>
-    
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key="></script>
+    <!-- <!> REFRESH KEY -->
     <script>
     
     var searchInput = 'search_input';
@@ -32,8 +32,8 @@
 });
 
         $(document).on('change', '#'+searchInput, function () {
-            document.getElementById('latitude_input').value = '';
-            document.getElementById('longitude_input').value = '';
+            // document.getElementById('latitude_input').value = '';
+            // document.getElementById('longitude_input').value = '';
 	
             document.getElementById('latitude_view').innerHTML = '';
             document.getElementById('longitude_view').innerHTML = '';
