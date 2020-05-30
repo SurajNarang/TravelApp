@@ -9,14 +9,14 @@
     <title>Travel Web App</title>
   </head>
   <body>
-    <h1>Travel Web App</h1>
+    <h1>US Travel Web App</h1>
 	<canvas id="canvas" width="800" height="600"> </canvas>
     <button id="info-button" class="button info-button">Show Info</button>
 	
     <div id="info" class="info">
       <h2>Info:</h2>
       <p>
-        Enter your starting location and end destination to determine the most cost-effective transportation service for your route!
+        Enter your starting location and end destination to determine the most cost-effective transportation service for your route! 
       </p>
       <button id="close-button" class="button">Close</button>
     </div>
@@ -40,18 +40,24 @@
 </div>
 
 <!-- Longitude & Latitude Data-->
-<div class="latlong-view">
-  <p><b>Latitude:</b> <span id="latitude_view"></span></p>
-  <p><b>Longitude:</b> <span id="longitude_view"></span></p>
+<div class="startlatlong-view">
+  <p><b>Latitude:</b> <span id="startlatitude_view"></span></p>
+  <p><b>Longitude:</b> <span id="startlongitude_view"></span></p>
+</div>
+
+<div class="endlatlong-view">
+  <p><b>Latitude:</b> <span id="endlatitude_view"></span></p>
+  <p><b>Longitude:</b> <span id="endlongitude_view"></span></p>
 </div>
 
   <!-- Destination section-->
   <div class ="endform">
-		<input type="text" name="location2" autocomplete="on" required />
+		<input type="text" name="location2" id="search_input2" onFocus="geolocate()"class="form-control" required placeholder="" />
 		<label for="location2" class="label-location2">
-			<span class="content-location2">Enter Destination: </span>
+			<span class="content-location2" id="autocomplete"> Enter Destination: </span>
 		</label>
   </div>
+  
   
     <script>
     const infoBtn = document.getElementById('info-button');
@@ -68,7 +74,9 @@
   <script>
    
    var searchInput = 'search_input';
+   var searchInput2 = 'search_input2';
 
+   // Start location autocomplete method
    $(document).ready(function () {
        var autocomplete;
        autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
@@ -83,15 +91,43 @@
        var near_place = autocomplete.getPlace();
        document.getElementById('loc_lat').value = near_place.geometry.location.lat();
        document.getElementById('loc_long').value = near_place.geometry.location.lng();
+
        // Updates Latitude and Longitude
-       document.getElementById('latitude_view').innerHTML = near_place.geometry.location.lat();
-       document.getElementById('longitude_view').innerHTML = near_place.geometry.location.lng();
+       document.getElementById('startlatitude_view').innerHTML = near_place.geometry.location.lat();
+       document.getElementById('startlongitude_view').innerHTML = near_place.geometry.location.lng();
    });
 });
 
        $(document).on('change', '#'+searchInput, function () {
-           document.getElementById('latitude_view').innerHTML = '';
-           document.getElementById('longitude_view').innerHTML = '';
+           document.getElementById('startlatitude_view').innerHTML = '';
+           document.getElementById('startlongitude_view').innerHTML = '';
+});
+
+// Final location autocomplete method
+$(document).ready(function () {
+       var autocomplete;
+       autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
+        types: ['geocode'],
+        // Restricts user input to America location 
+        componentRestrictions: {
+            country: 'USA',
+          }
+    });
+ 
+   google.maps.event.addListener(autocomplete, 'place_changed', function () {
+       var near_place = autocomplete.getPlace();
+       document.getElementById('loc_lat').value = near_place.geometry.location.lat();
+       document.getElementById('loc_long').value = near_place.geometry.location.lng();
+
+       // Updates Latitude and Longitude
+       document.getElementById('endlatitude_view').innerHTML = near_place.geometry.location.lat();
+       document.getElementById('endlongitude_view').innerHTML = near_place.geometry.location.lng();
+   });
+});
+
+       $(document).on('change', '#'+searchInput, function () {
+           document.getElementById('endlatitude_view').innerHTML = '';
+           document.getElementById('endlongitude_view').innerHTML = '';
 });
 
 </script>
