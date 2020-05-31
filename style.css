@@ -3,13 +3,19 @@
 }
 
 body {
-  background-color: #00ddd6; /* sets background to blue */
-  display: flex; /*in-line flex element */
-  flex-direction: column; /* laid out in vertical columns */
-  align-items: center; /*everything is centered within the canvas */
-  justify-content: space-around; /*allows for extra free space leftover around aligned items */
+  background-color: #00ddd6;
+  /* sets background to blue */
+  display: flex;
+  /*in-line flex element */
+  flex-direction: column;
+  /* laid out in vertical columns */
+  align-items: center;
+  /*everything is centered within the canvas */
+  justify-content: space-around;
+  /*allows for extra free space leftover around aligned items */
   font-family: sans-serif;
-  margin: 0; /*no margin or paddings for body */
+  margin: 0;
+  /*no margin or paddings for body */
 }
 
 .form-group {
@@ -51,7 +57,7 @@ body {
   width: 100%;
   height: 100%;
   color: #595f6e;
-  padding-top:20px;
+  padding-top: 20px;
   border: none;
 }
 
@@ -72,25 +78,27 @@ body {
   left: 0px;
   bottom: -1px;
   height: 100%;
-  width: 100%
-  border-bottom 3px solid #5da8d3;
-  transform: translateX(-100%); /* Repositions label horizontally */
+  width: 100% border-bottom 3px solid #5da8d3;
+  transform: translateX(-100%);
+  /* Repositions label horizontally */
 }
 
 .content-location1 {
   position: absolute;
   bottom: 5px;
   left: 0px;
-  transition: all 0.5s ease; 
+  transition: all 0.5s ease;
 }
 
-.startform input:focus + .label-location1 .content-location1, .startform input:valid + .label-location1 .content-location1 {
+.startform input:focus+.label-location1 .content-location1,
+.startform input:valid+.label-location1 .content-location1 {
   transform: translateY(-150%);
   font-size: 14px;
   color: #5fa8d3;
 }
 
-.startform input:focus + .label-name:after, .startform input:valid + .label-name::after {
+.startform input:focus+.label-name:after,
+.startform input:valid+.label-name::after {
   transform: translate(0%);
 }
 
@@ -108,7 +116,7 @@ body {
   width: 100%;
   height: 100%;
   color: #595f6e;
-  padding-top:20px;
+  padding-top: 20px;
   border: none;
 }
 
@@ -129,28 +137,30 @@ body {
   left: 0px;
   bottom: -1px;
   height: 100%;
-  width: 100%
-  border-bottom 3px solid #5da8d3;
-  transform: translateX(-100%); /* Repositions label horizontally */
+  width: 100% border-bottom 3px solid #5da8d3;
+  transform: translateX(-100%);
+  /* Repositions label horizontally */
 }
 
 .content-location2 {
   position: absolute;
   bottom: 5px;
   left: 0px;
-  transition: all 0.5s ease; 
+  transition: all 0.5s ease;
 }
 
-.endform input:focus + .label-location2 .content-location2, .endform input:valid + .label-location2 .content-location2 {
+.endform input:focus+.label-location2 .content-location2,
+.endform input:valid+.label-location2 .content-location2 {
   transform: translateY(-150%);
   font-size: 14px;
   color: #5fa8d3;
 }
 
-.endform input:focus + .label-name:after, .endform input:valid + .label-name::after {
+.endform input:focus+.label-name:after,
+.endform input:valid+.label-name::after {
   transform: translate(0%);
 }
-  
+
 h1 {
   font-size: 45px;
   color: #fff;
@@ -197,7 +207,8 @@ canvas {
   padding: 10px;
   line-height: 1.5;
   transform: translateX(-300px);
-  transition: transform 1s ease-in-out; /* Transitions after button click */
+  transition: transform 1s ease-in-out;
+  /* Transitions after button click */
 }
 
 .info.appear {
