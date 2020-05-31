@@ -15,8 +15,8 @@
     <canvas id="canvas" width="800" height="700"> </canvas>
     <button id="info-button" class="button info-button">Show Info</button>
     <button id="about-button" class="button about-button">About <a href="#about">
-      <li data-menuanchor="about" class="btn btn-lg btn-default about">About</li>
-    </a> </button>
+            <li data-menuanchor="about" class="btn btn-lg btn-default about">About</li>
+        </a> </button>
 
     <div id="info" class="info">
         <h2>Info:</h2>
@@ -30,8 +30,8 @@
     <div class="startform">
         <input type="text" name="location1" id="search_input" onFocus="geolocate()" class="form-control" required placeholder="" />
         <label for="location1" class="label-location1">
-      <span class="content-location1" id="autocomplete"> Enter Start Location: </span>
-    </label>
+            <span class="content-location1" id="autocomplete"> Enter Start Location: </span>
+        </label>
     </div>
 
     <div class="form-group" id="lat_area">
@@ -59,65 +59,37 @@
     <div class="endform">
         <input type="text" name="location2" id="search_input2" class="form-control" required placeholder="" />
         <label for="location2" class="label-location2">
-      <span class="content-location2" id="autocomplete"> Enter Destination: </span>
-    </label>
+            <span class="content-location2" id="autocomplete"> Enter Destination: </span>
+        </label>
     </div>
 
+    <!-- About Me Section-->
     <div id="about">
         <div class="section section-4">
             <h2 class="title"> About</h2>
             <div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
-                <p class="description">Travel Web App is an application built using Javascript to ease access of travel information.
+                <p class="description">Travel Web App is an application built using Javascript to ease access of travel information. This can cater to travelers going on any trip in the United States and further save time.
                 </p>
             </div>
             <div class="row">
                 <div class="col-xs-4">
                     <img class="img-rounded img-responsive center-block" src="" />
                     <div class="caption">
-                        <p class="name">Sahil Sinha</p>
+                        <p class="name1">Sahil Sinha</p>
                         <a href="https://www.linkedin.com/in/toddbest2004" target="_blank"><i
-                class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/toddbest2004" target="_blank"><i
-                class="fa fa-github-alt fa-2x"></i></a>
+                                class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/toddbest2004" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
                     </div>
                 </div>
                 <div class="col-xs-4">
                     <img class="img-rounded img-responsive center-block" src="" />
-                    <p class="name">Suraj Narang</p>
-                    <a href="https://www.linkedin.com/in/andrewmestas" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/andrew-mestas" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
+                    <p class="name2">Suraj Narang</p>
+                    <a href="https://www.linkedin.com/in/andrewmestas" target="_blank"><i
+                            class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/andrew-mestas" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-
-            $.ajax(
-                "https://freegeoip.net/json/", {
-                    method: "GET",
-                    success: function(data, textStatus, garbage) {
-                        $("#loc").val(data.region_name);
-                        $("#slat").val(data.latitude);
-                        $("#slon").val(data.longitude);
-                        var latlng = String(data.latitude) + "," + String(data.longitude);
-                        var data = {
-                            latlng
-                        };
-                        $.ajax(
-                            "/location", {
-                                method: "GET",
-                                data: data,
-                                success: function(data, textStatus, garbage) {
-                                    $("#from").val(data.results[0].formatted_address);
-                                    $("#from").data('default', data.results[0].formatted_address);
-                                }
-                            }
-                        );
-                    }
-                }
-            );
-        });
-    </script>
 
     <script>
         const infoBtn = document.getElementById('info-button');
@@ -129,8 +101,7 @@
         closeBtn.addEventListener('click', () => info.classList.remove('appear'));
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_OcPqd4-0Dsx7LK_3wHvVzvKcJRWSwjQ&amp;libraries=places"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyD0FKTtMYnvpMLbDCeJiqYsZ7di_9-G6U8"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyAplBezeCSRec7Y4b_bgW6FdspTwoAf6DU"></script>
 
     <script>
         var searchInput = 'search_input';
@@ -189,6 +160,58 @@
             document.getElementById('endlatitude_view').innerHTML = '';
             document.getElementById('endlongitude_view').innerHTML = '';
         });
+    </script>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script>
+        // Uber API Constants
+        var uberClientId = "",
+            uberServerToken = "";
+
+        // Create variables to store latitude and longitude
+        var startLat = startlatitude_view,
+            startLong = startlongitude_view,
+            finalLat = endlatitude_view,
+            finalLong = endlongitude_view;
+
+        navigator.geolocation.watchPosition(function(position) {
+            // Updates latitude and longitude
+            startLat = position.coords.latitude;
+            startLong = position.coords.longitude;
+
+            // Query Uber API if needed
+            getEstimatesForUserLocation(startLat, startLong);
+        });
+
+        function getEstimatesForUserLocation(latitude, longitude) {
+            $.ajax({
+                url: "https://api.uber.com/v1/estimates/price",
+                headers: {
+                    Authorization: "Bearer <USER_ACCESS_TOKEN>",
+                    Language: "en_US"
+                },
+                // headers: {
+                //      Authorization: "Token uberServerToken"
+                //  }
+
+                data: {
+                    start_latitude: latitude,
+                    start_longitude: longitude,
+                    end_latitude: finalLat,
+                    end_longitude: finalLong
+                },
+
+                prices: {
+                    localized_display_name: "uberX",
+                    display_name: "uberX",
+                    high_estimate: 17,
+                    low_estimate: 13,
+                },
+                success: function(result) {
+                    console.log(result);
+                }
+            });
+        }
     </script>
 </body>
 
