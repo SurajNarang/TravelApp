@@ -1,135 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="style.css" />
 
     <title>Travel Web App</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>US Travel Web App</h1>
-	<canvas id="canvas" width="800" height="600"> </canvas>
+    <canvas id="canvas" width="800" height="700"> </canvas>
     <button id="info-button" class="button info-button">Show Info</button>
-	
+    <button id="about-button" class="button about-button">About <a href="#about">
+      <li data-menuanchor="about" class="btn btn-lg btn-default about">About</li>
+    </a> </button>
+
     <div id="info" class="info">
-      <h2>Info:</h2>
-      <p>
-        Enter your starting location and end destination to determine the most cost-effective transportation service for your route! 
-      </p>
-      <button id="close-button" class="button">Close</button>
+        <h2>Info:</h2>
+        <p>
+            Enter your starting location and end destination to determine the most cost-effective transportation service for your route!
+        </p>
+        <button id="close-button" class="button">Close</button>
     </div>
-  
-  <!-- Start location section-->  
-	<div class ="startform">
-		<input type="text" name="location1" id="search_input" onFocus="geolocate()"class="form-control" required placeholder="" />
-		<label for="location1" class="label-location1">
-			<span class="content-location1" id="autocomplete"> Enter Start Location: </span>
+
+    <!-- Start location section-->
+    <div class="startform">
+        <input type="text" name="location1" id="search_input" onFocus="geolocate()" class="form-control" required placeholder="" />
+        <label for="location1" class="label-location1">
+      <span class="content-location1" id="autocomplete"> Enter Start Location: </span>
     </label>
-  </div>
+    </div>
 
-  <div class="form-group" id="lat_area">
-    <label for="latitude"> </label>
-    <input type="hidden" name="latitude" id="loc_lat" class="form-control">
-</div>
+    <div class="form-group" id="lat_area">
+        <label for="latitude"> </label>
+        <input type="hidden" name="latitude" id="loc_lat" class="form-control">
+    </div>
 
- <div class="form-group" id="long_area">
-    <label for="longitude"> </label>
-    <input type="hidden" name="longitude" id="loc_long" class="form-control">
-</div>
+    <div class="form-group" id="long_area">
+        <label for="longitude"> </label>
+        <input type="hidden" name="longitude" id="loc_long" class="form-control">
+    </div>
 
-<!-- Longitude & Latitude Data-->
-<div class="startlatlong-view">
-  <p><b>Latitude:</b> <span id="startlatitude_view"></span></p>
-  <p><b>Longitude:</b> <span id="startlongitude_view"></span></p>
-</div>
+    <!-- Longitude & Latitude Data-->
+    <div class="startlatlong-view">
+        <p><b>Latitude:</b> <span id="startlatitude_view"></span></p>
+        <p><b>Longitude:</b> <span id="startlongitude_view"></span></p>
+    </div>
 
-<div class="endlatlong-view">
-  <p><b>Latitude:</b> <span id="endlatitude_view"></span></p>
-  <p><b>Longitude:</b> <span id="endlongitude_view"></span></p>
-</div>
+    <div class="endlatlong-view">
+        <p><b>Latitude:</b> <span id="endlatitude_view"></span></p>
+        <p><b>Longitude:</b> <span id="endlongitude_view"></span></p>
+    </div>
 
-  <!-- Destination section-->
-  <div class ="endform">
-		<input type="text" name="location2" id="search_input2" onFocus="geolocate()"class="form-control" required placeholder="" />
-		<label for="location2" class="label-location2">
-			<span class="content-location2" id="autocomplete"> Enter Destination: </span>
-		</label>
-  </div>
-  
-  
+    <!-- Destination section-->
+    <div class="endform">
+        <input type="text" name="location2" id="search_input2" class="form-control" required placeholder="" />
+        <label for="location2" class="label-location2">
+      <span class="content-location2" id="autocomplete"> Enter Destination: </span>
+    </label>
+    </div>
+
+    <div id="about">
+        <div class="section section-4">
+            <h2 class="title"> About</h2>
+            <div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
+                <p class="description">Travel Web App is an application built using Javascript to ease access of travel information.
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <img class="img-rounded img-responsive center-block" src="" />
+                    <div class="caption">
+                        <p class="name">Sahil Sinha</p>
+                        <a href="https://www.linkedin.com/in/toddbest2004" target="_blank"><i
+                class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/toddbest2004" target="_blank"><i
+                class="fa fa-github-alt fa-2x"></i></a>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <img class="img-rounded img-responsive center-block" src="" />
+                    <p class="name">Suraj Narang</p>
+                    <a href="https://www.linkedin.com/in/andrewmestas" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/andrew-mestas" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-    const infoBtn = document.getElementById('info-button');
-    const closeBtn = document.getElementById('close-button');
-    const info = document.getElementById('info');
-    
-    // Open and close event handlers
-    infoBtn.addEventListener('click', () => info.classList.add('appear'));
-    closeBtn.addEventListener('click', () => info.classList.remove('appear'));
+        $(document).ready(function() {
+
+            $.ajax(
+                "https://freegeoip.net/json/", {
+                    method: "GET",
+                    success: function(data, textStatus, garbage) {
+                        $("#loc").val(data.region_name);
+                        $("#slat").val(data.latitude);
+                        $("#slon").val(data.longitude);
+                        var latlng = String(data.latitude) + "," + String(data.longitude);
+                        var data = {
+                            latlng
+                        };
+                        $.ajax(
+                            "/location", {
+                                method: "GET",
+                                data: data,
+                                success: function(data, textStatus, garbage) {
+                                    $("#from").val(data.results[0].formatted_address);
+                                    $("#from").data('default', data.results[0].formatted_address);
+                                }
+                            }
+                        );
+                    }
+                }
+            );
+        });
     </script>
-   <script src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 
-   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="></script>
-  <script>
-   
-   var searchInput = 'search_input';
-   var searchInput2 = 'search_input2';
+    <script>
+        const infoBtn = document.getElementById('info-button');
+        const closeBtn = document.getElementById('close-button');
+        const info = document.getElementById('info');
 
-   // Start location autocomplete method
-   $(document).ready(function () {
-       var autocomplete;
-       autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
-        types: ['geocode'],
-        // Restricts user input to America location 
-        componentRestrictions: {
-            country: 'USA',
-          }
-    });
- 
-   google.maps.event.addListener(autocomplete, 'place_changed', function () {
-       var near_place = autocomplete.getPlace();
-       document.getElementById('loc_lat').value = near_place.geometry.location.lat();
-       document.getElementById('loc_long').value = near_place.geometry.location.lng();
+        // Open and close event handlers
+        infoBtn.addEventListener('click', () => info.classList.add('appear'));
+        closeBtn.addEventListener('click', () => info.classList.remove('appear'));
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_OcPqd4-0Dsx7LK_3wHvVzvKcJRWSwjQ&amp;libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyD0FKTtMYnvpMLbDCeJiqYsZ7di_9-G6U8"></script>
 
-       // Updates Latitude and Longitude
-       document.getElementById('startlatitude_view').innerHTML = near_place.geometry.location.lat();
-       document.getElementById('startlongitude_view').innerHTML = near_place.geometry.location.lng();
-   });
-});
+    <script>
+        var searchInput = 'search_input';
+        var searchInput2 = 'search_input2';
 
-       $(document).on('change', '#'+searchInput, function () {
-           document.getElementById('startlatitude_view').innerHTML = '';
-           document.getElementById('startlongitude_view').innerHTML = '';
-});
+        // Start location autocomplete method
+        $(document).ready(function() {
+            var autocomplete;
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+                types: ['geocode'],
+                // Restricts user input to America location 
+                componentRestrictions: {
+                    country: 'USA',
+                }
+            });
 
-// Final location autocomplete method
-$(document).ready(function () {
-       var autocomplete;
-       autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
-        types: ['geocode'],
-        // Restricts user input to America location 
-        componentRestrictions: {
-            country: 'USA',
-          }
-    });
- 
-   google.maps.event.addListener(autocomplete, 'place_changed', function () {
-       var near_place = autocomplete.getPlace();
-       document.getElementById('loc_lat').value = near_place.geometry.location.lat();
-       document.getElementById('loc_long').value = near_place.geometry.location.lng();
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                var near_place = autocomplete.getPlace();
+                document.getElementById('loc_lat').value = near_place.geometry.location.lat();
+                document.getElementById('loc_long').value = near_place.geometry.location.lng();
 
-       // Updates Latitude and Longitude
-       document.getElementById('endlatitude_view').innerHTML = near_place.geometry.location.lat();
-       document.getElementById('endlongitude_view').innerHTML = near_place.geometry.location.lng();
-   });
-});
+                // Updates Latitude and Longitude
+                document.getElementById('startlatitude_view').innerHTML = near_place.geometry.location.lat();
+                document.getElementById('startlongitude_view').innerHTML = near_place.geometry.location.lng();
+            });
+        });
 
-       $(document).on('change', '#'+searchInput, function () {
-           document.getElementById('endlatitude_view').innerHTML = '';
-           document.getElementById('endlongitude_view').innerHTML = '';
-});
+        $(document).on('change', '#' + searchInput, function() {
+            document.getElementById('startlatitude_view').innerHTML = '';
+            document.getElementById('startlongitude_view').innerHTML = '';
+        });
 
-</script>
-  </body>
+        // Final location autocomplete method
+        $(document).ready(function() {
+            var autocomplete;
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
+                types: ['geocode'],
+                // Restricts user input to America location 
+                componentRestrictions: {
+                    country: 'USA',
+                }
+            });
+
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                var near_place = autocomplete.getPlace();
+                document.getElementById('loc_lat').value = near_place.geometry.location.lat();
+                document.getElementById('loc_long').value = near_place.geometry.location.lng();
+
+                // Updates Latitude and Longitude
+                document.getElementById('endlatitude_view').innerHTML = near_place.geometry.location.lat();
+                document.getElementById('endlongitude_view').innerHTML = near_place.geometry.location.lng();
+            });
+        });
+
+        $(document).on('change', '#' + searchInput, function() {
+            document.getElementById('endlatitude_view').innerHTML = '';
+            document.getElementById('endlongitude_view').innerHTML = '';
+        });
+    </script>
+</body>
+
 </html>
