@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: #00ddd6;
+    background-color: #89cdd3;
     /* sets background to blue */
     display: flex;
     /*in-line flex element */
@@ -246,5 +246,33 @@ html {
 h2.title {
     position: relative;
     font-family: 'Arial Narrow Bold', sans-serif;
-    left: 50%;
+    font-size: 30px;
+    left: 45%;
+}
+
+h2.title:after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 2px;
+    margin-left: -132px;
+    left: 10%;
+    bottom: 0px;
+    background-color: #00008b;
+}
+
+.description {
+    font-style: italic;
+}
+
+.name1 {
+    position: relative;
+    float: right;
+    right: 25%;
+}
+
+.name2 {
+    position: relative;
+    float: left;
+    left: 25%;
 }
