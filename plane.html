@@ -9,30 +9,35 @@
 
 <body>
     <script>
-       // import json
+
+        var data="a";
+       
+       function getStartingAiport(){
         fetch("https://api.lufthansa.com/v1/references/airports/nearest/51.5,-0.142", {
                 "method": "GET",
                 "headers": {
                     Accept: 'application/json',
                     Authorization: 'Bearer u8jj22u82esttbg5by6pajgw'
-                    //X-Originating-IP: '100.14.210.166',
-
                 }
             })
              .then(response =>  {
-                //console.log(response.json())
                 const test = response.json().then(response2 =>{
                     const test1 = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
-                    console.log(test1);
+                    data = "test1";
+                    
+                    
                 });
-                // console.log(test.NearestAirportResource.Airport[0])
-                 
+                
                 
             })
             .catch(err => {
                 console.log(err);
             });
-            
+       }  
+       getStartingAiport();
+
+       
+      
 
         // async function GetData(){
         //     const data = await fetch ('https://api.lufthansa.com/v1/references/airports/nearest/51.5,-0.142');

@@ -28,7 +28,7 @@
 
     <!-- Start location section-->
     <div class="startform">
-        <input type="text" name="location1" id="search_input" onFocus="geolocate()" class="form-control" required placeholder="" />
+        <input type="text" name="location1" id="search_input" class="form-control" required placeholder="" />
         <label for="location1" class="label-location1">
             <span class="content-location1" id="autocomplete"> Enter Start Location: </span>
         </label>
@@ -102,7 +102,7 @@
         closeBtn.addEventListener('click', () => info.classList.remove('appear'));
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyAplBezeCSRec7Y4b_bgW6FdspTwoAf6DU"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyANGSLBrjJ1DyDAW_5Mm68jd6sSG3cqzGI"></script>
 
     <script>
         var searchInput = 'search_input';
@@ -118,15 +118,17 @@
                     country: 'USA',
                 }
             });
-
+           
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
                 var near_place = autocomplete.getPlace();
                 document.getElementById('loc_lat').value = near_place.geometry.location.lat();
                 document.getElementById('loc_long').value = near_place.geometry.location.lng();
-
+               
                 // Updates Latitude and Longitude
                 document.getElementById('startlatitude_view').innerHTML = near_place.geometry.location.lat();
                 document.getElementById('startlongitude_view').innerHTML = near_place.geometry.location.lng();
+                console.log(near_place.geometry.location.lat());
+                console.log(near_place.geometry.location.lng());
             });
         });
 
@@ -154,6 +156,10 @@
                 // Updates Latitude and Longitude
                 document.getElementById('endlatitude_view').innerHTML = near_place.geometry.location.lat();
                 document.getElementById('endlongitude_view').innerHTML = near_place.geometry.location.lng();
+                console.log(near_place.geometry.location.lat());
+                console.log(near_place.geometry.location.lng());
+                //var temp = near_place.geometry.location.lat();
+                //console.log(temp);
             });
         });
 
@@ -161,59 +167,10 @@
             document.getElementById('endlatitude_view').innerHTML = '';
             document.getElementById('endlongitude_view').innerHTML = '';
         });
+        
     </script>
 
-    <script src="js/jquery-2.1.1.min.js"></script>
-    <script>
-        // Uber API Constants
-        var uberClientId = "",
-            uberServerToken = "";
-
-        // Create variables to store latitude and longitude
-        var startLat = startlatitude_view,
-            startLong = startlongitude_view,
-            finalLat = endlatitude_view,
-            finalLong = endlongitude_view;
-
-        navigator.geolocation.watchPosition(function(position) {
-            // Updates latitude and longitude
-            startLat = position.coords.latitude;
-            startLong = position.coords.longitude;
-
-            // Query Uber API if needed
-            getEstimatesForUserLocation(startLat, startLong);
-        });
-
-        function getEstimatesForUserLocation(latitude, longitude) {
-            $.ajax({
-                url: "https://api.uber.com/v1/estimates/price",
-                headers: {
-                    Authorization: "Bearer <USER_ACCESS_TOKEN>",
-                    Language: "en_US"
-                },
-                // headers: {
-                //      Authorization: "Token uberServerToken"
-                //  }
-
-                data: {
-                    start_latitude: latitude,
-                    start_longitude: longitude,
-                    end_latitude: finalLat,
-                    end_longitude: finalLong
-                },
-
-                prices: {
-                    localized_display_name: "uberX",
-                    display_name: "uberX",
-                    high_estimate: 17,
-                    low_estimate: 13,
-                },
-                success: function(result) {
-                    console.log(result);
-                }
-            });
-        }
-    </script>
+    
 </body>
 
 </html>
