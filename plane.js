@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocumentSuraj</title>
-</head>
 
-<body>
-    <script>
+
+        var testData = localStorage.getItem('FinalDestinationLat');
+        console.log(testData +" gfgfggfgfg");
 
         var data="a";
        
        function getStartingAiport(){
+           
         fetch("https://api.lufthansa.com/v1/references/airports/nearest/51.5,-0.142", {
                 "method": "GET",
                 "headers": {
@@ -23,7 +18,7 @@
              .then(response =>  {
                 const test = response.json().then(response2 =>{
                     const test1 = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
-                    data = "test1";
+                    
                     
                     
                 });
@@ -34,10 +29,12 @@
                 console.log(err);
             });
        }  
-       getStartingAiport();
 
        
-      
+       getStartingAiport();
+       //getDesinationAiport();
+
+
 
         // async function GetData(){
         //     const data = await fetch ('https://api.lufthansa.com/v1/references/airports/nearest/51.5,-0.142');
@@ -46,9 +43,7 @@
         // }
         // GetData();
 
-    </script>
-
-    <script>
+   
         // fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/SFO-sky/JFK-sky/2020-09-01?inboundpartialdate=2020-09-04", {
         //         "method": "GET",
         //         "headers": {
@@ -68,8 +63,5 @@
         // async function GetData() {
 
         // }
-    </script>
+   
 
-</body>
-
-</html>

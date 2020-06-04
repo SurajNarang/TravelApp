@@ -53,6 +53,7 @@ $(document).ready(function() {
         console.log(near_place.geometry.location.lng());
         //var temp = near_place.geometry.location.lat();
         //console.log(temp);
+        localStorage.setItem('FinalDestinationLat',near_place.geometry.location.lat());
     });
 });
 
