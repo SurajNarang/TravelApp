@@ -1,26 +1,33 @@
-
-
-
-        var testData = localStorage.getItem('FinalDestinationLat');
-        console.log(testData +" gfgfggfgfg");
-
-        var data="a";
        
-       function getStartingAiport(){
-           
+    //    if (localStorage.getItem("FinalStartLat") == null){
+        
+    //    }
+    //    var testData = localStorage.getItem("FinalStartLat");
+    //     console.log(testData +" gfgfggfgfg");
+
+        
+    //     var data="a";
+    
+    
+       function GetNearestAiport(lat, long){
+            
+       
         fetch("https://api.lufthansa.com/v1/references/airports/nearest/51.5,-0.142", {
                 "method": "GET",
                 "headers": {
                     Accept: 'application/json',
-                    Authorization: 'Bearer u8jj22u82esttbg5by6pajgw'
+                    Authorization: 'Bearer fhbdzp89tpmsw4n3t7kp9uez'
                 }
             })
              .then(response =>  {
                 const test = response.json().then(response2 =>{
                     const test1 = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
+                    console.log(test1);
                     
                     
-                    
+                })
+                .catch(err =>{
+                    console.log(err);
                 });
                 
                 
@@ -28,10 +35,10 @@
             .catch(err => {
                 console.log(err);
             });
-       }  
-
        
-       getStartingAiport();
+            console.log(data);
+
+        }
        //getDesinationAiport();
 
 
