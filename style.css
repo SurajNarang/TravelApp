@@ -44,6 +44,33 @@ body {
     font-size: 13px;
 }
 
+.airport-view {
+    width: 20%;
+    position: absolute;
+    overflow: hidden;
+    right: 22%;
+    top: 45%;
+    font-size: 13px;
+}
+
+table,
+td,
+th {
+    border: 1px solid #89cdd3;
+    text-align: left;
+}
+
+table {
+    position: absolute;
+    width: 50%;
+    bottom: 140px;
+}
+
+th,
+td {
+    padding: 10px;
+}
+
 
 /* First text box */
 
@@ -249,17 +276,6 @@ h2.title {
     font-family: 'Arial Narrow Bold', sans-serif;
     font-size: 30px;
     left: 45%;
-}
-
-h2.title:after {
-    content: '';
-    position: absolute;
-    width: 100px;
-    height: 2px;
-    margin-left: -132px;
-    left: 10%;
-    bottom: 0px;
-    background-color: #00008b;
 }
 
 .description {
