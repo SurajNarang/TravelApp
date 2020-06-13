@@ -4,8 +4,7 @@
  var EndLatFinal;
  var StartingAiportCode;
  var EndingAirportCode;
- const lufthansaKey = 'Bearer gqkrew8whj6xngwrukskh539';
- const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
+ 
  
 
  async function Overall() {
