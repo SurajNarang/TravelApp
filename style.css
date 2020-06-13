@@ -285,3 +285,99 @@ h2.title:after {
 #map #infowindow-content {
     display: inline;
 }
+
+.image1 {
+    position: absolute;
+    float: left;
+    left: 24%;
+    margin-top: 4%;
+    width: 210px;
+    height: 215px;
+}
+
+.image2 {
+    position: absolute;
+    float: right;
+    right: 24%;
+    margin-top: 4%;
+    width: 210px;
+    height: 215px;
+}
+
+.media1 {
+    position: absolute;
+    float: right;
+    left: 32%;
+    margin-top: 20%;
+    width: 210px;
+    height: 215px;
+    transform: translate(-53%);
+    text-align: center;
+}
+
+.media2 {
+    position: absolute;
+    float: right;
+    right: 16%;
+    margin-top: 20%;
+    width: 210px;
+    height: 215px;
+    transform: translate(-53%);
+    text-align: center;
+}
+
+.btn2 {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    background: #f1f1f1;
+    margin: 10px;
+    border-radius: 30%;
+    box-shadow: 0 5px 15px -5px #00000070;
+    color: #3498db;
+    overflow: hidden;
+    position: relative;
+}
+
+.btn2 i {
+    line-height: 70px;
+    font-size: 26px;
+    transition: 0.2s linear;
+}
+
+.btn2:hover i {
+    transform: scale(1.3);
+    color: #f1f1f1;
+}
+
+.btn2::before {
+    content: "";
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: #3498db;
+    transform: rotate(45deg);
+    left: -110%;
+    top: 90%;
+}
+
+.btn2:hover::before {
+    animation: aaa 0.7s 1;
+    top: -10%;
+    left: -10%;
+}
+
+@keyframes aaa {
+    0% {
+        left: -110%;
+        top: 90%;
+    }
+    50% {
+        left: 10%;
+        top: -30%;
+    }
+    100% {
+        top: -10%;
+        left: -10%;
+    }
+}
