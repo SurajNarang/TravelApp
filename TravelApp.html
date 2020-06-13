@@ -6,17 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 
     <title>Travel Web App</title>
 </head>
 
 <body>
     <h1>US Travel Web App</h1>
-    <canvas id="canvas" width="800" height="600"> </canvas>
+    <canvas id="canvas" width="800" height="700"> </canvas>
     <button id="info-button" class="button info-button">Show Info</button>
     <button id="about-button" class="button about-button">About <a href="#about">
-            <li data-menuanchor="about" class="btn btn-lg btn-default about"></li>
+            <li data-menuanchor="about" class="btn btn-lg btn-default about">About</li>
         </a> </button>
 
     <div id="info" class="info">
@@ -72,70 +71,26 @@
                 <p class="description">Travel Web App is an application built using Javascript to ease access of travel information. This can cater to travelers going on any trip in the United States and further save time.
                 </p>
             </div>
-
             <div class="row">
                 <div class="col-xs-4">
-                    <img class="image1" src="pic1.jpeg" alt="Sahil's Linkedin" />
+                    <img class="img-rounded img-responsive center-block" src="" />
                     <div class="caption">
-                        <b>
-                            <p class="name1">Sahil Sinha</p>
-                        </b>
-                        <div class="media1">
-                            <a class="btn2" href="https://www.linkedin.com/in/toddbest2004" target="_blank">
-                                <i class="fa fa-linkedin" aria-hidden="true"></i>
-                            </a>
-
-                            <a class="btn2" href="https://github.com/toddbest2004" target="_blank">
-                                <i class="fa fa-github" aria-hidden="true"></i>
-                            </a>
-                        </div>
+                        <p class="name1">Sahil Sinha</p>
+                        <a href="https://www.linkedin.com/in/toddbest2004" target="_blank"><i
+                                class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/toddbest2004" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
                     </div>
                 </div>
-
                 <div class="col-xs-4">
-                    <img class="image2" src="pic2.jpeg" alt="Suraj's Linkedin" />
-                    <b>
-                        <p class="name2">Suraj Narang</p>
-                    </b>
-                    <div class="media2">
-                        <a class="btn2" href="https://www.linkedin.com/in/toddbest2004" target="_blank">
-                            <i class="fa fa-linkedin" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn2" href="https://github.com/toddbest2004" target="_blank">
-                            <i class="fa fa-github" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                    <img class="img-rounded img-responsive center-block" src="" />
+                    <p class="name2">Suraj Narang</p>
+                    <a href="https://www.linkedin.com/in/andrewmestas" target="_blank"><i
+                            class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/andrew-mestas" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- <div class="section section-4">
-		<p class="title">About</p>
-		<div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
-			<p class="description">Fare <span class="last">Start</span> is a full stack web application built using Ruby on Rails for General Assembly Seattle.</p>
-		</div>
-		<div class="row">
-			<div class="col-xs-4">
-				<img class="img-rounded img-responsive center-block" src="/assets/todd-985bdd62c60934fdce68d9757ed95b4936a3da7c276aa080eb8e079378b8a6be.jpg" alt="Todd 985bdd62c60934fdce68d9757ed95b4936a3da7c276aa080eb8e079378b8a6be" />
-				<div class="caption">
-					<p class="name">Todd <br class="line-break-xs">Best</p>
-					<a href="https://www.linkedin.com/in/toddbest2004" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/toddbest2004" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
-				</div>
-			</div>
-			<div class="col-xs-4">
-				<img class="img-rounded img-responsive center-block" src="/assets/andrew-e92232870b8459447bc0eb5cba289f124c2a09bcc146982fb385e02ecf1fa406.jpg" alt="Andrew e92232870b8459447bc0eb5cba289f124c2a09bcc146982fb385e02ecf1fa406" />
-				<p class="name">Andrew Mestas</p>
-				<a href="https://www.linkedin.com/in/andrewmestas" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/andrew-mestas" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
-			</div>
-			<div class="col-xs-4">
-				<img class="img-rounded img-responsive center-block" src="/assets/thomas-c11a25cf5c9c59dad1f4bc99b4e8733112f19e138cb9f597513f9c46bede35e2.jpg" alt="Thomas c11a25cf5c9c59dad1f4bc99b4e8733112f19e138cb9f597513f9c46bede35e2" />
-				<div class="caption">
-					<p class="name">Thomas Vaeth</p>
-					<a href="https://www.linkedin.com/in/thomasvaeth" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a><a href="https://github.com/thomasvaeth" target="_blank"><i class="fa fa-github-alt fa-2x"></i></a>
-				</div>
-			</div>
-		</div> -->
+    
 
     <script>
         const infoBtn = document.getElementById('info-button');
@@ -147,9 +102,13 @@
         closeBtn.addEventListener('click', () => info.classList.remove('appear'));
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyArCZI-hxFCGw3u3ZU-1CFr9vkR7FUzqgg"></script>
-    <script src="LatLong.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="></script>
 
+   <script src = "LatLong.js"></script>
+
+   
+
+    
 </body>
 
 </html>

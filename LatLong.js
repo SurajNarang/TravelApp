@@ -5,6 +5,7 @@
  var StartingAiportCode;
  var EndingAirportCode;
  
+ 
 
  async function Overall() {
      await determiningLatLong();
@@ -16,6 +17,7 @@
      if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
          console.log("all numbers found");
          console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
+         GetFlightCost(StartingAiportCode,EndingAirportCode);
      }
 
  }
@@ -46,8 +48,8 @@
              console.log(near_place.geometry.location.lng());
              StartLongFinal = near_place.geometry.location.lng();
              StartLatFinal = near_place.geometry.location.lat();
-             StartingAiportCode =  GetNearestStartingAiport(StartLatFinal, StartLongFinal);
-             printResult();
+             GetNearestStartingAiport(StartLatFinal, StartLongFinal);
+             //printResult();
 
          });
      });
@@ -80,9 +82,9 @@
              console.log(near_place.geometry.location.lng());
              EndLatFinal = near_place.geometry.location.lat();
              EndLongFinal = near_place.geometry.location.lng();
-             EndingAirportCode =  GetNearestEndingAiport(EndLatFinal, EndLongFinal);
+             GetNearestEndingAiport(EndLatFinal, EndLongFinal);
              printResult();
-             GetFlightCost(StartingAiportCode,EndingAirportCode);
+             
          });
      });
 
@@ -106,9 +108,9 @@
          .then(response => {
              const test = response.json().then(response2 => {
                      const test1 = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
-                     console.log(test1 + " airport");
+                     console.log(test1 + " - Starting airport");
                      var CurrentAirport = test1;
-                     return CurrentAirport;
+                     StartingAiportCode= CurrentAirport;
                  })
                  .catch(err => {
                      console.log(err);
@@ -130,10 +132,12 @@
          })
          .then(response => {
              const test = response.json().then(response2 => {
-                     const test1 = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
-                     console.log(test1 + " airport");
-                     var CurrentAirport = test1;
-                     return CurrentAirport;
+                EndingAirportCode = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
+                console.log('Taking a break...');
+                 sleep(4000);
+                     console.log(EndingAirportCode + " -Destination airport");
+                    //  var CurrentAirport = test1;
+                    //  EndingAirportCode = CurrentAirport;
                  })
                  .catch(err => {
                      console.log(err);
@@ -142,9 +146,21 @@
          .catch(err => {
              console.log(err);
          });
- }
+ } 
 
- function GetFlightCost(startCode, endCode) {
+ function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  
+
+ async function GetFlightCost(startCode, endCode) {
+    if (StartingAiportCode == undefined || EndingAirportCode == undefined){
+        
+        console.log('Taking a break...');
+        await sleep(4000);
+
+     }
      console.log("cost in running");
      var skipDay = 0;
      var skipMonth = 0;
@@ -158,7 +174,7 @@
      todayDate = yyyy + '-' + mm + '-' + dd;
      todayDate = todayDate.toString();
 
-     fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + startCode + "-sky/" + endCode + "-sky/" + todayDate, {
+     fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAiportCode + "-sky/" + EndingAirportCode + "-sky/" + "2020-06-14", {
              "method": "GET",
              "headers": {
                  "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
@@ -189,11 +205,12 @@
                                     "x-rapidapi-key": skyScannerKey
                                 }
                             })
-                            .then(response2 => {
+                            .then(responce2 => {
                                 const data2 = responce2.json();
                                 data2.then(jresponce2 => {
                                     const MinPriceForTm = jresponce2.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
+                                    console.log(airlinePrice);
    
                                 })
                             })
@@ -220,17 +237,18 @@
                                  "x-rapidapi-key": skyScannerKey
                              }
                          })
-                         .then(response2 => {
+                         .then(responce2 => {
                              const data2 = responce2.json();
-                             data2.then(jresponce2 => {
-                                 const MinPriceForTm = jresponce2.Quotes[0].MinPrice;
+                             data2.then(jresponce3 => {
+                                 const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
                                  airlinePrice = MinPriceForTm;
+                                 console.log(airlinePrice);
                                  checkedNextDay = true;
 
                              })
                          })
                          .catch(err => {
-                             console.log(err);
+                             console.log("error error");
                          });
                  });
          })
@@ -240,4 +258,8 @@
 
 
 
+ }
+
+ function LyftCost(tempStartLong, tempStartLat, tempEndLong, tempEndLat){
+    const url = "https://www.lyft.com/api/costs?start_lat="+tempStartLat+"&start_lng="+tempStartLong+"&end_lat="+tempEndLat+"&end_lng="+tempEndLong;
  }
