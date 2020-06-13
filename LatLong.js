@@ -4,7 +4,8 @@
  var EndLatFinal;
  var StartingAiportCode;
  var EndingAirportCode;
- 
+ var checkedNextDay = new Boolean(false);
+
  
 
  async function Overall() {
@@ -84,7 +85,6 @@
              EndLongFinal = near_place.geometry.location.lng();
              GetNearestEndingAiport(EndLatFinal, EndLongFinal);
              printResult();
-             
          });
      });
 
@@ -92,12 +92,10 @@
          document.getElementById('endlatitude_view').innerHTML = '';
          document.getElementById('endlongitude_view').innerHTML = '';
      });
-
  }
 
 
  function GetNearestStartingAiport(LatFinal, LongFinal) {
-
      fetch("https://api.lufthansa.com/v1/references/airports/nearest/" + LatFinal + "," + LongFinal, {
              "method": "GET",
              "headers": {
@@ -134,7 +132,7 @@
              const test = response.json().then(response2 => {
                 EndingAirportCode = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
                 console.log('Taking a break...');
-                 sleep(4000);
+                 //sleep(4000);
                      console.log(EndingAirportCode + " -Destination airport");
                     //  var CurrentAirport = test1;
                     //  EndingAirportCode = CurrentAirport;
@@ -169,12 +167,12 @@
      var dd = String(todayDate.getDate() + skipDay).padStart(2, '0');
      var mm = String(todayDate.getMonth() + 1 + skipMonth).padStart(2, '0'); //January is 0!
      var yyyy = todayDate.getFullYear() + skipYear;
-     var checkedNextDay = new Boolean(false);
+     checkedNextDay = new Boolean(false);
      var airlinePrice;
      todayDate = yyyy + '-' + mm + '-' + dd;
      todayDate = todayDate.toString();
 
-     fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAiportCode + "-sky/" + EndingAirportCode + "-sky/" + "2020-06-14", {
+     fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAiportCode + "-sky/" + EndingAirportCode + "-sky/" + todayDate, {
              "method": "GET",
              "headers": {
                  "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
@@ -195,10 +193,11 @@
                         var month = String(currentDate.getMonth() + 1).padStart(2, '0');
                         var year = currentDate.getFullYear();
                         const tommorowDate = year + '-' + month + '-' + day;
+                        tommorowDate = tommorowDate.toString();
                         console.log(tommorowDate);
                         checkedNextDay = true;
    
-                        fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + startCode + "-sky/" + endCode + "-sky/" + tommorowDate, {
+                        fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAiportCode + "-sky/" + EndingAirportCode + "-sky/" + tommorowDate, {
                                 "method": "GET",
                                 "headers": {
                                     "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
@@ -227,10 +226,11 @@
                      var month = String(currentDate.getMonth() + 1).padStart(2, '0');
                      var year = currentDate.getFullYear();
                      const tommorowDate = year + '-' + month + '-' + day;
+                     //tommorowDate = tommorowDate.toString();
                      console.log(tommorowDate);
                      checkedNextDay = true;
 
-                     fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + startCode + "-sky/" + endCode + "-sky/" + tommorowDate, {
+                     fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAiportCode + "-sky/" + EndingAirportCode + "-sky/" + tommorowDate, {
                              "method": "GET",
                              "headers": {
                                  "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
@@ -240,11 +240,14 @@
                          .then(responce2 => {
                              const data2 = responce2.json();
                              data2.then(jresponce3 => {
+                                 if ((jresponce3.Quotes.length) == 0){
+                                    alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
+                                 } else {
                                  const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
                                  airlinePrice = MinPriceForTm;
                                  console.log(airlinePrice);
                                  checkedNextDay = true;
-
+                                }
                              })
                          })
                          .catch(err => {
