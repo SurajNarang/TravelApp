@@ -170,6 +170,7 @@
      checkedNextDay = new Boolean(false);
      var airlinePrice;
      todayDate = yyyy + '-' + mm + '-' + dd;
+     console.log(todayDate);
      todayDate = todayDate.toString();
 
      fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAiportCode + "-sky/" + EndingAirportCode + "-sky/" + todayDate, {
