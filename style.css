@@ -56,14 +56,15 @@ body {
 table,
 td,
 th {
-    border: 1px solid #89cdd3;
+    border: 4px solid #89cdd3;
     text-align: left;
 }
 
 table {
     position: absolute;
     width: 50%;
-    bottom: 140px;
+    bottom: 50px;
+    border-collapse: collapse;
 }
 
 th,
