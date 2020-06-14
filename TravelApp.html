@@ -14,7 +14,7 @@
 <body>
     <h1>US Travel Web App</h1>
     <canvas id="canvas" width="800" height="600"> </canvas>
-    <button id="info-button" class="button info-button">Show Info</button>
+    <button id="info-button" class="button info-button">Click Here for More info</button>
     <button id="about-button" class="button about-button">About <a href="#about">
             <li data-menuanchor="about" class="btn btn-lg btn-default about"></li>
         </a> </button>
@@ -55,14 +55,13 @@
         <input type="hidden" name="destination" id="loc_endflight" class="form-control">
     </div>
 
+    
     <table>
-        <tr>
-            
-        </tr>
+        
         <tr>
             <th></th>
-            <th>Uber</th>
-            <th>Lyft</th>
+            <th><img src="uber.png" height="10%"></th>
+            <th><img src="lyft.jpg" height="10%" width="65px"></th>
             <th>Flight</th>
         </tr>
         <tr>
@@ -71,7 +70,7 @@
             <td><b></b>UberX: </td>
             <td>Standard: </td>
             <td>
-                <p>One-way Price: <span id="flightcost"></span></p>
+                <p>One-way Airfare: <span id="flightcost"></span></p>
             </td>
         </tr>
         <tr>
@@ -79,8 +78,8 @@
             <td>N/A</td>
             <td>N/A</td>
             <td>
-                <p>Starting Nearest Airport: <span id="startnearestairport"></span></p>
-                <p>Ending Nearest Airport: <span id="endnearestairport"></span></p>
+                <p>Nearest Starting Airport: <span id="startnearestairport"></span></p>
+                <p>Nearest Ending Airport: <span id="endnearestairport"></span></p>
             </td>
         </tr>
     </table>
@@ -170,7 +169,7 @@
         closeBtn.addEventListener('click', () => info.classList.remove('appear'));
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyArCZI-hxFCGw3u3ZU-1CFr9vkR7FUzqgg"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="></script>
     <script src="LatLong.js"></script>
 
 
