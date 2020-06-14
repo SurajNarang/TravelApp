@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: #89cdd3;
+    background-color: #89cdf2;
     /* sets background to blue */
     display: flex;
     /*in-line flex element */
@@ -17,6 +17,10 @@ body {
     margin: 0;
     /*no margin or paddings for body */
     overflow-x: hidden;
+}
+
+h1 {
+    text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
 }
 
 .form-group {
@@ -56,7 +60,7 @@ body {
 table,
 td,
 th {
-    border: 4px solid #89cdd3;
+    border: 4px solid #89cdf2;
     text-align: left;
 }
 
@@ -251,7 +255,6 @@ canvas {
     position: absolute;
     top: 0;
     left: 0;
-    color: #fff;
     width: 300px;
     padding: 10px;
     line-height: 1.5;
@@ -276,23 +279,31 @@ h2.title {
     position: relative;
     font-family: 'Arial Narrow Bold', sans-serif;
     font-size: 30px;
-    left: 45%;
+    left: 48%;
+    text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
 }
 
 .description {
+    margin-left: 5%;
+    margin-right: 5%;
     font-style: italic;
+}
+
+.subtitle {
+    position: relative;
+    left: 47%;
 }
 
 .name1 {
     position: relative;
     float: right;
-    right: 25%;
+    right: 28%;
 }
 
 .name2 {
     position: relative;
     float: left;
-    left: 25%;
+    left: 28%;
 }
 
 #infowindow-content {
