@@ -76,6 +76,18 @@ td {
     padding: 10px;
 }
 
+#uber {
+    height: 10%;
+    display: block;
+    margin: 0 auto;
+}
+
+#lyft {
+    height: 15%;
+    display: block;
+    margin: 0 auto;
+}
+
 
 /* First text box */
 
