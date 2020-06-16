@@ -8,10 +8,10 @@ var FlightCost;
 var checkedNextDay = new Boolean(false);
 const lufthansaKey = 'Bearer rqakmw8wt5gs6pgdwtg52v9b';
 const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
- 
+
 async function Overall() {
     await determiningLatLong();
-    //surajLyft(39.82552846,-75.49414158,39.83225175,-75.55525303)
+    //GetFlightCost("PHL", "LAX");
 }
 Overall();
 
@@ -20,9 +20,10 @@ function printResult() {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         GetFlightCost(StartingAirportCode, EndingAirportCode);
+        GetLyftCost(StartLongFinal, StartLatFinal, EndLongFinal, EndLatFinal);
     }
-
 }
+
 async function determiningLatLong() {
     var searchInput = 'search_input';
     var searchInput2 = 'search_input2';
@@ -163,9 +164,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
-
-async function GetFlightCost(startCode, endCode) {
+async function GetFlightCost() {
     if (StartingAirportCode == undefined || EndingAirportCode == undefined) {
 
         console.log('Taking a break...');
@@ -198,10 +197,10 @@ async function GetFlightCost(startCode, endCode) {
                     console.log(jresponce);
                     const minPriceToday = jresponce.Quotes[0].MinPrice;
                     airlinePrice = minPriceToday;
-                   
-                    if(jresponce.Quotes.length > 1){
+
+                    if (jresponce.Quotes.length > 1) {
                         let min = jresponce.Quotes[0];
-                        for(let x=0;x<jresponce.Quotes.length;x++){
+                        for (let x = 0; x < jresponce.Quotes.length; x++) {
                             let value = jresponce.Quotes[x];
                             min = (value < min) ? value : min
                         }
@@ -231,10 +230,10 @@ async function GetFlightCost(startCode, endCode) {
                                 data2.then(jresponce2 => {
                                     const MinPriceForTm = jresponce2.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
-                                   
-                                    if(jresponce2.Quotes.length > 1){
+
+                                    if (jresponce2.Quotes.length > 1) {
                                         let min = jresponce2.Quotes[0];
-                                        for(let x=0;x<jresponce2.Quotes.length;x++){
+                                        for (let x = 0; x < jresponce2.Quotes.length; x++) {
                                             let value = jresponce2.Quotes[x];
                                             min = (value < min) ? value : min
                                         }
@@ -276,10 +275,10 @@ async function GetFlightCost(startCode, endCode) {
                                 } else {
                                     const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
-                                    
-                                    if(jresponce3.Quotes.length > 1){
+
+                                    if (jresponce3.Quotes.length > 1) {
                                         let min = jresponce3.Quotes[0];
-                                        for(let x=0;x<jresponce3.Quotes.length;x++){
+                                        for (let x = 0; x < jresponce3.Quotes.length; x++) {
                                             let value = jresponce3.Quotes[x];
                                             min = (value < min) ? value : min
                                         }
@@ -303,45 +302,35 @@ async function GetFlightCost(startCode, endCode) {
 
 }
 
-function LyftCost(tempStartLong, tempStartLat, tempEndLong, tempEndLat) {
-    const puppeteer = require('puppeteer');
+function GetLyftCost(tempStartLong, tempStartLat, tempEndLong, tempEndLat) {
+    var dynamicUrl = "https://www.lyft.com/api/costs?start_lat=" + tempStartLat + "&start_lng=" + tempStartLong + "&end_lat=" + tempEndLat + "&end_lng=" + tempEndLong;
+    // const cookie = "samesite=none; secure";
 
-    (async() => {
-        let url = "https://www.lyft.com/api/costs?start_lat=" + tempStartLat + "&start_lng=" + tempStartLong + "&end_lat=" + tempEndLat + "&end_lng=" + tempEndLong;
-
-        let browser = await puppeteer.launch({ headless: false });
-        let page = await browser.newPage();
-
-        await page.goto(url, { waitUntil: 'networkidle2' });
-
-        let data = await page.evaluate(() => {
-            let cost = document.querySelector('estimated_costs_per_max').innerText;
-
-            return {
-                cost
+    $.ajax({
+        type: 'GET',
+        url: dynamicUrl,
+        dataType: 'jsonp',
+        crossDomain: true,
+        cache: false,
+        async: true,
+        beforeSend: function(xhr) {
+            if (xhr && xhr.overrideMimeType) {
+                xhr.overrideMimeType('application/json;charset=utf-8');
             }
-        });
+        },
 
-        console.log(data);
-
-        await browser.close();
-
-    })();
-}
-
-function surajLyft(tempStartLat,tempStartLong,tempEndLat,tempEndLong){
-    var url = "https://www.lyft.com/api/costs?start_lat="+tempStartLat+"&start_lng="+tempStartLong+"&end_lat="+tempEndLat+"&end_lng="+tempEndLong;
-    console.log(url)
-    $.getJSON(url,function(data){
-        console.log("inside the function");
+        success: function(data) {
+            var minCost;
+            var maxCost;
+            var finalLyftCost;
+            minCost = data.estimated_cost_cents_min;
+            maxCost = data.estimated_cost_cents_max;
+            finalLyftCost = (minCost + maxCost) / 2;
+            $(data.cost_estimates.each(function(index, value) {
+                console.log("Min cost is" + minCost);
+                console.log("Max cost is" + maxCost);
+                console.log("Lyft cost: " + finalLyftCost);
+            }));
+        }
     });
-//     fetch(url)
-//   .then(response => response.json())
-//   .then(data => console.log(data));
-    // (async () => {
-    //     const response = await fetch(url);
-    //     const json = await response.json();
-    //     console.log(JSON.stringify(json));
-    //   })()
 }
-
