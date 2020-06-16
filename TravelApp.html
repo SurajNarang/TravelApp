@@ -14,16 +14,24 @@
 <body>
     <h1>US Travel Web App</h1>
     <canvas id="canvas" width="800" height="600"> </canvas>
-    <button id="info-button" class="button info-button">Click Here for More info</button>
+    <button id="info-button" class="button info-button">More</button>
     <button id="about-button" class="button about-button">About <a href="#about">
             <li data-menuanchor="about" class="btn btn-lg btn-default about"></li>
         </a> </button>
 
     <div id="info" class="info">
-        <h2>Info:</h2>
         <p>
-            Enter your starting location and end destination to determine the most cost-effective transportation service for your route!
+            Thanks for checking out our Travel Webapp! Would you like to help us keep the site running?
         </p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" id="form" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_donations" />
+            <input type="hidden" name="business" value="V9M9HCZTGSWCL" />
+            <input type="hidden" name="currency_code" value="USD" />
+            <input type="hidden" name="amount" value="1" />
+            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+            <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        <br></br>
         <button id="close-button" class="button">Close</button>
     </div>
 
@@ -55,9 +63,7 @@
         <input type="hidden" name="destination" id="loc_endflight" class="form-control">
     </div>
 
-    
     <table>
-
         <tr>
             <th></th>
             <th><img id="uber" src="uber.png" alt="uber">
@@ -70,7 +76,7 @@
             <td>
                 <b>Total Cost</b></td>
             <td><b></b>UberX: </td>
-            <td>Standard: </td>
+            <td>Standard: <span id="lyftcost"></span></td>
             <td>
                 <p>One-way Airfare: <span id="flightcost"></span></p>
             </td>
@@ -172,16 +178,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="></script>
     <script src="LatLong.js"></script>
 
-    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-        <input type="hidden" name="cmd" value="_donations" />
-        <input type="hidden" name="business" value="V9M9HCZTGSWCL" />
-        <input type="hidden" name="currency_code" value="USD" />
-        <input type="hidden" name="amount" value="1" />
-        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-        <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-        </form>
-        
-        
+
 </body>
 
 </html>
