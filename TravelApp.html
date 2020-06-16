@@ -57,11 +57,13 @@
 
     
     <table>
-        
+
         <tr>
             <th></th>
-            <th><img src="uber.png" height="10%"></th>
-            <th><img src="lyft2.png" height="15%" width="80px" ></th>
+            <th><img id="uber" src="uber.png" alt="uber">
+            </th>
+            <th><img id="lyft" src="lyft2.png" width=70px 0px alt="uber">
+            </th>
             <th>Flight</th>
         </tr>
         <tr>
@@ -109,17 +111,15 @@
             <h2 class="title"> <u>About</u></h2>
             <div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
                 <p class="description">
-                    APP-NAME provides an elegant solution to a modern traveling problem. To find the most cost-effective means of travel, 
-                    we often spend countless minutes, sometimes hours, scouring different apps/websites for the best prices, whether it be for ride-hailing 
-                    or air travel. 
-                    <br>
-                    With APP-NAME, you simply input your start address and your destination address and you will be shown the real-time estimated price of 
-                    UBER and LYFT side-by-side, allowing you to choose the most cost-efficient travel method. If your trip is greater than 100 miles,
-                    APP-NAME will automatically provide you with the cheapest airfare ticket, along with the Airline name. APP-NAME has also been developed 
-                    to handle long-distance travel as well. When your travel trip is greater than 100 miles, APP-NAME automatically grabs the nearest airport of your starting 
-                    location as well as the nearest airport to your destination location. From there, APP-NAME seamlessly provides you with the cheapest Airfare, along with
-                    providing you with the airline, starting/destination airport, and the respective link to the Airline's website, all for ease of booking.
+                    Travel Genie provides an elegant solution to a modern traveling problem. To find the most cost-effective means of travel, we often spend countless minutes, sometimes hours, scouring different apps/websites for the best prices, whether it be for ride-hailing
+                    or air travel.
+                    <br></br>
+                    With Travel Genie, you simply input your start address and your destination address and you will be shown the real-time estimated price of UBER and LYFT side-by-side, allowing you to choose the most cost-efficient travel method. If your trip is greater
+                    than 100 miles, it will automatically provide you with the cheapest airfare ticket, along with the Airline name. Travel Genie has also been developed to handle long-distance travel as well. When your travel trip is greater than 100
+                    miles, Travel Genie automatically grabs the nearest airport of your starting location as well as the nearest airport to your destination location. From there, it seamlessly provides you with the cheapest Airfare, along with providing
+                    you with the airline, starting/destination airport, and the respective link to the Airline's website, all for ease of booking.
                 </p>
+                <h3 class="subtitle">Developers</h3>
             </div>
 
             <div class="row">
@@ -172,7 +172,16 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="></script>
     <script src="LatLong.js"></script>
 
-
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+        <input type="hidden" name="cmd" value="_donations" />
+        <input type="hidden" name="business" value="V9M9HCZTGSWCL" />
+        <input type="hidden" name="currency_code" value="USD" />
+        <input type="hidden" name="amount" value="1" />
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+        <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        
+        
 </body>
 
 </html>
