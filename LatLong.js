@@ -6,10 +6,12 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-
+const lufthansaKey = 'Bearer rqakmw8wt5gs6pgdwtg52v9b';
+const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
+ 
 async function Overall() {
     await determiningLatLong();
-    //GetFlightCost("PHL", "LAX");
+    //surajLyft(39.82552846,-75.49414158,39.83225175,-75.55525303)
 }
 Overall();
 
@@ -196,6 +198,15 @@ async function GetFlightCost(startCode, endCode) {
                     console.log(jresponce);
                     const minPriceToday = jresponce.Quotes[0].MinPrice;
                     airlinePrice = minPriceToday;
+                   
+                    if(jresponce.Quotes.length > 1){
+                        let min = jresponce.Quotes[0];
+                        for(let x=0;x<jresponce.Quotes.length;x++){
+                            let value = jresponce.Quotes[x];
+                            min = (value < min) ? value : min
+                        }
+                        airlinePrice = min;
+                    }
                     console.log(airlinePrice);
                     if (jresponce.Quotes.length === 0) {
                         console.log("Attention Attention, we must check the mext day")
@@ -220,6 +231,15 @@ async function GetFlightCost(startCode, endCode) {
                                 data2.then(jresponce2 => {
                                     const MinPriceForTm = jresponce2.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
+                                   
+                                    if(jresponce2.Quotes.length > 1){
+                                        let min = jresponce2.Quotes[0];
+                                        for(let x=0;x<jresponce2.Quotes.length;x++){
+                                            let value = jresponce2.Quotes[x];
+                                            min = (value < min) ? value : min
+                                        }
+                                        airlinePrice = min;
+                                    }
                                     console.log(airlinePrice);
                                     document.getElementById('flightcost').value = airlinePrice;
                                 })
@@ -256,6 +276,15 @@ async function GetFlightCost(startCode, endCode) {
                                 } else {
                                     const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
+                                    
+                                    if(jresponce3.Quotes.length > 1){
+                                        let min = jresponce3.Quotes[0];
+                                        for(let x=0;x<jresponce3.Quotes.length;x++){
+                                            let value = jresponce3.Quotes[x];
+                                            min = (value < min) ? value : min
+                                        }
+                                        airlinePrice = min;
+                                    }
                                     console.log(airlinePrice);
                                     checkedNextDay = true;
                                 }
@@ -299,3 +328,20 @@ function LyftCost(tempStartLong, tempStartLat, tempEndLong, tempEndLat) {
 
     })();
 }
+
+function surajLyft(tempStartLat,tempStartLong,tempEndLat,tempEndLong){
+    var url = "https://www.lyft.com/api/costs?start_lat="+tempStartLat+"&start_lng="+tempStartLong+"&end_lat="+tempEndLat+"&end_lng="+tempEndLong;
+    console.log(url)
+    $.getJSON(url,function(data){
+        console.log("inside the function");
+    });
+//     fetch(url)
+//   .then(response => response.json())
+//   .then(data => console.log(data));
+    // (async () => {
+    //     const response = await fetch(url);
+    //     const json = await response.json();
+    //     console.log(JSON.stringify(json));
+    //   })()
+}
+
