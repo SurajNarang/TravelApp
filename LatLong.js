@@ -354,13 +354,13 @@ function surajUber(){
 
 
     const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
-    const token = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAAAGJNrD2_tlyd-NxbJ3aSOCnAAAAleauBT3ouw70YBYbKYFVYtTauU0iHOBauhBpJo2533LWjHxcdE-9ivL_KWs3JG1Dz9EIea4jAmMv30HUAj3KNb79S_eD2j1mJ25gOmWttocL-6PWSMAIfZU3v0Lc30MAdpPbfPcdDGN4CYrv5XZOvguuCC6YNGXAZAhMi-Eah75hoKr8IBTk6J7FpGS5XUHuE3EzMjIz8TmQW60ichNWJYpzLmrTp3UADAAAAIFEkqGyU7_nBQ36GiQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
+    const token = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAAPPBmgfnUrDTE_wEhoYMaPqnAAAAnBYoVETqQEnsAY6O-7e5bVnIldbPGoQCtvHDFUHovwtfTWBJU9pBDviZg3OxJZfccck_xlvpLfORDlrzS4CZ3ZSqgo-26yqQafW-MG-r_vsrLDFN5UP6sMjL2M85YDeG_lHaZkYfCgGqQDKG-Go02g6hqBG2euCTWIGQNyWKT7JHrIJl1VsKm7bAxxCs_iUFwWLVWHcp2kkM7AkaJC-x_zDUPjG9EqoADAAAAB3ts_QbKehW89MthCQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
     
     fetch(url, {
         "method": "GET",
         "headers": {
             'Accept-Language': 'en_US',
-            'Authorization': token,
+            'Authorization': 'Token ' +token,
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods': 'GET',
         }
@@ -369,7 +369,7 @@ function surajUber(){
         console.log(responceHI);
     })
     .catch (err => {
-        console.log(err);
+        console.log(err+"errorror");
     });
 
 
