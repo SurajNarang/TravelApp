@@ -219,7 +219,10 @@ canvas {
     background: #f0f0f0;
     display: block;
     border-radius: 5px;
-    min-width: 800;
+    width: 70%;
+    height: 55%;
+   
+    
 }
 
 #form {
@@ -252,6 +255,7 @@ canvas {
 
 .info {
     position: absolute;
+    text-align: center;
     top: 0;
     left: 0;
     background: #333;
