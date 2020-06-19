@@ -12,8 +12,10 @@
 </head>
 
 <body>
-    <h1>US Travel Web App</h1>
-    <canvas id="canvas" width="800" height="600"> </canvas>
+    <h1 id="webtitle"> US Travel Web App</h1>
+    <div id="canvas">
+        <canvas id="canvas-box" width="800" height="600"> </canvas>
+    </div>
     <button id="info-button" class="button info-button">More</button>
     <button id="about-button" class="button about-button">About <a href="#about">
             <li data-menuanchor="about" class="btn btn-lg btn-default about"></li>
@@ -23,19 +25,14 @@
         <p>
             Thanks for checking out our Travel Webapp! Would you like to help us keep the site running?
         </p>
-        <form action="https://www.paypal.com/cgi-bin/webscr"  method="post" target="_top">
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
             <input type="hidden" name="cmd" value="_donations" />
             <input type="hidden" name="business" value="V9M9HCZTGSWCL" />
             <input type="hidden" name="currency_code" value="USD" />
             <input type="hidden" name="amount" value="1" />
             <input type="image" src="https://i.postimg.cc/fTMDWWgV/Donate-Button-4.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
             <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-            </form>
-            
-            
-            
-            
-            
+        </form>
         <br></br>
         <button id="close-button" class="button">Close</button>
     </div>
@@ -180,10 +177,8 @@
         closeBtn.addEventListener('click', () => info.classList.remove('appear'));
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyDvVw5H9upLsNcSlzGWQn9Y42cp93ybKiM"></script>
     <script src="LatLong.js"></script>
-
-
 </body>
 
 </html>

@@ -9,7 +9,7 @@ body {
     /*in-line flex element */
     flex-direction: column;
     /* laid out in vertical columns */
-    align-items: center;
+    /* align-items: center; */
     /*everything is centered within the canvas */
     justify-content: space-around;
     /*allows for extra free space leftover around aligned items */
@@ -20,53 +20,56 @@ body {
 }
 
 h1 {
+    position: relative;
     text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+    bottom: 5px;
+    left: 500px;
 }
 
 .form-group {
-    width: 50%;
+    width: 150px;
     position: absolute;
     height: 50px;
     overflow: hidden;
 }
 
 .startlatlong-view {
-    width: 20%;
+    width: 300px;
     position: absolute;
     overflow: hidden;
-    right: 22%;
-    top: 24%;
+    left: 850px;
+    bottom: 490px;
     font-size: 13px;
 }
 
 .endlatlong-view {
-    width: 20%;
+    width: 300px;
     position: absolute;
     overflow: hidden;
-    right: 22%;
-    top: 34%;
+    left: 850px;
+    bottom: 410px;
     font-size: 13px;
 }
 
 .airport-view {
-    width: 20%;
+    width: 50px;
     position: absolute;
-    overflow: hidden;
+    /* overflow: hidden; */
     right: 22%;
-    top: 45%;
     font-size: 13px;
 }
 
 table,
 td,
 th {
-    border: 5px solid #89cdf2;
+    border: 4px solid #89cdf2;
     text-align: left;
 }
 
 table {
     position: absolute;
-    width: 50%;
+    width: 600px;
+    left: 400px;
     bottom: 50px;
     border-collapse: collapse;
 }
@@ -77,7 +80,7 @@ td {
 }
 
 #uber {
-    height: 10%;
+    height: 8%;
     display: block;
     margin: 0 auto;
 }
@@ -92,12 +95,12 @@ td {
 /* First text box */
 
 .startform {
-    width: 30%;
+    width: 415px;
     position: absolute;
     height: 50px;
     overflow: hidden;
-    top: 25%;
-    left: 25%;
+    bottom: 500px;
+    left: 380px;
 }
 
 .startform input {
@@ -153,12 +156,12 @@ td {
 /* Second text box */
 
 .endform {
-    width: 30%;
+    width: 415px;
     position: absolute;
     height: 50px;
     overflow: hidden;
-    top: 35%;
-    left: 25%;
+    bottom: 420px;
+    left: 380px;
 }
 
 .endform input {
@@ -215,19 +218,14 @@ h1 {
     color: #fff;
 }
 
-canvas {
+#canvas-box {
+    position: relative;
+    left: 300px;
+    bottom: 2px;
     background: #f0f0f0;
     display: block;
     border-radius: 5px;
-    width: 70%;
-    height: 55%;
-   
-    
-}
-
-#form {
-    position: relative;
-    left: 23%;
+    align-items: stretch !important;
 }
 
 .button {
@@ -249,7 +247,7 @@ canvas {
 
 .info-button {
     position: absolute;
-    top: 35px;
+    bottom: 670px;
     left: 35px;
 }
 
@@ -261,7 +259,7 @@ canvas {
     background: #333;
     color: #fff;
     min-height: 100vh;
-    width: 300px;
+    width: 290px;
     padding: 10px;
     line-height: 1.5;
     transform: translateX(-300px);
@@ -284,8 +282,8 @@ canvas {
 
 .about-button {
     position: absolute;
-    top: 35px;
-    right: 35px;
+    bottom: 670px;
+    left: 1330px;
 }
 
 html {
@@ -306,26 +304,26 @@ h2.title {
 }
 
 .description {
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 100px;
+    margin-right: 100px;
     font-style: italic;
 }
 
 .subtitle {
     position: relative;
-    left: 47%;
+    left: 685px;
 }
 
 .name1 {
-    position: relative;
+    position: absolute;
     float: right;
-    right: 28%;
+    left: 965px;
 }
 
 .name2 {
     position: relative;
     float: left;
-    left: 28%;
+    left: 400px;
 }
 
 #infowindow-content {
@@ -339,8 +337,8 @@ h2.title {
 .image1 {
     position: absolute;
     float: left;
-    left: 24%;
-    margin-top: 4%;
+    left: 340px;
+    margin-top: 55px;
     width: 210px;
     height: 215px;
 }
@@ -348,8 +346,8 @@ h2.title {
 .image2 {
     position: absolute;
     float: right;
-    right: 24%;
-    margin-top: 4%;
+    left: 900px;
+    margin-top: 55px;
     width: 210px;
     height: 215px;
 }
@@ -357,22 +355,20 @@ h2.title {
 .media1 {
     position: absolute;
     float: right;
-    left: 32%;
-    margin-top: 20%;
+    left: 900px;
+    margin-top: 280px;
     width: 210px;
     height: 215px;
-    transform: translate(-53%);
     text-align: center;
 }
 
 .media2 {
     position: absolute;
     float: right;
-    right: 16%;
-    margin-top: 20%;
+    left: 350px;
+    margin-top: 280px;
     width: 210px;
     height: 215px;
-    transform: translate(-53%);
     text-align: center;
 }
 
