@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <h1>Welcome to the Server</h1>
-    <script src="lyft.js"></script>
+    <script>
+        fetch('https://www.lyft.com/api/costs?start_lat=${startLat}&start_lng=${startLong}&end_lat=${endLat}&end_lng=${endLong}')
+            .then(r => r.json())
+            .then((data) => {
+                console.log(data);
+            })
+    </script>
 </body>
+
 </html>
