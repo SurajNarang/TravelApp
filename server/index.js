@@ -18,9 +18,24 @@ app.get("/lyft", (req, response) => {
         .then((r) => r.json())
         .then((r) => {
             let costEstimates = r.cost_estimates;
-            return costEstimates.map(item => item.estimated_cost_cents_min);
+            let min = costEstimates.map(item1 => (item1.estimated_cost_cents_min));
+            let max = costEstimates.map(item2 => (item2.estimated_cost_cents_max));
+
+            let stringMin = min.toString();
+            let minLyftCost = stringMin.substr(0, stringMin.indexOf(','));
+            let num1 = parseInt(minLyftCost, 10);
+
+            let stringMax = max.toString();
+            let maxLyftCost = stringMax.substr(0, stringMax.indexOf(','));
+            let num2 = parseInt(maxLyftCost, 10);
+
+            var finalCost = 0.5 * (num1 + num2);
+            return finalCost;
+
         })
         .then(r => {
-            response.send(r);
+            response.status(200).send((r).toString());
+        }).catch(err => {
+            console.log("Unable to retrieve price data");
         })
 });
