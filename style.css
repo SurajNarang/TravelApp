@@ -201,7 +201,7 @@ td {
     overflow: hidden;
     bottom: 540px;
     left: 400px;
-    min-width: 620px;
+    width: 620px;
     z-index: 1;
 }
 
