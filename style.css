@@ -37,8 +37,8 @@ h1 {
     width: 300px;
     position: absolute;
     overflow: hidden;
-    left: 850px;
-    bottom: 490px;
+    left: 860px;
+    bottom: 460px;
     font-size: 13px;
 }
 
@@ -46,8 +46,8 @@ h1 {
     width: 300px;
     position: absolute;
     overflow: hidden;
-    left: 850px;
-    bottom: 410px;
+    left: 860px;
+    bottom: 380px;
     font-size: 13px;
 }
 
@@ -70,7 +70,7 @@ table {
     position: absolute;
     width: 600px;
     left: 400px;
-    bottom: 50px;
+    bottom: 60px;
     border-collapse: collapse;
 }
 
@@ -99,8 +99,8 @@ td {
     position: absolute;
     height: 50px;
     overflow: hidden;
-    bottom: 500px;
-    left: 380px;
+    bottom: 470px;
+    left: 400px;
 }
 
 .startform input {
@@ -128,7 +128,8 @@ td {
     left: 0px;
     bottom: -1px;
     height: 100%;
-    width: 100% border-bottom 3px solid #5da8d3;
+    width: 100%;
+    border-bottom: 3px solid #5da8d3;
     transform: translateX(-100%);
     /* Repositions label horizontally */
 }
@@ -160,8 +161,8 @@ td {
     position: absolute;
     height: 50px;
     overflow: hidden;
-    bottom: 420px;
-    left: 380px;
+    bottom: 390px;
+    left: 400px;
 }
 
 .endform input {
@@ -189,9 +190,19 @@ td {
     left: 0px;
     bottom: -1px;
     height: 100%;
-    width: 100% border-bottom 3px solid #5da8d3;
+    width: 100%;
+    border-bottom: 3px solid #5da8d3;
     transform: translateX(-100%);
     /* Repositions label horizontally */
+}
+
+#directions {
+    position: absolute;
+    overflow: hidden;
+    bottom: 540px;
+    left: 400px;
+    width: 620px;
+    z-index: 1;
 }
 
 .content-location2 {

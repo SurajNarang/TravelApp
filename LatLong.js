@@ -6,13 +6,14 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-const lufthansaKey = 'Bearer 9xxw44dh98m5n7ubjqursp96';
+const lufthansaKey = 'Bearer v34rwwgqhnx5tuaz5653bdt4';
 const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
  
 async function Overall() {
-   // await determiningLatLong();
-   surajUber();
+    await determiningLatLong();
+  // surajUber();
    // surajLyft(39.82552846,-75.49414158,39.83225175,-75.55525303)
+   //victor();
 }
 Overall();
 
@@ -300,8 +301,6 @@ async function GetFlightCost(startCode, endCode) {
             console.log(" an error occurred");
         });
 
-
-
 }
 
 function LyftCost(tempStartLong, tempStartLat, tempEndLong, tempEndLat) {
@@ -354,24 +353,27 @@ function surajUber(){
 
 
     const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
-    const token = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAAPPBmgfnUrDTE_wEhoYMaPqnAAAAnBYoVETqQEnsAY6O-7e5bVnIldbPGoQCtvHDFUHovwtfTWBJU9pBDviZg3OxJZfccck_xlvpLfORDlrzS4CZ3ZSqgo-26yqQafW-MG-r_vsrLDFN5UP6sMjL2M85YDeG_lHaZkYfCgGqQDKG-Go02g6hqBG2euCTWIGQNyWKT7JHrIJl1VsKm7bAxxCs_iUFwWLVWHcp2kkM7AkaJC-x_zDUPjG9EqoADAAAAB3ts_QbKehW89MthCQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
+    const token = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAADiF425_ZuOwidjmusWIhDmnAAAAAWyZ-Tqyu6Ne4HW3kGpIldZw0PzUGbuvwO8qNqANhP8nB1UUgkp9XqjtpQoX-q1nvf2iNcBoJhoPMAZ8ArrmDly_PIf0uINyTwaas4ObCrlJVuP3-kTzj3QhIJNqGLcQ-HmUcTBum13tmxr28veH2A7LpmG4n--XEgea5KmkplsdKW4TMo5XtqcU6BGMbJDtAfXn__-WdQLgosa5ltqRWPf25s5A8DIADAAAACG7wGeFWS4YWX7YRyQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
     
     fetch(url, {
         "method": "GET",
+        "mode" : "no-cors",
         "headers": {
             'Accept-Language': 'en_US',
-            'Authorization': 'Token ' +token,
+            'Authorization': 'Bearer ' +token,
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': 'GET',
+            //'Access-Control-Allow-Methods': 'GET',
+            
         }
     
     }).then(responceHI => {
         console.log(responceHI);
     })
     .catch (err => {
-        console.log(err+"errorror");
+        console.log(err+"error happened");
     });
 
+    
 
     // UBER 
     // POST "https://www.uber.com/api/loadFEEstimates" 
@@ -391,4 +393,19 @@ function surajUber(){
     //              "provider": "google_places" 
     //             }
     //          }
+}
+
+function victor(){
+    const axios = require('axios');
+
+    axios({
+        url : "https://www.lyft.com/api/costs?start_lat=47.6076018&start_lng=-122.3119244&end_lat=47.6233218&end_lng=-122.3636521"
+
+    }).then((res, err)=>{
+        let costEstimates = res.data.cost_estimate;
+        let minCents = costEstimates.map(item=>item.estimated_cost_cents_min);
+        console.log(minCents);
+
+    })
+
 }
