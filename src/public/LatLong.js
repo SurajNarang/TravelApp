@@ -6,7 +6,7 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-const lufthansaKey = 'Bearer hjjyh5gdjj7yq22t24zcn24x';
+const lufthansaKey = 'Bearer p2yhfbsb3u9kvh5kpz7z7b4x';
 const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
 
 async function Overall() {
@@ -20,7 +20,7 @@ function printResult() {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         GetFlightCost(StartingAirportCode, EndingAirportCode);
-        GetLyftCost(StartLongFinal, StartLatFinal, EndLongFinal, EndLatFinal);
+        GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
     }
 }
 
@@ -271,6 +271,7 @@ async function GetFlightCost() {
                             const data2 = responce2.json();
                             data2.then(jresponce3 => {
                                 if ((jresponce3.Quotes.length) == 0) {
+                                    document.getElementById('flightcost').innerHTML = "* No Flights Yet *";
                                     alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
                                 } else {
                                     const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
@@ -300,66 +301,19 @@ async function GetFlightCost() {
         });
 }
 
-function GetLyftCost(tempStartLong, tempStartLat, tempEndLat, tempEndLong) {
-    var dynamicUrl = "https://www.lyft.com/api/costs?start_lat=" + tempStartLat + "&start_lng=" + tempStartLong + "&end_lat=" + tempEndLat + "&end_lng=" + tempEndLong;
+function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
+    const dynamicUrl = "http://localhost:3000/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
+    // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
-    let h = new Headers();
-    h.append('Accept', 'application/json');
-    h.append('Content-Type', 'application/json');
-    h.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE');
-
-    let url = new Request(dynamicUrl, {
-        method: 'GET',
-        headers: h,
-        mode: 'no-cors',
-    });
-
-    fetch(url)
-        .then(function(response) {
-            return response.json();
+    fetch(dynamicUrl, {
+            mode: "no-cors"
         })
-        .then(function(data) {
-            console.log(JSON.stringify(data));
-            var minCost;
-            var maxCost;
-            var finalLyftCost;
-            minCost = data.estimated_cost_cents_min; // Gets the minimum cost of ride
-            maxCost = data.estimated_cost_cents_max; // Gets the maximum cost of ride
-            $(data.forEach(function(index, value) {
-                console.log("Min cost is" + minCost);
-                console.log("Max cost is" + maxCost);
-            }));
-        })
-
-    .catch(err => {
-        console.log("Unable to retrieve price data");
-    });
+        .then(r => r.json())
+        .then((data) => {
+            console.log("Lyft Price (cents): " + data.price);
+            console.log("Lyft Price (dollars): " + data.price / 100)
+            document.getElementById('lyftcost').innerHTML = "$" + data.price / 100;
+        }).catch(err => {
+            console.log("Unable to retrieve price data");
+        });
 }
-
-
-
-// Using ajax jQuery - requires cookie site request access
-
-//     $.ajax({
-//         type: 'GET',
-//         url: dynamicUrl,
-//         dataType: 'jsonp',
-//         crossDomain: true,
-//         cache: false,
-//         async: true,
-
-//         success: function(data) {
-//             var minCost;
-//             var maxCost;
-//             var finalLyftCost;
-//             minCost = data.estimated_cost_cents_min;
-//             maxCost = data.estimated_cost_cents_max;
-//             finalLyftCost = (minCost + maxCost) / 2;
-//             $(data.cost_estimates.each(function(index, value) {
-//                 console.log("Min cost is" + minCost);
-//                 console.log("Max cost is" + maxCost);
-//                 console.log("Lyft cost: " + finalLyftCost);
-//             }));
-//         }
-//     });
-// }

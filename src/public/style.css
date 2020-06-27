@@ -9,8 +9,6 @@ body {
     /*in-line flex element */
     flex-direction: column;
     /* laid out in vertical columns */
-    /* align-items: center; */
-    /*everything is centered within the canvas */
     justify-content: space-around;
     /*allows for extra free space leftover around aligned items */
     font-family: sans-serif;
@@ -19,10 +17,10 @@ body {
     overflow-x: hidden;
 }
 
-h1 {
+#webtitle {
     position: relative;
     text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
-    bottom: 5px;
+    bottom: 2px;
     left: 500px;
 }
 
@@ -31,6 +29,10 @@ h1 {
     position: absolute;
     height: 50px;
     overflow: hidden;
+}
+
+#flightcost {
+    color: #00008B;
 }
 
 .startlatlong-view {
@@ -310,14 +312,16 @@ h2.title {
     position: relative;
     font-family: 'Arial Narrow Bold', sans-serif;
     font-size: 30px;
-    left: 48%;
+    left: 690px;
+    bottom: 20px;
     text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
 }
 
 .description {
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 200px;
+    margin-right: 200px;
     font-style: italic;
+    width: 1040px;
 }
 
 .subtitle {
