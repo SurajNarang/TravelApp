@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <h1>Welcome to the Server</h1>
     <script>
-    //fetch('localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521')
+        //fetch('localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521')
 
-    fetch("http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521")
-            .then(r => r.json())
-            .then((data) => {
-                console.log(data);
-            })
+        fetch(
+                "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521")
+            .then(r => r.json())
+            .then((data) => {
+                console.log(data.price);
+            })
 
+        
     </script>
+ <h1>res.sendFile() Works!
     
+ </h1>
+
+
 </body>
+
 </html>
