@@ -6,14 +6,12 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-const lufthansaKey = 'Bearer v34rwwgqhnx5tuaz5653bdt4';
+const lufthansaKey = 'Bearer p2yhfbsb3u9kvh5kpz7z7b4x';
 const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
- 
+
 async function Overall() {
     await determiningLatLong();
-  // surajUber();
-   // surajLyft(39.82552846,-75.49414158,39.83225175,-75.55525303)
-   //victor();
+    //GetFlightCost("PHL", "LAX");
 }
 Overall();
 
@@ -22,15 +20,16 @@ function printResult() {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         GetFlightCost(StartingAirportCode, EndingAirportCode);
+        GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
     }
-
 }
+
 async function determiningLatLong() {
     var searchInput = 'search_input';
     var searchInput2 = 'search_input2';
 
     // Start location autocomplete method
-    $(document).ready(function() {
+    $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
             types: ['geocode'],
@@ -40,7 +39,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -61,14 +60,14 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function() {
+    $(document).on('change', '#' + searchInput, function () {
         document.getElementById('startlatitude_view').innerHTML = '';
         document.getElementById('startlongitude_view').innerHTML = '';
         document.getElementById('startnearestairport').innerHTML = '';
     });
 
     // Final location autocomplete method
-    $(document).ready(function() {
+    $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
             types: ['geocode'],
@@ -78,7 +77,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -99,7 +98,7 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function() {
+    $(document).on('change', '#' + searchInput, function () {
         document.getElementById('endlatitude_view').innerHTML = '';
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
@@ -165,9 +164,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
-
-async function GetFlightCost(startCode, endCode) {
+async function GetFlightCost() {
     if (StartingAirportCode == undefined || EndingAirportCode == undefined) {
 
         console.log('Taking a break...');
@@ -200,10 +197,10 @@ async function GetFlightCost(startCode, endCode) {
                     console.log(jresponce);
                     const minPriceToday = jresponce.Quotes[0].MinPrice;
                     airlinePrice = minPriceToday;
-                   
-                    if(jresponce.Quotes.length > 1){
+
+                    if (jresponce.Quotes.length > 1) {
                         let min = jresponce.Quotes[0];
-                        for(let x=0;x<jresponce.Quotes.length;x++){
+                        for (let x = 0; x < jresponce.Quotes.length; x++) {
                             let value = jresponce.Quotes[x];
                             min = (value < min) ? value : min
                         }
@@ -233,17 +230,17 @@ async function GetFlightCost(startCode, endCode) {
                                 data2.then(jresponce2 => {
                                     const MinPriceForTm = jresponce2.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
-                                   
-                                    if(jresponce2.Quotes.length > 1){
+
+                                    if (jresponce2.Quotes.length > 1) {
                                         let min = jresponce2.Quotes[0];
-                                        for(let x=0;x<jresponce2.Quotes.length;x++){
+                                        for (let x = 0; x < jresponce2.Quotes.length; x++) {
                                             let value = jresponce2.Quotes[x];
                                             min = (value < min) ? value : min
                                         }
                                         airlinePrice = min;
                                     }
                                     console.log(airlinePrice);
-                                    document.getElementById('flightcost').value = airlinePrice;
+                                    document.getElementById('flightcost').value = "$" + airlinePrice;
                                 })
                             })
                             .catch(err => {
@@ -274,20 +271,22 @@ async function GetFlightCost(startCode, endCode) {
                             const data2 = responce2.json();
                             data2.then(jresponce3 => {
                                 if ((jresponce3.Quotes.length) == 0) {
+                                    document.getElementById('flightcost').innerHTML = "* No Flights Yet *";
                                     alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
                                 } else {
                                     const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
-                                    
-                                    if(jresponce3.Quotes.length > 1){
+
+                                    if (jresponce3.Quotes.length > 1) {
                                         let min = jresponce3.Quotes[0];
-                                        for(let x=0;x<jresponce3.Quotes.length;x++){
+                                        for (let x = 0; x < jresponce3.Quotes.length; x++) {
                                             let value = jresponce3.Quotes[x];
                                             min = (value < min) ? value : min
                                         }
                                         airlinePrice = min;
                                     }
                                     console.log(airlinePrice);
+                                    document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
                                     checkedNextDay = true;
                                 }
                             })
@@ -300,112 +299,21 @@ async function GetFlightCost(startCode, endCode) {
         .catch(err => {
             console.log(" an error occurred");
         });
-
 }
 
-function LyftCost(tempStartLong, tempStartLat, tempEndLong, tempEndLat) {
-    const puppeteer = require('puppeteer');
+function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
+    const dynamicUrl = "http://localhost:3000/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
+    // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
-    (async() => {
-        let url = "https://www.lyft.com/api/costs?start_lat=" + tempStartLat + "&start_lng=" + tempStartLong + "&end_lat=" + tempEndLat + "&end_lng=" + tempEndLong;
-
-        let browser = await puppeteer.launch({ headless: false });
-        let page = await browser.newPage();
-
-        await page.goto(url, { waitUntil: 'networkidle2' });
-
-        let data = await page.evaluate(() => {
-            let cost = document.querySelector('estimated_costs_per_max').innerText;
-
-            return {
-                cost
-            }
+    fetch(dynamicUrl, {
+            mode: "no-cors"
+        })
+        .then(r => r.json())
+        .then((data) => {
+            console.log("Lyft Price (cents): " + data.price);
+            console.log("Lyft Price (dollars): " + data.price / 100)
+            document.getElementById('lyftcost').innerHTML = "$" + data.price / 100;
+        }).catch(err => {
+            console.log("Unable to retrieve price data");
         });
-
-        console.log(data);
-
-        await browser.close();
-
-    })();
-}
-
-function surajLyft(tempStartLat,tempStartLong,tempEndLat,tempEndLong){
-    var url = "https://www.lyft.com/api/costs?start_lat="+tempStartLat+"&start_lng="+tempStartLong+"&end_lat="+tempEndLat+"&end_lng="+tempEndLong;
-    console.log(url)
-    let result = loadjson(url);
-    console.log(result);
-    
-
-    // $.getJSON(url,function(data){
-    //     console.log("inside the function");
-    // });
-//     fetch(url)
-//   .then(response => response.json())
-//   .then(data => console.log(data));
-    // (async () => {
-    //     const response = await fetch(url);
-    //     const json = await response.json();
-    //     console.log(JSON.stringify(json));
-    //   })()
-}
-
-function surajUber(){
-
-
-    const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
-    const token = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAADiF425_ZuOwidjmusWIhDmnAAAAAWyZ-Tqyu6Ne4HW3kGpIldZw0PzUGbuvwO8qNqANhP8nB1UUgkp9XqjtpQoX-q1nvf2iNcBoJhoPMAZ8ArrmDly_PIf0uINyTwaas4ObCrlJVuP3-kTzj3QhIJNqGLcQ-HmUcTBum13tmxr28veH2A7LpmG4n--XEgea5KmkplsdKW4TMo5XtqcU6BGMbJDtAfXn__-WdQLgosa5ltqRWPf25s5A8DIADAAAACG7wGeFWS4YWX7YRyQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
-    
-    fetch(url, {
-        "method": "GET",
-        "mode" : "no-cors",
-        "headers": {
-            'Accept-Language': 'en_US',
-            'Authorization': 'Bearer ' +token,
-            'Content-Type': 'application/json',
-            //'Access-Control-Allow-Methods': 'GET',
-            
-        }
-    
-    }).then(responceHI => {
-        console.log(responceHI);
-    })
-    .catch (err => {
-        console.log(err+"error happened");
-    });
-
-    
-
-    // UBER 
-    // POST "https://www.uber.com/api/loadFEEstimates" 
-    // HEADER add "x-csrf-token: x" 
-    // BODY {  
-    //     "destination": 
-    //     { "id": "ChIJgb8Ht9BqkFQR7Xm7qmRD4KM",
-    //      "latitude": 47.61344130000001,
-    //       "locale": "en",
-    //        "longitude": -122.304172,
-    //         "provider": "google_places" },
-    //          "origin": 
-    //          { "id": "ChIJN4LWxsVqkFQR1LE-hB6E4GY",
-    //           "latitude": 47.6076018,
-    //            "locale": "en",
-    //             "longitude": -122.3119244,
-    //              "provider": "google_places" 
-    //             }
-    //          }
-}
-
-function victor(){
-    const axios = require('axios');
-
-    axios({
-        url : "https://www.lyft.com/api/costs?start_lat=47.6076018&start_lng=-122.3119244&end_lat=47.6233218&end_lng=-122.3636521"
-
-    }).then((res, err)=>{
-        let costEstimates = res.data.cost_estimate;
-        let minCents = costEstimates.map(item=>item.estimated_cost_cents_min);
-        console.log(minCents);
-
-    })
-
 }
