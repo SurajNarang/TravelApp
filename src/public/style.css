@@ -3,8 +3,10 @@
 }
 
 body {
+    /* background: -webkit-linear-gradient(left, #25c481, #25b7c4);
+    background: linear-gradient(to right, #25c481, #25b7c4); */
     background-color: #89cdf2;
-    /* sets background to blue */
+    font-family: 'Roboto', sans-serif;
     display: flex;
     /*in-line flex element */
     flex-direction: column;
@@ -21,7 +23,7 @@ body {
     position: relative;
     text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
     bottom: 2px;
-    left: 500px;
+    text-align: center;
 }
 
 .form-group {
@@ -31,16 +33,15 @@ body {
     overflow: hidden;
 }
 
-#flightcost {
-    color: #00008B;
-}
-
 .startlatlong-view {
     width: 300px;
     position: absolute;
     overflow: hidden;
     left: 860px;
+    top: 225px;
+    /*
     bottom: 460px;
+    */
     font-size: 13px;
 }
 
@@ -49,7 +50,10 @@ body {
     position: absolute;
     overflow: hidden;
     left: 860px;
+    top: 320px;
+    /*
     bottom: 380px;
+    */
     font-size: 13px;
 }
 
@@ -65,14 +69,15 @@ table,
 td,
 th {
     border: 4px solid #89cdf2;
-    text-align: left;
+    text-align: center;
 }
 
 table {
     position: absolute;
-    width: 600px;
-    left: 400px;
-    bottom: 60px;
+    width: 700px;
+    left: 350px;
+    top: 425px;/**/
+    /*bottom: 0px;*/
     border-collapse: collapse;
 }
 
@@ -101,7 +106,10 @@ td {
     position: absolute;
     height: 50px;
     overflow: hidden;
+    top: 240px;
+    /*
     bottom: 470px;
+    */
     left: 400px;
 }
 
@@ -163,7 +171,10 @@ td {
     position: absolute;
     height: 50px;
     overflow: hidden;
+    top: 330px;
+    /*
     bottom: 390px;
+    */
     left: 400px;
 }
 
@@ -201,7 +212,10 @@ td {
 #directions {
     position: absolute;
     overflow: hidden;
+    top: 150px;
+    /*
     bottom: 540px;
+    */
     left: 400px;
     width: 620px;
     z-index: 1;
@@ -260,7 +274,10 @@ h1 {
 
 .info-button {
     position: absolute;
+    top: 35px;
+    /*
     bottom: 670px;
+    */
     left: 35px;
 }
 
@@ -295,7 +312,10 @@ h1 {
 
 .about-button {
     position: absolute;
+    top: 35px;
+    /*
     bottom: 670px;
+    */
     left: 1330px;
 }
 
@@ -310,11 +330,11 @@ html {
 
 h2.title {
     position: relative;
-    font-family: 'Arial Narrow Bold', sans-serif;
+    font-family: 'Arial Bold', sans-serif;
     font-size: 30px;
     left: 690px;
     bottom: 20px;
-    text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+    /*text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);*/
 }
 
 .description {
@@ -322,6 +342,8 @@ h2.title {
     margin-right: 200px;
     font-style: italic;
     width: 1040px;
+    line-height: 25px;
+    font-family: 'Arial', sans-serif;
 }
 
 .subtitle {
