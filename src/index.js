@@ -22,20 +22,11 @@ app.get("/lyft", (req, response) => {
     .then((r) => {
       let costEstimates = r.cost_estimates;
       let prices = costEstimates.map(item=>({min:item.estimated_cost_cents_min, max: item.estimated_cost_cents_max}));
-      return { price: (prices[0].min + prices[0].max)/2};
-      // let min = costEstimates.map(item1 => (item1.estimated_cost_cents_min));
-      // let max = costEstimates.map(item2 => (item2.estimated_cost_cents_max));
-
-      // let stringMin = min.toString();
-      // let minLyftCost = stringMin.substr(0, stringMin.indexOf(','));
-      // let num1 = parseInt(minLyftCost, 10);
-
-      // let stringMax = max.toString();
-      // let maxLyftCost = stringMax.substr(0, stringMax.indexOf(','));
-      // let num2 = parseInt(maxLyftCost, 10);
-
-      // var finalCost = 0.5 * (num1 + num2);
-      // return finalCost;
+      let lyftStandardPrice = { price: (prices[0].min + prices[0].max)/2};
+      let lyftXLPrice = { price: (prices[1].min + prices[1].max)/2};
+      let timeDuration = r.cost_estimates[0].estimated_duration_seconds;
+      var RidePriceArray = [lyftStandardPrice,lyftXLPrice,timeDuration];
+      return RidePriceArray;
 
     })
     .then(r => {
