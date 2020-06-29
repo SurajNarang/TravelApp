@@ -29,7 +29,7 @@ async function determiningLatLong() {
     var searchInput2 = 'search_input2';
 
     // Start location autocomplete method
-    $(document).ready(function () {
+    $(document).ready(function() {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
             types: ['geocode'],
@@ -39,7 +39,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -60,14 +60,14 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function () {
+    $(document).on('change', '#' + searchInput, function() {
         document.getElementById('startlatitude_view').innerHTML = '';
         document.getElementById('startlongitude_view').innerHTML = '';
         document.getElementById('startnearestairport').innerHTML = '';
     });
 
     // Final location autocomplete method
-    $(document).ready(function () {
+    $(document).ready(function() {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
             types: ['geocode'],
@@ -77,7 +77,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -98,7 +98,7 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function () {
+    $(document).on('change', '#' + searchInput, function() {
         document.getElementById('endlatitude_view').innerHTML = '';
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
@@ -240,7 +240,7 @@ async function GetFlightCost() {
                                         airlinePrice = min;
                                     }
                                     console.log(airlinePrice);
-                                    document.getElementById('flightcost').value = "$" + airlinePrice;
+                                    document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
                                 })
                             })
                             .catch(err => {
@@ -271,8 +271,9 @@ async function GetFlightCost() {
                             const data2 = responce2.json();
                             data2.then(jresponce3 => {
                                 if ((jresponce3.Quotes.length) == 0) {
-                                    document.getElementById('flightcost').innerHTML = "* No Flights Yet *";
-                                    alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
+                                    var message = "*No Flights Yet*"
+                                    document.getElementById('flightcost').innerHTML = message.fontcolor("#00008B");
+                                    // alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
                                 } else {
                                     const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
@@ -310,9 +311,18 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
         })
         .then(r => r.json())
         .then((data) => {
-            console.log("Lyft Price (cents): " + data.price);
-            console.log("Lyft Price (dollars): " + data.price / 100)
-            document.getElementById('lyftcost').innerHTML = "$" + data.price / 100;
+            console.log("Lyft Price (dollars): " + data.price / 100);
+            console.log("Duration of Trip (minutes): " + data.duration / 60);
+
+            var standardPrice = data.standardPrice / 100;
+            var XLprice = data.XLprice / 100;
+            var finalDuration = data.timeDuration / 60;
+            var standardDuration = Math.round(finalDuration);
+
+            document.getElementById('lyftcost').innerHTML = "$" + standardPrice;
+            document.getElementById('lyftXLcost').innerHTML = "$" + XLprice;
+            document.getElementById('lyftduration').innerHTML = "~ " + standardDuration + " minutes";
+
         }).catch(err => {
             console.log("Unable to retrieve price data");
         });

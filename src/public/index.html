@@ -15,8 +15,7 @@
     <h1 id="webtitle"> US Turbo Travel WebApp</h1>
     <p id="directions"> <b>Directions: </b>Please enter a start and end location to determine the most cost-effective way of travel to your destination, via Ridesharing or Air Travel. </p>
     <div id="canvas">
-        <canvas id="canvas-box" width="800" height="600"> 
-            
+        <canvas id="canvas-box" width="800" height="700"> 
         </canvas>
     </div>
     <button id="info-button" class="button info-button">More</button>
@@ -70,30 +69,42 @@
 
     <table>
         <tr>
-            <th></th>
-            <th><img id="uber" src="uber.png" alt="uber">
+            <th>Service</th>
+            <th><b>Prices </b>
             </th>
-            <th><img id="lyft" src="lyft2.png" width=70px 0px alt="uber">
+            <th><b>More Details</b>
             </th>
-            <th>Flight</th>
+
         </tr>
         <tr>
             <td>
-                <b>Total Cost</b></td>
-            <td><b></b>UberX: </td>
-            <td>Standard: <span id="lyftcost"></span></td>
+                <img id="uber" src="uber.png" alt="uber"></td>
+            <td>UberX (Max: 4 passengers): <span id="ubercost"></span><br></br>
+                UberXL (Max: 6 passengers):
+            </td>
+            <td> Duration: </td>
+
+        </tr>
+        <tr>
+            <td><img id="lyft" src="lyft2.png" width="70px" alt="lyft"></td>
+            <td>Lyft Standard (Max: 4 passengers): <span id="lyftcost"></span><br></br>
+                Lyft XL (Max: 6 passengers): <span id="lyftXLcost"></span></td>
+            <td>Duration: <span id="lyftduration"></span></td>
+
+        </tr>
+        <tr>
+            <td>
+                <b>Flights</b>
+            </td>
             <td>
                 <p>One-way Airfare: <span id="flightcost"></span></p>
             </td>
-        </tr>
-        <tr>
-            <td><b>Data</b></td>
-            <td>N/A</td>
-            <td>N/A</td>
             <td>
                 <p>Nearest Starting Airport: <span id="startnearestairport"></span></p>
                 <p>Nearest Ending Airport: <span id="endnearestairport"></span></p>
+                <p>Airline: </p>
             </td>
+
         </tr>
     </table>
 
@@ -180,7 +191,7 @@
         closeBtn.addEventListener('click', () => info.classList.remove('appear'));
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyDNzy9Ajy_yaFij7u2WysWT7KEWFvhJpQg"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="></script>
     <script src="LatLong.js"></script>
 
 
