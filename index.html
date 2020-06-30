@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <title>Travel Web App</title>
+</head>
+
+<body>
+    <h1 id="webtitle"> US Turbo Travel WebApp</h1>
+    <p id="directions"> <b>Directions: </b>Please enter a start and end location to determine the most cost-effective way of travel to your destination, via Ridesharing or Air Travel. </p>
+    <div id="canvas">
+        <canvas id="canvas-box" width="800" height="700"> 
+        </canvas>
+    </div>
+    <button id="info-button" class="button info-button">More</button>
+    <button id="about-button" class="button about-button">About <a href="#about">
+            <li data-menuanchor="about" class="btn btn-lg btn-default about"></li>
+        </a> </button>
+
+    <div id="info" class="info">
+        <p>
+            Thanks for checking out our Travel Webapp! Would you like to help us keep the site running?
+        </p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_donations" />
+            <input type="hidden" name="business" value="V9M9HCZTGSWCL" />
+            <input type="hidden" name="currency_code" value="USD" />
+            <input type="hidden" name="amount" value="1" />
+            <input type="image" src="https://i.postimg.cc/fTMDWWgV/Donate-Button-4.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+            <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        <br></br>
+        <button id="close-button" class="button">Close</button>
+    </div>
+
+    <!-- Start location section-->
+    <div class="startform">
+        <input type="text" name="location1" id="search_input" class="form-control" required placeholder="" />
+        <label for="location1" class="label-location1">
+            <span class="content-location1" id="autocomplete"> Enter Start Location: </span>
+        </label>
+    </div>
+
+    <div class="form-group" id="lat_area">
+        <label for="latitude"> </label>
+        <input type="hidden" name="latitude" id="loc_lat" class="form-control">
+    </div>
+
+    <div class="form-group" id="long_area">
+        <label for="longitude"> </label>
+        <input type="hidden" name="longitude" id="loc_long" class="form-control">
+    </div>
+
+    <div class="form-group" id="startairport">
+        <label for="startingpoint"> </label>
+        <input type="hidden" name="startingpoint" id="loc_startflight" class="form-control">
+    </div>
+
+    <div class="form-group" id="endairport">
+        <label for="destination"> </label>
+        <input type="hidden" name="destination" id="loc_endflight" class="form-control">
+    </div>
+
+    <table>
+        <tr>
+            <th>Service</th>
+            <th><b>Prices </b>
+            </th>
+            <th><b>More Details</b>
+            </th>
+
+        </tr>
+        <tr>
+            <td>
+                <img id="uber" src="uber.png" alt="uber"></td>
+            <td>UberX (Max: 4 passengers): <span id="ubercost"></span><br></br>
+                UberXL (Max: 6 passengers):
+            </td>
+            <td> Duration: </td>
+
+        </tr>
+        <tr>
+            <td><img id="lyft" src="lyft3.png" width="70px" alt="lyft"></td>
+            <td>Lyft Standard (Max: 4 passengers): <span id="lyftcost"></span><br></br>
+                Lyft XL (Max: 6 passengers): <span id="lyftXLcost"></span></td>
+            <td>Duration: <span id="lyftduration"></span></td>
+
+        </tr>
+        <tr>
+            <td>
+                <b>Flights</b>
+            </td>
+            <td>
+                <p>One-way Airfare: <span id="flightcost"></span></p>
+            </td>
+            <td>
+                <p>Nearest Starting Airport: <span id="startnearestairport"></span></p>
+                <p>Nearest Ending Airport: <span id="endnearestairport"></span></p>
+                <p>Airline: </p>
+            </td>
+
+        </tr>
+    </table>
+
+    <!-- Longitude & Latitude Data-->
+    <div class="startlatlong-view">
+        <p><b>Latitude:</b> <span id="startlatitude_view"></span></p>
+        <p><b>Longitude:</b> <span id="startlongitude_view"></span></p>
+    </div>
+
+    <div class="endlatlong-view">
+        <p><b>Latitude:</b> <span id="endlatitude_view"></span></p>
+        <p><b>Longitude:</b> <span id="endlongitude_view"></span></p>
+    </div>
+
+    <!-- Destination section-->
+    <div class="endform">
+        <input type="text" name="location2" id="search_input2" class="form-control" required placeholder="" />
+        <label for="location2" class="label-location2">
+            <span class="content-location2" id="autocomplete"> Enter Destination: </span>
+        </label>
+    </div>
+
+    <!-- About Me Section-->
+    <div id="about">
+        <div class="section section-4">
+            <h2 class="title"> <u>About</u></h2>
+            <div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
+                <p class="description">
+                    Turbo Travel provides an elegant solution to a modern traveling problem. To find the most cost-effective means of travel, we often spend countless minutes, sometimes hours, scouring different apps/websites for the best prices, whether it be for ride-hailing
+                    or air travel.
+                    <br></br>
+                    With Turbo Travel, you simply input your start address and your destination address and you will be shown the real-time estimated price of UBER and LYFT side-by-side, allowing you to choose the most cost-efficient travel method. If your trip is greater
+                    than 100 miles, it will automatically provide you with the cheapest airfare ticket, along with the Airline name. Turbo Travel has also been developed to handle long-distance travel as well. When your travel trip is greater than 100
+                    miles, Turbo Travel automatically grabs the nearest airport of your starting location as well as the nearest airport to your destination location. From there, it seamlessly provides you with the cheapest Airfare, along with providing
+                    you with the airline, starting/destination airport, and the respective link to the Airline's website, all for ease of booking.
+                </p>
+                <h3 class="subtitle"><u>Developers</u></h3>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-4">
+                    <img class="image1" src="pic1.jpeg" alt="Sahil's Linkedin" />
+                    <div class="caption">
+                        <b>
+                            <p class="name1">Sahil Sinha</p>
+                        </b>
+                        <div class="media1">
+                            <a class="btn2" href="https://www.linkedin.com/in/sahilsinha2000/" target="_blank">
+                                <i class="fa fa-linkedin" aria-hidden="true"></i>
+                            </a>
+
+                            <a class="btn2" href="https://github.com/snail2037" target="_blank">
+                                <i class="fa fa-github" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-4">
+                    <img class="image2" src="pic2.jpeg" alt="Suraj's Linkedin" />
+                    <b>
+                        <p class="name2">Suraj Narang</p>
+                    </b>
+                    <div class="media2">
+                        <a class="btn2" href="https://www.linkedin.com/in/suraj-narang" target="_blank">
+                            <i class="fa fa-linkedin" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn2" href="https://github.com/SurajNarang" target="_blank">
+                            <i class="fa fa-github" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const infoBtn = document.getElementById('info-button');
+        const closeBtn = document.getElementById('close-button');
+        const info = document.getElementById('info');
+
+        // Open and close event handlers
+        infoBtn.addEventListener('click', () => info.classList.add('appear'));
+        closeBtn.addEventListener('click', () => info.classList.remove('appear'));
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyBc_OslzqoGgB6zFR4wzAxYKGLFJWO6WOw"></script>
+    <script src="LatLong.js"></script>
+
+
+</body>
+
+</html>
