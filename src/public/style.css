@@ -87,13 +87,13 @@ td {
 }
 
 #uber {
-    height: 8%;
+    height: 10%;
     display: block;
     margin: 0 auto;
 }
 
 #lyft {
-    height: 12%;
+    height: 19%;
     display: block;
     margin: 0 auto;
 }
@@ -249,6 +249,7 @@ h1 {
     position: relative;
     left: 300px;
     bottom: 2px;
+    
     background: #f0f0f0;
     display: block;
     border-radius: 5px;

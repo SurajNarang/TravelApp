@@ -314,8 +314,9 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
             console.log("Lyft Price (dollars): " + data.price / 100);
             console.log("Duration of Trip (minutes): " + data.duration / 60);
 
-            var standardPrice = data.standardPrice / 100;
-            var XLprice = data.XLprice / 100;
+            var standardPrice = addZeroes(data.standardPrice / 100);
+            
+            var XLprice = addZeroes(data.XLprice / 100);
             var finalDuration = data.timeDuration / 60;
             var standardDuration = Math.round(finalDuration);
 
@@ -326,4 +327,15 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
         }).catch(err => {
             console.log("Unable to retrieve price data");
         });
+}
+
+function addZeroes(num) {
+    // Cast as number
+    var num = Number(num);
+    // If there is no decimal, or the decimal is less than 2 digits, toFixed
+    if (String(num).split(".").length < 2 || String(num).split(".")[1].length<=2 ){
+        num = num.toFixed(2);
+    }
+    // Return the number
+    return num;
 }
