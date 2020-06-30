@@ -38,7 +38,10 @@ body {
     position: absolute;
     overflow: hidden;
     left: 860px;
+    top: 225px;
+    /*
     bottom: 460px;
+    */
     font-size: 13px;
 }
 
@@ -47,7 +50,10 @@ body {
     position: absolute;
     overflow: hidden;
     left: 860px;
+    top: 320px;
+    /*
     bottom: 380px;
+    */
     font-size: 13px;
 }
 
@@ -70,7 +76,8 @@ table {
     position: absolute;
     width: 700px;
     left: 350px;
-    bottom: 0px;
+    top: 425px;/**/
+    /*bottom: 0px;*/
     border-collapse: collapse;
 }
 
@@ -99,7 +106,10 @@ td {
     position: absolute;
     height: 50px;
     overflow: hidden;
+    top: 240px;
+    /*
     bottom: 470px;
+    */
     left: 400px;
 }
 
@@ -161,7 +171,10 @@ td {
     position: absolute;
     height: 50px;
     overflow: hidden;
+    top: 330px;
+    /*
     bottom: 390px;
+    */
     left: 400px;
 }
 
@@ -199,7 +212,10 @@ td {
 #directions {
     position: absolute;
     overflow: hidden;
+    top: 150px;
+    /*
     bottom: 540px;
+    */
     left: 400px;
     width: 620px;
     z-index: 1;
@@ -258,7 +274,10 @@ h1 {
 
 .info-button {
     position: absolute;
+    top: 35px;
+    /*
     bottom: 670px;
+    */
     left: 35px;
 }
 
@@ -293,7 +312,10 @@ h1 {
 
 .about-button {
     position: absolute;
+    top: 35px;
+    /*
     bottom: 670px;
+    */
     left: 1330px;
 }
 
