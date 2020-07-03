@@ -95,7 +95,7 @@
         <tr>
             <td>
                 <img id="planePic" src="airplane3.png">
-                
+
             </td>
             <td>
                 <p>One-way Airfare: <span id="flightcost"></span></p>
@@ -181,7 +181,7 @@
             </div>
         </div>
     </div>
-
+    <script type='text/javascript' src='config.js'></script>
     <script>
         const infoBtn = document.getElementById('info-button');
         const closeBtn = document.getElementById('close-button');
@@ -192,7 +192,12 @@
         closeBtn.addEventListener('click', () => info.classList.remove('appear'));
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=AIzaSyBc_OslzqoGgB6zFR4wzAxYKGLFJWO6WOw"></script>
+
+    <script>
+        var mykey = config.MY_KEY;
+        document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
+    </script>
+
     <script src="LatLong.js"></script>
 
 

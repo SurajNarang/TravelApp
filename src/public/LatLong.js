@@ -6,8 +6,8 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-const lufthansaKey = 'Bearer p2yhfbsb3u9kvh5kpz7z7b4x';
-const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
+var lufthansaKey = config.LUFT_KEY;
+var skyScannerKey = config.SKYSCAN_KEY;
 
 async function Overall() {
     await determiningLatLong();
@@ -315,7 +315,7 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
             console.log("Duration of Trip (minutes): " + data.duration / 60);
 
             var standardPrice = addZeroes(data.standardPrice / 100);
-            
+
             var XLprice = addZeroes(data.XLprice / 100);
             var finalDuration = data.timeDuration / 60;
             var standardDuration = Math.round(finalDuration);
@@ -323,6 +323,8 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
             document.getElementById('lyftcost').innerHTML = "$" + standardPrice;
             document.getElementById('lyftXLcost').innerHTML = "$" + XLprice;
             document.getElementById('lyftduration').innerHTML = "~ " + standardDuration + " minutes";
+            document.getElementById('uberduration').innerHTML = "~ " + standardDuration + " minutes";
+
 
         }).catch(err => {
             console.log("Unable to retrieve price data");
@@ -333,7 +335,7 @@ function addZeroes(num) {
     // Cast as number
     var num = Number(num);
     // If there is no decimal, or the decimal is less than 2 digits, toFixed
-    if (String(num).split(".").length < 2 || String(num).split(".")[1].length<=2 ){
+    if (String(num).split(".").length < 2 || String(num).split(".")[1].length <= 2) {
         num = num.toFixed(2);
     }
     // Return the number
