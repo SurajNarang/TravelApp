@@ -6,8 +6,10 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-const lufthansaKey = 'Bearer p2yhfbsb3u9kvh5kpz7z7b4x';
-const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
+const lufthansaKey = config.LUFT_KEY;
+const skyScannerKey = config.SKYSCAN_KEY;
+const mykey = config.MY_KEY;
+document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
 
 async function Overall() {
     await determiningLatLong();
@@ -21,6 +23,7 @@ function printResult() {
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         GetFlightCost(StartingAirportCode, EndingAirportCode);
         GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+        // GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
     }
 }
 
@@ -304,33 +307,33 @@ async function GetFlightCost() {
 
 function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
     //ADD SOMETHING TO FIL IN HTML WHEN ROUTE IS TOO LONG
-    if(getDistanceFromLatLonInKm(tempStartLat, tempStartLong, tempEndLat, tempEndLong) < 150){
+    if (getDistanceFromLatLonInKm(tempStartLat, tempStartLong, tempEndLat, tempEndLong) < 150) {
 
-    const dynamicUrl = "http://localhost:3000/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
-    // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
+        const dynamicUrl = "http://localhost:3000/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
+        // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
-    fetch(dynamicUrl, {
-            mode: "no-cors"
-        })
-        .then(r => r.json())
-        .then((data) => {
-            console.log("Lyft Price (dollars): " + data.price / 100);
-            console.log("Duration of Trip (minutes): " + data.duration / 60);
+        fetch(dynamicUrl, {
+                mode: "no-cors"
+            })
+            .then(r => r.json())
+            .then((data) => {
+                console.log("Lyft Price (dollars): " + data.price / 100);
+                console.log("Duration of Trip (minutes): " + data.duration / 60);
 
-            var standardPrice = addZeroes(data.standardPrice / 100);
-            
-            var XLprice = addZeroes(data.XLprice / 100);
-            var finalDuration = data.timeDuration / 60;
-            var standardDuration = Math.round(finalDuration);
+                var standardPrice = addZeroes(data.standardPrice / 100);
 
-            document.getElementById('lyftcost').innerHTML = "$" + standardPrice;
-            document.getElementById('lyftXLcost').innerHTML = "$" + XLprice;
-            document.getElementById('lyftduration').innerHTML = "~ " + standardDuration + " minutes";
-            document.getElementById('uberduration').innerHTML = "~ " + standardDuration + " minutes";
+                var XLprice = addZeroes(data.XLprice / 100);
+                var finalDuration = data.timeDuration / 60;
+                var standardDuration = Math.round(finalDuration);
 
-        }).catch(err => {
-            console.log("Unable to retrieve price data");
-        });
+                document.getElementById('lyftcost').innerHTML = "$" + standardPrice;
+                document.getElementById('lyftXLcost').innerHTML = "$" + XLprice;
+                document.getElementById('lyftduration').innerHTML = "~ " + standardDuration + " minutes";
+                document.getElementById('uberduration').innerHTML = "~ " + standardDuration + " minutes";
+
+            }).catch(err => {
+                console.log("Unable to retrieve price data");
+            });
     }
     document.getElementById('lyftcost').innerHTML = "***";
     document.getElementById('lyftXLcost').innerHTML = "***";
@@ -342,61 +345,60 @@ function addZeroes(num) {
     // Cast as number
     var num = Number(num);
     // If there is no decimal, or the decimal is less than 2 digits, toFixed
-    if (String(num).split(".").length < 2 || String(num).split(".")[1].length<=2 ){
+    if (String(num).split(".").length < 2 || String(num).split(".")[1].length <= 2) {
         num = num.toFixed(2);
     }
     // Return the number
     return num;
 }
 
-function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
-    var dLat = deg2rad(lat2-lat1);  // deg2rad below
-    var dLon = deg2rad(lon2-lon1); 
-    var a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2)
-      ; 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var dLat = deg2rad(lat2 - lat1); // deg2rad below
+    var dLon = deg2rad(lon2 - lon1);
+    var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c; // Distance in km
     return d;
-  }
-  
-  function deg2rad(deg) {
-    return deg * (Math.PI/180)
-  }
+}
 
-  
-//   const fetch = require("node-fetch");
+function deg2rad(deg) {
+    return deg * (Math.PI / 180)
+}
 
-//   async function postData ( data = {} ){
-  
-//       url = 'https://www.uber.com/api/loadFEEstimates';
-//       const response = await fetch(url, {
-//           method: 'POST',
-//           mode: 'cors',
-//           headers: {
-//               add: 'x-csrf-token: x'
-//           },
-//           body: {
-//               'destination': {
-//                   'id': 'AIzaSyDm_njKItPSYzr20AeYersiYRjyokfakXY',
-//                   'latitude': '47.61344130000001',
-//                   'locale':"en",
-//                   'longitude': '-122.304172',
-//                   "provider": "google_places"
-//               },
-//               'origin': {
-//                   "id": "AIzaSyDm_njKItPSYzr20AeYersiYRjyokfakXY",
-//                   "latitude": '47.6076018',
-//                   "locale": "en",
-//                   "longitude": '-122.3119244',
-//                   "provider": "google_places"
-//               }
-//           },
-//           body: JSON.stringify(data)
-//       });
-//       return response.json()
-//   }
-//   console.log(postData());
+function GetUberCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
+    const fetchUberSubEstimates = (tempStartLat, tempStartLong, tempEndLat, tempEndLong) => {
+        return new Promise((resolve, reject) => {
+            axios({
+                    method: 'GET',
+                    url: 'https://api.uber.com/v1.2/estimates/price',
+                    headers: {
+                        'Authorization': `Token ${tokens.uber}`,
+                        'Accept-Language': 'en_US',
+                        'Content-Type': 'application/json'
+                    },
+                    params: {
+                        tempStartLat,
+                        tempStartLong,
+                        tempEndLat,
+                        tempEndLong
+                    }
+
+                })
+                .then((response) => {
+                    // returns array of subestimate objects
+                    resolve(response.data.prices);
+                })
+                .catch((err) => {
+                    console.log(`UBER API err: ${err}`);
+                    reject(err);
+                });
+        })
+    };
+    fetchUberSubEstimates(37.7752315, -122.418075, 37.7752415, -122.518075)
+        //   .then((prices) => console.log(prices));
+
+}
