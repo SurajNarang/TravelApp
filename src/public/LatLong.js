@@ -6,8 +6,8 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-const lufthansaKey = 'Bearer p2yhfbsb3u9kvh5kpz7z7b4x';
-const skyScannerKey = "f2a0fe483cmsh6dc8cbd8fda93d4p1035a1jsn72c0097275c9";
+var lufthansaKey = config.LUFT_KEY;
+var skyScannerKey = config.SKYSCAN_KEY;
 
 async function Overall() {
     await determiningLatLong();
