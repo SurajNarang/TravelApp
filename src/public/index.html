@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <h1 id="webtitle"> Turbo Travel (USA Edition)</h1>
+    <h1 id="webtitle"> US Turbo Travel WebApp</h1>
     <p id="directions"> <b>Directions: </b>Please enter a start and end location to determine the most cost-effective way of travel to your destination, via Ridesharing or Air Travel. </p>
     <div id="canvas">
         <canvas id="canvas-box" width="800" height="700"> 
@@ -68,35 +68,34 @@
     </div>
 
     <table>
-        <tr >
-            <th id="first-header">Service</th>
-            <th id="second-header"><b>Prices </b>
+        <tr>
+            <th>Service</th>
+            <th><b>Prices </b>
             </th>
-            <th id="third-header"><b>More Details</b>
+            <th><b>More Details</b>
             </th>
 
         </tr>
         <tr>
             <td>
                 <img id="uber" src="uber.png" alt="uber"></td>
-            <td>UberX (Max: 4 Riders): <b> <span id="ubercost"></span></b>
-                <br></br>
-                UberXL (Max: 6 Riders):
-            </td> 
-            <td>Duration: <b><span id="uberduration"></span></b></td>
+            <td>UberX (Max: 4 passengers): <span id="ubercost"></span><br></br>
+                UberXL (Max: 6 passengers):
+            </td>
+            <td> Duration: </td>
 
         </tr>
         <tr>
             <td><img id="lyft" src="lyft3.png" width="70px" alt="lyft"></td>
-            <td>Lyft (Max: 4 Riders): <b><span id="lyftcost"></span></b><br></br>
-                Lyft XL (Max: 6 Riders): <b><span id="lyftXLcost"></span></b></td>
-            <td>Duration: <b><span id="lyftduration"></span></b></td>
+            <td>Lyft Standard (Max: 4 passengers): <span id="lyftcost"></span><br></br>
+                Lyft XL (Max: 6 passengers): <span id="lyftXLcost"></span></td>
+            <td>Duration: <span id="lyftduration"></span></td>
 
         </tr>
         <tr>
             <td>
                 <img id="planePic" src="airplane3.png">
-                
+
             </td>
             <td>
                 <p>One-way Airfare: <span id="flightcost"></span></p>
@@ -129,14 +128,6 @@
         </label>
     </div>
 
-    <div id="TooLongRoute">
-        <p>
-           <b>***</b>  = Seems like your route is greater than 150 miles 😳 !! <br>This route is not accessible by Uber/Lyft, 
-            but rather is accessible by flight 🛫
-            
-        </p>
-    </div>
-
     <!-- About Me Section-->
     <div id="about">
         <div class="section section-4">
@@ -144,10 +135,10 @@
             <div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
                 <p class="description">
                     Turbo Travel provides an elegant solution to a modern traveling problem. To find the most cost-effective means of travel, we often spend countless minutes, sometimes hours, scouring different apps/websites for the best prices, whether it be for ride-hailing
-                    or air travel. Turbo Travel is a cost-effective mobility guidance product!
+                    or air travel.
                     <br></br>
                     With Turbo Travel, you simply input your start address and your destination address and you will be shown the real-time estimated price of UBER and LYFT side-by-side, allowing you to choose the most cost-efficient travel method. If your trip is greater
-                    than 150 miles, it will automatically provide you with the cheapest airfare ticket, along with the Airline name. Turbo Travel has also been developed to handle long-distance travel as well. When your travel trip is greater than 150
+                    than 100 miles, it will automatically provide you with the cheapest airfare ticket, along with the Airline name. Turbo Travel has also been developed to handle long-distance travel as well. When your travel trip is greater than 100
                     miles, Turbo Travel automatically grabs the nearest airport of your starting location as well as the nearest airport to your destination location. From there, it seamlessly provides you with the cheapest Airfare, along with providing
                     you with the airline, starting/destination airport, and the respective link to the Airline's website, all for ease of booking.
                 </p>
@@ -201,19 +192,8 @@
         closeBtn.addEventListener('click', () => info.classList.remove('appear'));
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-
-    <script>
-        var mykey = config.MY_KEY;
-        document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
-    </script>
-
     <script src="LatLong.js"></script>
 
-
 </body>
-<div id="disclaimer">
-  <footer>
-      *Turbo Travel is not affiliated with Uber, Lyft, or any Airlines
-    </footer>
-</div>
+
 </html>

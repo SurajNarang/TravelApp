@@ -6,8 +6,11 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-var lufthansaKey = config.LUFT_KEY;
-var skyScannerKey = config.SKYSCAN_KEY;
+const lufthansaKey = config.LUFT_KEY;
+const skyScannerKey = config.SKYSCAN_KEY;
+const mykey = config.MY_KEY;
+document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
+
 
 async function Overall() {
     await determiningLatLong();
