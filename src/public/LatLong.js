@@ -6,8 +6,10 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var checkedNextDay = new Boolean(false);
-var lufthansaKey = config.LUFT_KEY;
-var skyScannerKey = config.SKYSCAN_KEY;
+const lufthansaKey = config.LUFT_KEY;
+const skyScannerKey = config.SKYSCAN_KEY;
+const mykey = config.MY_KEY;
+document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
 
 async function Overall() {
     await determiningLatLong();
@@ -21,6 +23,7 @@ function printResult() {
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         GetFlightCost(StartingAirportCode, EndingAirportCode);
         GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+        GetUberCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong)
     }
 }
 
@@ -340,4 +343,38 @@ function addZeroes(num) {
     }
     // Return the number
     return num;
+}
+
+function GetUberCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
+    const fetchUberSubEstimates = (tempStartLat, tempStartLong, tempEndLat, tempEndLong) => {
+        return new Promise((resolve, reject) => {
+            axios({
+                    method: 'GET',
+                    url: 'https://api.uber.com/v1.2/estimates/price',
+                    headers: {
+                        'Authorization': `Token ${tokens.uber}`,
+                        'Accept-Language': 'en_US',
+                        'Content-Type': 'application/json'
+                    },
+                    params: {
+                        tempStartLat,
+                        tempStartLong,
+                        tempEndLat,
+                        tempEndLong
+                    }
+
+                })
+                .then((response) => {
+                    // returns array of subestimate objects
+                    resolve(response.data.prices);
+                })
+                .catch((err) => {
+                    console.log(`UBER API err: ${err}`);
+                    reject(err);
+                });
+        })
+    };
+    fetchUberSubEstimates(37.7752315, -122.418075, 37.7752415, -122.518075)
+        //   .then((prices) => console.log(prices));
+
 }
