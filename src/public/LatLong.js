@@ -303,6 +303,9 @@ async function GetFlightCost() {
 }
 
 function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
+    //ADD SOMETHING TO FIL IN HTML WHEN ROUTE IS TOO LONG
+    if(getDistanceFromLatLonInKm(tempStartLat, tempStartLong, tempEndLat, tempEndLong) < 150){
+
     const dynamicUrl = "http://localhost:3000/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
     // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
@@ -314,16 +317,86 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
             console.log("Lyft Price (dollars): " + data.price / 100);
             console.log("Duration of Trip (minutes): " + data.duration / 60);
 
-            var standardPrice = data.standardPrice / 100;
-            var XLprice = data.XLprice / 100;
+            var standardPrice = addZeroes(data.standardPrice / 100);
+            
+            var XLprice = addZeroes(data.XLprice / 100);
             var finalDuration = data.timeDuration / 60;
             var standardDuration = Math.round(finalDuration);
 
             document.getElementById('lyftcost').innerHTML = "$" + standardPrice;
             document.getElementById('lyftXLcost').innerHTML = "$" + XLprice;
             document.getElementById('lyftduration').innerHTML = "~ " + standardDuration + " minutes";
+            document.getElementById('uberduration').innerHTML = "~ " + standardDuration + " minutes";
 
         }).catch(err => {
             console.log("Unable to retrieve price data");
         });
+    }
+    document.getElementById('lyftcost').innerHTML = "***";
+    document.getElementById('lyftXLcost').innerHTML = "***";
+    document.getElementById('lyftduration').innerHTML = "***";
+    document.getElementById('uberduration').innerHTML = "***";
 }
+
+function addZeroes(num) {
+    // Cast as number
+    var num = Number(num);
+    // If there is no decimal, or the decimal is less than 2 digits, toFixed
+    if (String(num).split(".").length < 2 || String(num).split(".")[1].length<=2 ){
+        num = num.toFixed(2);
+    }
+    // Return the number
+    return num;
+}
+
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2-lat1);  // deg2rad below
+    var dLon = deg2rad(lon2-lon1); 
+    var a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+      ; 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    return d;
+  }
+  
+  function deg2rad(deg) {
+    return deg * (Math.PI/180)
+  }
+
+  
+//   const fetch = require("node-fetch");
+
+//   async function postData ( data = {} ){
+  
+//       url = 'https://www.uber.com/api/loadFEEstimates';
+//       const response = await fetch(url, {
+//           method: 'POST',
+//           mode: 'cors',
+//           headers: {
+//               add: 'x-csrf-token: x'
+//           },
+//           body: {
+//               'destination': {
+//                   'id': 'AIzaSyDm_njKItPSYzr20AeYersiYRjyokfakXY',
+//                   'latitude': '47.61344130000001',
+//                   'locale':"en",
+//                   'longitude': '-122.304172',
+//                   "provider": "google_places"
+//               },
+//               'origin': {
+//                   "id": "AIzaSyDm_njKItPSYzr20AeYersiYRjyokfakXY",
+//                   "latitude": '47.6076018',
+//                   "locale": "en",
+//                   "longitude": '-122.3119244',
+//                   "provider": "google_places"
+//               }
+//           },
+//           body: JSON.stringify(data)
+//       });
+//       return response.json()
+//   }
+//   console.log(postData());
