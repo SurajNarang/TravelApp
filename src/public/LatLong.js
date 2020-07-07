@@ -5,6 +5,8 @@ var EndLatFinal;
 var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
+var RouteTooFar = new Boolean(true);
+
 var checkedNextDay = new Boolean(false);
 const lufthansaKey = config.LUFT_KEY;
 const skyScannerKey = config.SKYSCAN_KEY;
@@ -308,7 +310,7 @@ async function GetFlightCost() {
 function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
     //ADD SOMETHING TO FIL IN HTML WHEN ROUTE IS TOO LONG
     if (getDistanceFromLatLonInKm(tempStartLat, tempStartLong, tempEndLat, tempEndLong) < 150) {
-
+        RouteTooFar = false;
         const dynamicUrl = "http://localhost:3000/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
         // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
@@ -334,6 +336,12 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
             }).catch(err => {
                 console.log("Unable to retrieve price data");
             });
+    }
+    if (RouteTooFar == true ){
+        var boldText = "***"
+        boldText =  boldText.bold();
+        document.getElementById('route').innerHTML = boldText+" = This route is not accessible by Uber/Lyft ( > 150 miles)";
+        
     }
     document.getElementById('lyftcost').innerHTML = "***";
     document.getElementById('lyftXLcost').innerHTML = "***";

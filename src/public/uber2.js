@@ -9,7 +9,7 @@ const fetchUberSubEstimates = (start_latitude, start_longitude, end_latitude, en
                 method: 'GET',
                 url: estimateUrl,
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Token `,
                     'Accept-Language': 'en_US',
                     'Content-Type': 'application/json'
                 },
@@ -22,10 +22,10 @@ const fetchUberSubEstimates = (start_latitude, start_longitude, end_latitude, en
             })
             .then((response) => {
                 // returns array of subestimate objects
-                resolve(response.data.prices);
+                console.log(response.json().prices);
             })
             .catch((err) => {
-                console.log("Unable to fetch Uber price");
+                console.log(err);
             });
     })
 };
