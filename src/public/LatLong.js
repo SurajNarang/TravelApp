@@ -337,11 +337,11 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
                 console.log("Unable to retrieve price data");
             });
     }
-    if (RouteTooFar == true ){
+    if (RouteTooFar == true) {
         var boldText = "***"
-        boldText =  boldText.bold();
-        document.getElementById('route').innerHTML = boldText+" = This route is not accessible by Uber/Lyft ( > 150 miles)";
-        
+        boldText = boldText.bold();
+        document.getElementById('route').innerHTML = boldText + " = This route is not accessible by Uber/Lyft ( > 150 miles)";
+
     }
     document.getElementById('lyftcost').innerHTML = "***";
     document.getElementById('lyftXLcost').innerHTML = "***";
@@ -406,7 +406,7 @@ function GetUberCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
                 });
         })
     };
-    fetchUberSubEstimates(37.7752315, -122.418075, 37.7752415, -122.518075)
-        //   .then((prices) => console.log(prices));
+    // fetchUberSubEstimates(37.7752315, -122.418075, 37.7752415, -122.518075)
+    //   .then((prices) => console.log(prices));
 
 }
