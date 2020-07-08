@@ -6,8 +6,8 @@ var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
 var RouteTooFar = new Boolean(true);
-
 var checkedNextDay = new Boolean(false);
+
 const lufthansaKey = config.LUFT_KEY;
 const skyScannerKey = config.SKYSCAN_KEY;
 const mykey = config.MY_KEY;
@@ -336,17 +336,18 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
             }).catch(err => {
                 console.log("Unable to retrieve price data");
             });
+    } else {
+        document.getElementById('lyftcost').innerHTML = "***";
+        document.getElementById('lyftXLcost').innerHTML = "***";
+        document.getElementById('lyftduration').innerHTML = "***";
+        document.getElementById('uberduration').innerHTML = "***";
     }
+
     if (RouteTooFar == true) {
         var boldText = "***"
         boldText = boldText.bold();
         document.getElementById('route').innerHTML = boldText + " = This route is not accessible by Uber/Lyft ( > 150 miles)";
-
     }
-    document.getElementById('lyftcost').innerHTML = "***";
-    document.getElementById('lyftXLcost').innerHTML = "***";
-    document.getElementById('lyftduration').innerHTML = "***";
-    document.getElementById('uberduration').innerHTML = "***";
 }
 
 function addZeroes(num) {
