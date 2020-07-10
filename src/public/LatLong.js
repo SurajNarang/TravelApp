@@ -317,7 +317,7 @@ async function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong)
     console.log(travelMiles + " Travel Miles");
     if (travelMiles < 150) {
         RouteTooFar = false;
-        const dynamicUrl = "http://localhost:3000/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
+        const dynamicUrl = "/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
         // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
         fetch(dynamicUrl, {
