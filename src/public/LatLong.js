@@ -324,8 +324,8 @@ async function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong)
                 mode: "no-cors"
             })
             .then(r => r.json())
-            .then((data) => {
-                const routeTime = getRouteDurationGoogle(tempStartLat, tempStartLong, tempEndLat, tempEndLong);
+            .then(async (data) => {
+                const routeTime = await getRouteDurationGoogle(tempStartLat, tempStartLong, tempEndLat, tempEndLong);
                 console.log("Route time: " + routeTime);
 
                 console.log("Lyft Price (dollars): " + data.price / 100);
@@ -372,12 +372,14 @@ function addZeroes(num) {
 async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
     // const fetch = require("node-fetch");
 
-    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
+    url = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
     console.log(url);
-    await fetch(url, {
-        mode: "no-cors"
+    const test = await fetch(url, {
+		"method": "GET",
+		mode: "cors"
     }).then(response => {
-        response.json()
+		console.log("Response",response)
+        return response.json()
             .then((data) => {
                 var data1 = (data.rows[0].elements[0].distance.text);
                 console.log(data1 + " data1");
@@ -389,15 +391,17 @@ async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
             })
     }).catch(err => {
         console.log(err);
-    })
+	})
+	
+	return test;
 
 }
-function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
+async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     // const fetch = require("node-fetch");
 
-    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
-    fetch(url, {
-            // mode: "no-cors"
+    url = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
+    const duration = await fetch(url, {
+            mode: "cors"
         }).then(response => response.json())
         .then((data) => {
             var time = (data.rows[0].elements[0].duration.text);
@@ -405,7 +409,9 @@ function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
             return time;
         }).catch(err => {
             console.log(err);
-        });
+		});
+		
+	return duration;
 }
 
 
