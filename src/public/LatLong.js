@@ -10,12 +10,15 @@ var checkedNextDay = new Boolean(false);
 
 const lufthansaKey = config.LUFT_KEY;
 const skyScannerKey = config.SKYSCAN_KEY;
-const mykey = config.MY_KEY;
+const mykey = config.GOOGLE_KEY;
 document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
+
 
 async function Overall() {
     await determiningLatLong();
     //GetFlightCost("PHL", "LAX");
+    //getDistanceGoogle(37.7752315, -122.418075, 37.7752415, -122.518075);
+
 }
 Overall();
 
@@ -34,7 +37,7 @@ async function determiningLatLong() {
     var searchInput2 = 'search_input2';
 
     // Start location autocomplete method
-    $(document).ready(function() {
+    $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
             types: ['geocode'],
@@ -44,7 +47,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -65,14 +68,14 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function() {
+    $(document).on('change', '#' + searchInput, function () {
         document.getElementById('startlatitude_view').innerHTML = '';
         document.getElementById('startlongitude_view').innerHTML = '';
         document.getElementById('startnearestairport').innerHTML = '';
     });
 
     // Final location autocomplete method
-    $(document).ready(function() {
+    $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
             types: ['geocode'],
@@ -82,7 +85,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -103,7 +106,7 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function() {
+    $(document).on('change', '#' + searchInput, function () {
         document.getElementById('endlatitude_view').innerHTML = '';
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
@@ -307,9 +310,12 @@ async function GetFlightCost() {
         });
 }
 
-function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
+async function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
     //ADD SOMETHING TO FIL IN HTML WHEN ROUTE IS TOO LONG
-    if (getDistanceFromLatLonInKm(tempStartLat, tempStartLong, tempEndLat, tempEndLong) < 150) {
+    console.log((tempStartLat + ', ' + tempStartLong + ', ' + tempEndLat + ', ' + tempEndLong));
+    const travelMiles = await getDistanceGoogle(tempStartLat, tempStartLong, tempEndLat, tempEndLong);
+    console.log(travelMiles + " Travel Miles");
+    if (travelMiles < 150) {
         RouteTooFar = false;
         const dynamicUrl = "http://localhost:3000/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
         // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
@@ -319,19 +325,21 @@ function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
             })
             .then(r => r.json())
             .then((data) => {
+                const routeTime = getRouteDurationGoogle(tempStartLat, tempStartLong, tempEndLat, tempEndLong);
+                console.log("Route time: " + routeTime);
+
                 console.log("Lyft Price (dollars): " + data.price / 100);
-                console.log("Duration of Trip (minutes): " + data.duration / 60);
+                console.log("Duration of Trip (minutes): " + routeTime);
 
                 var standardPrice = addZeroes(data.standardPrice / 100);
 
                 var XLprice = addZeroes(data.XLprice / 100);
-                var finalDuration = data.timeDuration / 60;
-                var standardDuration = Math.round(finalDuration);
+                var finalDuration = routeTime;
 
                 document.getElementById('lyftcost').innerHTML = "$" + standardPrice;
                 document.getElementById('lyftXLcost').innerHTML = "$" + XLprice;
-                document.getElementById('lyftduration').innerHTML = "~ " + standardDuration + " minutes";
-                document.getElementById('uberduration').innerHTML = "~ " + standardDuration + " minutes";
+                document.getElementById('lyftduration').innerHTML = "~ " + finalDuration;
+                document.getElementById('uberduration').innerHTML = "~ " + finalDuration;
 
             }).catch(err => {
                 console.log("Unable to retrieve price data");
@@ -361,22 +369,45 @@ function addZeroes(num) {
     return num;
 }
 
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    var R = 6371; // Radius of the earth in km
-    var dLat = deg2rad(lat2 - lat1); // deg2rad below
-    var dLon = deg2rad(lon2 - lon1);
-    var a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c; // Distance in km
-    return d;
+async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
+    // const fetch = require("node-fetch");
+
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
+    console.log(url);
+    await fetch(url, {
+        mode: "no-cors"
+    }).then(response => {
+        response.json()
+            .then((data) => {
+                var data1 = (data.rows[0].elements[0].distance.text);
+                console.log(data1 + " data1");
+                data1.toString();
+                var StringData = data1.substr(0, data1.indexOf(' '));
+                var num = parseFloat(StringData, 10);
+                console.log(num + " DISTANCE METHOD");
+                return num;
+            })
+    }).catch(err => {
+        console.log(err);
+    })
+
+}
+function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
+    // const fetch = require("node-fetch");
+
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
+    fetch(url, {
+            // mode: "no-cors"
+        }).then(response => response.json())
+        .then((data) => {
+            var time = (data.rows[0].elements[0].duration.text);
+            console.log(time +" TIME METHOD");
+            return time;
+        }).catch(err => {
+            console.log(err);
+        });
 }
 
-function deg2rad(deg) {
-    return deg * (Math.PI / 180)
-}
 
 function GetUberCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
     const fetchUberSubEstimates = (tempStartLat, tempStartLong, tempEndLat, tempEndLong) => {
