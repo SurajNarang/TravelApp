@@ -414,36 +414,48 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
 }
 
 
-// function GetUberCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
-//     const fetchUberSubEstimates = (tempStartLat, tempStartLong, tempEndLat, tempEndLong) => {
-//         return new Promise((resolve, reject) => {
-//             axios({
-//                     method: 'GET',
-//                     url: 'https://api.uber.com/v1.2/estimates/price',
-//                     headers: {
-//                         'Authorization': `Token ${tokens.uber}`,
-//                         'Accept-Language': 'en_US',
-//                         'Content-Type': 'application/json'
-//                     },
-//                     params: {
-//                         tempStartLat,
-//                         tempStartLong,
-//                         tempEndLat,
-//                         tempEndLong
-//                     }
+function FinalUber(uberStartLat, uberStartLong, uberEndLat, uberEndLong) {
+    //const fetch = require('node-fetch');
 
-//                 })
-//                 .then((response) => {
-//                     // returns array of subestimate objects
-//                     resolve(response.data.prices);
-//                 })
-//                 .catch((err) => {
-//                     console.log(`UBER API err: ${err}`);
-//                     reject(err);
-//                 });
-//         })
-//     };
-//     // fetchUberSubEstimates(37.7752315, -122.418075, 37.7752415, -122.518075)
-//     //   .then((prices) => console.log(prices));
+    //const token = 'ZSTiVSODCEeq3FF4zb_bHFvIux-r2hJN5YRElfBU';
+    //uberToken = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAADRBKwjOWXdUEx7UXCW4QpanAAAAcX-2iu3mMmlnJR_R6v2Jm-v09WNimsvSgzXdOfQL0bkial3RQupCMCrAz6yB5SaPDOhisoB6DUhrrA3nLvyP5gmN2QpgyA-eT2YRPS1YMl9hZzp5WwAG8m7s8knVCnbu76efw52lPuJ4qDjS-4J2-e03JnXafNPENCvwjt4P3skXFD2s7hXZKNo3BFB7F1StJEXGsQHFoFFNnHRWvJg-9V3MYvVedFoADAAAAMnd00FW-4AUudHpzCQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
 
-// }
+
+    // const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
+    const url = 'https://www.uber.com/api/loadFEEstimates';
+
+    fetch(url, {
+            "method": "POST",
+            "headers": {
+                'x-csrf-token': 'x',
+                'Content-type': 'application/json'
+            },
+            "body": JSON.stringify({
+                'destination': {
+                    "id": "ChIJgb8Ht9BqkFQR7Xm7qmRD4KM",
+                    'latitude': uberStartLat,
+                    "locale": "en",
+                    "longitude": uberStartLong,
+                    "provider": "google_places"
+                },
+                "origin": {
+                    "id": "ChIJN4LWxsVqkFQR1LE-hB6E4GY",
+                    "latitude": uberEndLat,
+                    "locale": "en",
+                    "longitude": uberEndLong,
+                    "provider": "google_places"
+                }
+
+            })
+        }).then(responce => {
+            return responce.json()
+
+
+        }).then(data => {
+            const finalData = data;
+            console.log(finalData);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
