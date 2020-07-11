@@ -37,7 +37,7 @@ async function determiningLatLong() {
     var searchInput2 = 'search_input2';
 
     // Start location autocomplete method
-    $(document).ready(function () {
+    $(document).ready(function() {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
             types: ['geocode'],
@@ -47,7 +47,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -68,14 +68,14 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function () {
+    $(document).on('change', '#' + searchInput, function() {
         document.getElementById('startlatitude_view').innerHTML = '';
         document.getElementById('startlongitude_view').innerHTML = '';
         document.getElementById('startnearestairport').innerHTML = '';
     });
 
     // Final location autocomplete method
-    $(document).ready(function () {
+    $(document).ready(function() {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
             types: ['geocode'],
@@ -85,7 +85,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -106,7 +106,7 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function () {
+    $(document).on('change', '#' + searchInput, function() {
         document.getElementById('endlatitude_view').innerHTML = '';
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
@@ -315,20 +315,21 @@ async function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong)
     console.log((tempStartLat + ', ' + tempStartLong + ', ' + tempEndLat + ', ' + tempEndLong));
     const travelMiles = await getDistanceGoogle(tempStartLat, tempStartLong, tempEndLat, tempEndLong);
     console.log(travelMiles + " Travel Miles");
-    if (travelMiles < 150) {
+    if (travelMiles < 150 && typeof travelMiles !== 'undefined') {
         RouteTooFar = false;
         const dynamicUrl = "/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
         // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
-        fetch(dynamicUrl, {
+        await fetch(dynamicUrl, {
                 mode: "no-cors"
             })
             .then(r => r.json())
-            .then(async (data) => {
+            .then(async(data) => {
                 const routeTime = await getRouteDurationGoogle(tempStartLat, tempStartLong, tempEndLat, tempEndLong);
                 console.log("Route time: " + routeTime);
 
-                console.log("Lyft Price (dollars): " + data.price / 100);
+                var price1 = data.price / 100;
+                console.log("Lyft Price (dollars): " + price1);
                 console.log("Duration of Trip (minutes): " + routeTime);
 
                 var standardPrice = addZeroes(data.standardPrice / 100);
@@ -349,12 +350,12 @@ async function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong)
         document.getElementById('lyftXLcost').innerHTML = "***";
         document.getElementById('lyftduration').innerHTML = "***";
         document.getElementById('uberduration').innerHTML = "***";
-    }
 
-    if (RouteTooFar == true) {
-        var boldText = "***"
-        boldText = boldText.bold();
-        document.getElementById('route').innerHTML = boldText + " = This route is not accessible by Uber/Lyft ( > 150 miles)";
+        if (RouteTooFar == true) {
+            var boldText = "***"
+            boldText = boldText.bold();
+            document.getElementById('route').innerHTML = boldText + " = This route is not accessible by Uber/Lyft ( > 150 miles)";
+        }
     }
 }
 
@@ -370,81 +371,79 @@ function addZeroes(num) {
 }
 
 async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
-    // const fetch = require("node-fetch");
 
     url = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
     console.log(url);
     const test = await fetch(url, {
-		"method": "GET",
-		mode: "cors"
-    }).then(response => {
-		console.log("Response",response)
-        return response.json()
-            .then((data) => {
-                var data1 = (data.rows[0].elements[0].distance.text);
-                console.log(data1 + " data1");
-                data1.toString();
-                var StringData = data1.substr(0, data1.indexOf(' '));
-                var num = parseFloat(StringData, 10);
-                console.log(num + " DISTANCE METHOD");
-                return num;
-            })
+        method: "GET",
+        mode: "cors"
+    }).then(async response => {
+        console.log("Response", response)
+
+        const data = await response.json();
+        var data1 = (data.rows[0].elements[0].distance.text);
+        console.log(data1 + " data1");
+        data1.toString();
+        var StringData = data1.substr(0, data1.indexOf(' '));
+
+        var num = Number(StringData);
+        console.log("DISTANCE METHOD: " + num);
+        return num;
     }).catch(err => {
         console.log(err);
-	})
-	
-	return test;
+    })
 
+    return test;
 }
 async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
-    // const fetch = require("node-fetch");
 
     url = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
     const duration = await fetch(url, {
+            method: "GET",
             mode: "cors"
         }).then(response => response.json())
         .then((data) => {
             var time = (data.rows[0].elements[0].duration.text);
-            console.log(time +" TIME METHOD");
+            console.log("TIME METHOD" + time);
             return time;
         }).catch(err => {
             console.log(err);
-		});
-		
-	return duration;
+        });
+
+    return duration;
 }
 
 
-function GetUberCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
-    const fetchUberSubEstimates = (tempStartLat, tempStartLong, tempEndLat, tempEndLong) => {
-        return new Promise((resolve, reject) => {
-            axios({
-                    method: 'GET',
-                    url: 'https://api.uber.com/v1.2/estimates/price',
-                    headers: {
-                        'Authorization': `Token ${tokens.uber}`,
-                        'Accept-Language': 'en_US',
-                        'Content-Type': 'application/json'
-                    },
-                    params: {
-                        tempStartLat,
-                        tempStartLong,
-                        tempEndLat,
-                        tempEndLong
-                    }
+// function GetUberCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
+//     const fetchUberSubEstimates = (tempStartLat, tempStartLong, tempEndLat, tempEndLong) => {
+//         return new Promise((resolve, reject) => {
+//             axios({
+//                     method: 'GET',
+//                     url: 'https://api.uber.com/v1.2/estimates/price',
+//                     headers: {
+//                         'Authorization': `Token ${tokens.uber}`,
+//                         'Accept-Language': 'en_US',
+//                         'Content-Type': 'application/json'
+//                     },
+//                     params: {
+//                         tempStartLat,
+//                         tempStartLong,
+//                         tempEndLat,
+//                         tempEndLong
+//                     }
 
-                })
-                .then((response) => {
-                    // returns array of subestimate objects
-                    resolve(response.data.prices);
-                })
-                .catch((err) => {
-                    console.log(`UBER API err: ${err}`);
-                    reject(err);
-                });
-        })
-    };
-    // fetchUberSubEstimates(37.7752315, -122.418075, 37.7752415, -122.518075)
-    //   .then((prices) => console.log(prices));
+//                 })
+//                 .then((response) => {
+//                     // returns array of subestimate objects
+//                     resolve(response.data.prices);
+//                 })
+//                 .catch((err) => {
+//                     console.log(`UBER API err: ${err}`);
+//                     reject(err);
+//                 });
+//         })
+//     };
+//     // fetchUberSubEstimates(37.7752315, -122.418075, 37.7752415, -122.518075)
+//     //   .then((prices) => console.log(prices));
 
-}
+// }
