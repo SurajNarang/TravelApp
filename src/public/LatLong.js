@@ -63,7 +63,20 @@ async function determiningLatLong() {
             GetNearestStartingAirport(StartLatFinal, StartLongFinal);
             document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
 
-            //printResult();
+            var geocoder1 = new google.maps.Geocoder;
+            var latlng = { lat: parseFloat(StartLatFinal), lng: parseFloat(StartLongFinal) };
+
+            geocoder1.geocode({ 'location': latlng }, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        console.log("Origin Place ID: " + results[1].place_id);
+                    }
+                } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                }
+            });
+
+            printResult();
 
         });
     });
@@ -101,6 +114,18 @@ async function determiningLatLong() {
             EndingAirportCode = GetNearestEndingAirport(EndLatFinal, EndLongFinal);
             document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
 
+            var geocoder2 = new google.maps.Geocoder;
+            var latlng = { lat: parseFloat(EndLatFinal), lng: parseFloat(EndLongFinal) };
+
+            geocoder2.geocode({ 'location': latlng }, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        console.log("Destination Place ID: " + results[1].place_id);
+                    }
+                } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                }
+            });
 
             printResult();
         });
@@ -112,7 +137,6 @@ async function determiningLatLong() {
         document.getElementById('endnearestairport').innerHTML = '';
     });
 }
-
 
 function GetNearestStartingAirport(LatFinal, LongFinal) {
     fetch("https://api.lufthansa.com/v1/references/airports/nearest/" + LatFinal + "," + LongFinal, {
@@ -413,18 +437,15 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     return duration;
 }
 
-
-function FinalUber(uberStartLat, uberStartLong, uberEndLat, uberEndLong) {
-    //const fetch = require('node-fetch');
+async function FinalUber(uberStartLat, uberStartLong, uberEndLat, uberEndLong) {
 
     //const token = 'ZSTiVSODCEeq3FF4zb_bHFvIux-r2hJN5YRElfBU';
     //uberToken = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAADRBKwjOWXdUEx7UXCW4QpanAAAAcX-2iu3mMmlnJR_R6v2Jm-v09WNimsvSgzXdOfQL0bkial3RQupCMCrAz6yB5SaPDOhisoB6DUhrrA3nLvyP5gmN2QpgyA-eT2YRPS1YMl9hZzp5WwAG8m7s8knVCnbu76efw52lPuJ4qDjS-4J2-e03JnXafNPENCvwjt4P3skXFD2s7hXZKNo3BFB7F1StJEXGsQHFoFFNnHRWvJg-9V3MYvVedFoADAAAAMnd00FW-4AUudHpzCQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
-
-
     // const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
+
     const url = 'https://www.uber.com/api/loadFEEstimates';
 
-    fetch(url, {
+    await fetch(url, {
             "method": "POST",
             "headers": {
                 'x-csrf-token': 'x',
