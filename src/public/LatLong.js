@@ -24,13 +24,13 @@ async function Overall() {
 }
 Overall();
 
-function printResult() {
+async function printResult() {
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         GetFlightCost(StartingAirportCode, EndingAirportCode);
-        GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
-        GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
+        await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
     }
 }
 
@@ -66,7 +66,7 @@ async function determiningLatLong() {
             document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
 
             var geocoder1 = new google.maps.Geocoder;
-            var latlng = { lat: parseFloat(StartLatFinal), lng: parseFloat(StartLongFinal) };
+            var latlng = { lat: Number(StartLatFinal), lng: Number(StartLongFinal) };
 
             geocoder1.geocode({ 'location': latlng }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
@@ -79,7 +79,7 @@ async function determiningLatLong() {
                 }
             });
 
-            printResult();
+            // printResult();
 
         });
     });
@@ -118,7 +118,7 @@ async function determiningLatLong() {
             document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
 
             var geocoder2 = new google.maps.Geocoder;
-            var latlng = { lat: parseFloat(EndLatFinal), lng: parseFloat(EndLongFinal) };
+            var latlng = { lat: Number(EndLatFinal), lng: Number(EndLongFinal) };
 
             geocoder2.geocode({ 'location': latlng }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
@@ -339,11 +339,11 @@ async function GetFlightCost() {
 }
 
 async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong) {
-    //ADD SOMETHING TO FIL IN HTML WHEN ROUTE IS TOO LONG
-    console.log((lyftStartLat + ', ' + lyftStartLong + ', ' + lyftEndLat + ', ' + lyftEndLong));
+
     const travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
     console.log(travelMiles + " Travel Miles");
     if (travelMiles < 150 && typeof travelMiles !== 'undefined') {
+
         RouteTooFar = false;
         const dynamicUrl = "/lyft?startLat=" + lyftStartLat + "&startLong=" + lyftStartLong + "&endLat=" + lyftEndLat + "&endLong=" + lyftEndLong;
         // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
@@ -369,6 +369,8 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
                 document.getElementById('lyftXLcost').innerHTML = "$" + XLprice;
                 document.getElementById('lyftduration').innerHTML = "~ " + finalDuration;
                 document.getElementById('uberduration').innerHTML = "~ " + finalDuration;
+                document.getElementById('uberdistance').innerHTML = "~ " + travelMiles + " miles";
+                document.getElementById('lyftdistance').innerHTML = "~ " + travelMiles + " miles";
 
             }).catch(err => {
                 console.log("Unable to retrieve price data");
@@ -378,6 +380,8 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
         document.getElementById('lyftXLcost').innerHTML = "***";
         document.getElementById('lyftduration').innerHTML = "***";
         document.getElementById('uberduration').innerHTML = "***";
+        document.getElementById('uberdistance').innerHTML = "***";
+        document.getElementById('lyftdistance').innerHTML = "***";
 
         if (RouteTooFar == true) {
             var boldText = "***"
@@ -417,6 +421,7 @@ async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
         var num = Number(StringData);
         console.log("DISTANCE METHOD: " + num);
         return num;
+
     }).catch(err => {
         console.log(err);
     })
@@ -443,50 +448,56 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
 
 async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
 
-    /* 
-    const token = 'ZSTiVSODCEeq3FF4zb_bHFvIux-r2hJN5YRElfBU';
-    uberToken = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAADRBKwjOWXdUEx7UXCW4QpanAAAAcX-2iu3mMmlnJR_R6v2Jm-v09WNimsvSgzXdOfQL0bkial3RQupCMCrAz6yB5SaPDOhisoB6DUhrrA3nLvyP5gmN2QpgyA-eT2YRPS1YMl9hZzp5WwAG8m7s8knVCnbu76efw52lPuJ4qDjS-4J2-e03JnXafNPENCvwjt4P3skXFD2s7hXZKNo3BFB7F1StJEXGsQHFoFFNnHRWvJg-9V3MYvVedFoADAAAAMnd00FW-4AUudHpzCQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
-    const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
-    */
+    //const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
 
-    const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
-    console.log(url);
+    const travelMiles = await getDistanceGoogle(uberStartLat, uberStartLong, uberEndLat, uberEndLong);
+    if (travelMiles < 150) {
 
-    await fetch(url, {
-            "method": "POST",
-            "mode": "cors",
+        const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
+        console.log(url);
 
-            "headers": {
-                'x-csrf-token': 'x',
-                'Content-type': 'application/json',
-                // "Access-Control-Allow-Origin": "*",
-                // "Access-Control-Allow-Methods": "POST",
-                // "Access-Control-Allow-Headers": "x-requested-with, Content-Type, origin, authorization, accept, client-security-token",
-            },
-            "body": JSON.stringify({
-                'destination': {
-                    "id": endID,
-                    'latitude': uberStartLat,
-                    "locale": "en",
-                    "longitude": uberStartLong,
-                    "provider": "google_places"
+        await fetch(url, {
+                "method": "POST",
+                "mode": "cors",
+                "headers": {
+                    'x-csrf-token': 'x',
+                    'Content-type': 'application/json',
                 },
-                "origin": {
-                    "id": startID,
-                    "latitude": uberEndLat,
-                    "locale": "en",
-                    "longitude": uberEndLong,
-                    "provider": "google_places"
-                }
+                "body": JSON.stringify({
+                    'destination': {
+                        "id": endID,
+                        "latitude": uberEndLat,
+                        "locale": "en",
+                        "longitude": uberEndLong,
+                        "provider": "google_places"
+                    },
+                    "origin": {
+                        "id": startID,
+                        'latitude': uberStartLat,
+                        "locale": "en",
+                        "longitude": uberStartLong,
+                        "provider": "google_places"
+                    }
+
+                })
+            }).then(async responce => {
+                return responce.json()
+            }).then(data => {
+                var finalData = data;
+                var uberXcost = finalData.data.prices[1].total;
+                console.log("UberX Price: " + uberXcost);
+                document.getElementById('ubercost').innerHTML = "$" + uberXcost;
+
+                var uberXLcost = finalData.data.prices[5].total;
+                console.log("UberXL Price: " + uberXLcost);
+                document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
 
             })
-        }).then(responce => {
-            return responce.json()
-        }).then(data => {
-            const finalData = data;
-            console.log(finalData);
-        })
-        .catch(err => {
-            console.log(err);
-        });
+            .catch(err => {
+                console.log(err);
+            });
+    } else {
+        document.getElementById('ubercost').innerHTML = "***";
+        document.getElementById('uberXLcost').innerHTML = "***";
+    }
 }
