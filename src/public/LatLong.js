@@ -31,6 +31,7 @@ async function printResult() {
         GetFlightCost(StartingAirportCode, EndingAirportCode);
         await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
         await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
+        await checkIfSameAirport();
     }
 }
 
@@ -509,5 +510,12 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
     } else {
         document.getElementById('ubercost').innerHTML = "***";
         document.getElementById('uberXLcost').innerHTML = "***";
+    }
+}
+
+function checkIfSameAirport(){
+    if (StartingAirportCode === EndingAirportCode){
+        document.getElementById('startnearestairport').innerHTML = "-_-";
+        document.getElementById('endnearestairport').innerHTML = "-_-";
     }
 }
