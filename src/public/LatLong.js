@@ -5,6 +5,8 @@ var EndLatFinal;
 var StartingAirportCode;
 var EndingAirportCode;
 var FlightCost;
+var StartLocPlaceID;
+var EndLocPlaceID;
 var RouteTooFar = new Boolean(true);
 var checkedNextDay = new Boolean(false);
 
@@ -28,7 +30,7 @@ function printResult() {
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         GetFlightCost(StartingAirportCode, EndingAirportCode);
         GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
-        // GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+        GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
     }
 }
 
@@ -69,7 +71,8 @@ async function determiningLatLong() {
             geocoder1.geocode({ 'location': latlng }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
-                        console.log("Origin Place ID: " + results[1].place_id);
+                        StartLocPlaceID = results[1].place_id;
+                        console.log("Origin Place ID: " + StartLocPlaceID);
                     }
                 } else {
                     window.alert('Geocoder failed due to: ' + status);
@@ -120,7 +123,8 @@ async function determiningLatLong() {
             geocoder2.geocode({ 'location': latlng }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
-                        console.log("Destination Place ID: " + results[1].place_id);
+                        EndLocPlaceID = results[1].place_id;
+                        console.log("Destination Place ID: " + EndLocPlaceID);
                     }
                 } else {
                     window.alert('Geocoder failed due to: ' + status);
@@ -334,14 +338,14 @@ async function GetFlightCost() {
         });
 }
 
-async function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong) {
+async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong) {
     //ADD SOMETHING TO FIL IN HTML WHEN ROUTE IS TOO LONG
-    console.log((tempStartLat + ', ' + tempStartLong + ', ' + tempEndLat + ', ' + tempEndLong));
-    const travelMiles = await getDistanceGoogle(tempStartLat, tempStartLong, tempEndLat, tempEndLong);
+    console.log((lyftStartLat + ', ' + lyftStartLong + ', ' + lyftEndLat + ', ' + lyftEndLong));
+    const travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
     console.log(travelMiles + " Travel Miles");
     if (travelMiles < 150 && typeof travelMiles !== 'undefined') {
         RouteTooFar = false;
-        const dynamicUrl = "/lyft?startLat=" + tempStartLat + "&startLong=" + tempStartLong + "&endLat=" + tempEndLat + "&endLong=" + tempEndLong;
+        const dynamicUrl = "/lyft?startLat=" + lyftStartLat + "&startLong=" + lyftStartLong + "&endLat=" + lyftEndLat + "&endLong=" + lyftEndLong;
         // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
         await fetch(dynamicUrl, {
@@ -349,7 +353,7 @@ async function GetLyftCost(tempStartLat, tempStartLong, tempEndLat, tempEndLong)
             })
             .then(r => r.json())
             .then(async(data) => {
-                const routeTime = await getRouteDurationGoogle(tempStartLat, tempStartLong, tempEndLat, tempEndLong);
+                const routeTime = await getRouteDurationGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
                 console.log("Route time: " + routeTime);
 
                 var price1 = data.price / 100;
@@ -437,30 +441,38 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     return duration;
 }
 
-async function FinalUber(uberStartLat, uberStartLong, uberEndLat, uberEndLong) {
+async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
 
-    //const token = 'ZSTiVSODCEeq3FF4zb_bHFvIux-r2hJN5YRElfBU';
-    //uberToken = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAADRBKwjOWXdUEx7UXCW4QpanAAAAcX-2iu3mMmlnJR_R6v2Jm-v09WNimsvSgzXdOfQL0bkial3RQupCMCrAz6yB5SaPDOhisoB6DUhrrA3nLvyP5gmN2QpgyA-eT2YRPS1YMl9hZzp5WwAG8m7s8knVCnbu76efw52lPuJ4qDjS-4J2-e03JnXafNPENCvwjt4P3skXFD2s7hXZKNo3BFB7F1StJEXGsQHFoFFNnHRWvJg-9V3MYvVedFoADAAAAMnd00FW-4AUudHpzCQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
-    // const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
+    /* 
+    const token = 'ZSTiVSODCEeq3FF4zb_bHFvIux-r2hJN5YRElfBU';
+    uberToken = 'JA.VUNmGAAAAAAAEgASAAAABwAIAAwAAAAAAAAAEgAAAAAAAAH4AAAAFAAAAAAADgAQAAQAAAAIAAwAAAAOAAAAzAAAABwAAAAEAAAAEAAAADRBKwjOWXdUEx7UXCW4QpanAAAAcX-2iu3mMmlnJR_R6v2Jm-v09WNimsvSgzXdOfQL0bkial3RQupCMCrAz6yB5SaPDOhisoB6DUhrrA3nLvyP5gmN2QpgyA-eT2YRPS1YMl9hZzp5WwAG8m7s8knVCnbu76efw52lPuJ4qDjS-4J2-e03JnXafNPENCvwjt4P3skXFD2s7hXZKNo3BFB7F1StJEXGsQHFoFFNnHRWvJg-9V3MYvVedFoADAAAAMnd00FW-4AUudHpzCQAAABiMGQ4NTgwMy0zOGEwLTQyYjMtODA2ZS03YTRjZjhlMTk2ZWU';
+    const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
+    */
 
-    const url = 'https://www.uber.com/api/loadFEEstimates';
+    const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
+    console.log(url);
 
     await fetch(url, {
             "method": "POST",
+            "mode": "cors",
+
             "headers": {
                 'x-csrf-token': 'x',
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                // "Access-Control-Allow-Origin": "*",
+                // "Access-Control-Allow-Methods": "POST",
+                // "Access-Control-Allow-Headers": "x-requested-with, Content-Type, origin, authorization, accept, client-security-token",
             },
             "body": JSON.stringify({
                 'destination': {
-                    "id": "ChIJgb8Ht9BqkFQR7Xm7qmRD4KM",
+                    "id": endID,
                     'latitude': uberStartLat,
                     "locale": "en",
                     "longitude": uberStartLong,
                     "provider": "google_places"
                 },
                 "origin": {
-                    "id": "ChIJN4LWxsVqkFQR1LE-hB6E4GY",
+                    "id": startID,
                     "latitude": uberEndLat,
                     "locale": "en",
                     "longitude": uberEndLong,
@@ -470,8 +482,6 @@ async function FinalUber(uberStartLat, uberStartLong, uberEndLat, uberEndLong) {
             })
         }).then(responce => {
             return responce.json()
-
-
         }).then(data => {
             const finalData = data;
             console.log(finalData);
