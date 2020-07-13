@@ -28,10 +28,10 @@ async function printResult() {
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
-        GetFlightCost(StartingAirportCode, EndingAirportCode);
+        await GetFlightCost(StartingAirportCode, EndingAirportCode);
         await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
         await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
-        await checkIfSameAirport();
+        checkIfSameAirport();
     }
 }
 
@@ -40,7 +40,7 @@ async function determiningLatLong() {
     var searchInput2 = 'search_input2';
 
     // Start location autocomplete method
-    $(document).ready(function () {
+    $(document).ready(function() {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
             types: ['geocode'],
@@ -50,7 +50,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -64,7 +64,6 @@ async function determiningLatLong() {
             StartLongFinal = near_place.geometry.location.lng();
             StartLatFinal = near_place.geometry.location.lat();
             GetNearestStartingAirport(StartLatFinal, StartLongFinal);
-            document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
 
             var geocoder1 = new google.maps.Geocoder;
             var latlng = {
@@ -74,7 +73,7 @@ async function determiningLatLong() {
 
             geocoder1.geocode({
                 'location': latlng
-            }, function (results, status) {
+            }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
                         StartLocPlaceID = results[1].place_id;
@@ -90,14 +89,14 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function () {
+    $(document).on('change', '#' + searchInput, function() {
         document.getElementById('startlatitude_view').innerHTML = '';
         document.getElementById('startlongitude_view').innerHTML = '';
         document.getElementById('startnearestairport').innerHTML = '';
     });
 
     // Final location autocomplete method
-    $(document).ready(function () {
+    $(document).ready(function() {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
             types: ['geocode'],
@@ -107,7 +106,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -121,7 +120,6 @@ async function determiningLatLong() {
             EndLatFinal = near_place.geometry.location.lat();
             EndLongFinal = near_place.geometry.location.lng();
             EndingAirportCode = GetNearestEndingAirport(EndLatFinal, EndLongFinal);
-            document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
 
             var geocoder2 = new google.maps.Geocoder;
             var latlng = {
@@ -131,7 +129,7 @@ async function determiningLatLong() {
 
             geocoder2.geocode({
                 'location': latlng
-            }, function (results, status) {
+            }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
                         EndLocPlaceID = results[1].place_id;
@@ -146,7 +144,7 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function () {
+    $(document).on('change', '#' + searchInput, function() {
         document.getElementById('endlatitude_view').innerHTML = '';
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
@@ -167,7 +165,7 @@ function GetNearestStartingAirport(LatFinal, LongFinal) {
                     console.log(test1 + " - Starting airport");
                     var CurrentAirport = test1;
                     StartingAirportCode = CurrentAirport;
-                    document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
+                    // document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
                 })
                 .catch(err => {
                     console.log(err);
@@ -195,7 +193,7 @@ function GetNearestEndingAirport(LatFinal1, LongFinal1) {
                     console.log(EndingAirportCode + " -Destination airport");
                     //  var CurrentAirport = test1;
                     //  EndingAirportCode = CurrentAirport;
-                    document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
+                    // document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
 
                 })
                 .catch(err => {
@@ -363,7 +361,7 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
                 mode: "no-cors"
             })
             .then(r => r.json())
-            .then(async (data) => {
+            .then(async(data) => {
                 const routeTime = await getRouteDurationGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
                 console.log("Route time: " + routeTime);
 
@@ -467,7 +465,7 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
         const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
         console.log(url);
 
-        await fetch(url, {
+        const uberFetch = await fetch(url, {
                 "method": "POST",
                 "mode": "cors",
                 "headers": {
@@ -493,29 +491,34 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                 })
             }).then(async responce => {
                 return responce.json()
-            }).then(data => {
+            }).then(async data => {
                 var finalData = data;
-                var uberXcost = finalData.data.prices[1].total;
+                const uberXcost = await Promise.resolve(finalData.data.prices[1].total);
                 console.log("UberX Price: " + uberXcost);
                 document.getElementById('ubercost').innerHTML = "$" + uberXcost;
 
-                var uberXLcost = finalData.data.prices[5].total;
+                const uberXLcost = await Promise.resolve(finalData.data.prices[5].total);
                 console.log("UberXL Price: " + uberXLcost);
                 document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
-
             })
             .catch(err => {
                 console.log(err);
             });
+
+        return uberFetch;
+
     } else {
         document.getElementById('ubercost').innerHTML = "***";
         document.getElementById('uberXLcost').innerHTML = "***";
     }
 }
 
-function checkIfSameAirport(){
-    if (StartingAirportCode === EndingAirportCode){
+function checkIfSameAirport() {
+    if (StartingAirportCode === EndingAirportCode) {
         document.getElementById('startnearestairport').innerHTML = "-_-";
         document.getElementById('endnearestairport').innerHTML = "-_-";
+    } else {
+        document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
+        document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
     }
 }
