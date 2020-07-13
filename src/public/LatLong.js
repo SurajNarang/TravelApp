@@ -28,9 +28,11 @@ async function printResult() {
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
+        const travelMiles = await getDistanceGoogle(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+
         await GetFlightCost(StartingAirportCode, EndingAirportCode);
-        await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
-        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
+        await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, travelMiles);
+        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID, travelMiles);
         checkIfSameAirport();
     }
 }
@@ -347,9 +349,9 @@ async function GetFlightCost() {
         });
 }
 
-async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong) {
+async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong, travelMiles) {
 
-    const travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
+    // const travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
     console.log(travelMiles + " Travel Miles");
     if (travelMiles < 150 && typeof travelMiles !== 'undefined') {
 
@@ -455,11 +457,11 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     return duration;
 }
 
-async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
+async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID, travelMiles) {
 
     //const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
 
-    const travelMiles = await getDistanceGoogle(uberStartLat, uberStartLong, uberEndLat, uberEndLong);
+    // const travelMiles = await getDistanceGoogle(uberStartLat, uberStartLong, uberEndLat, uberEndLong);
     if (travelMiles < 150) {
 
         const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
