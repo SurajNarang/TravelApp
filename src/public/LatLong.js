@@ -246,9 +246,9 @@ async function GetFlightCost() {
                     airlinePrice = minPriceToday;
 
                     if (jresponce.Quotes.length > 1) {
-                        let min = jresponce.Quotes[0];
+                        let min = jresponce.Quotes[0].MinPrice;
                         for (let x = 0; x < jresponce.Quotes.length; x++) {
-                            let value = jresponce.Quotes[x];
+                            let value = jresponce.Quotes[x].MinPrice;
                             min = (value < min) ? value : min
                         }
                         airlinePrice = min;
@@ -279,9 +279,9 @@ async function GetFlightCost() {
                                     airlinePrice = MinPriceForTm;
 
                                     if (jresponce2.Quotes.length > 1) {
-                                        let min = jresponce2.Quotes[0];
+                                        let min = jresponce2.Quotes[0].MinPrice;
                                         for (let x = 0; x < jresponce2.Quotes.length; x++) {
-                                            let value = jresponce2.Quotes[x];
+                                            let value = jresponce2.Quotes[x].MinPrice;
                                             min = (value < min) ? value : min
                                         }
                                         airlinePrice = min;
@@ -326,15 +326,26 @@ async function GetFlightCost() {
                                     airlinePrice = MinPriceForTm;
 
                                     if (jresponce3.Quotes.length > 1) {
-                                        let min = jresponce3.Quotes[0];
+                                        let min = jresponce3.Quotes[0].MinPrice;
                                         for (let x = 0; x < jresponce3.Quotes.length; x++) {
-                                            let value = jresponce3.Quotes[x];
+                                            let value = jresponce3.Quotes[x].MinPrice;
                                             min = (value < min) ? value : min
                                         }
                                         airlinePrice = min;
                                     }
-                                    console.log(airlinePrice);
+                                    const AirLine = jresponce3.Carriers[0].Name;
+                                    const date = jresponce3.Quotes[0].QuoteDateTime;
+
+                                    date.toString();
+                                    var StringDate = date.substr(0, date.indexOf('T'));
+                                    var StringTime = date.substr(date.indexOf('T') + 1);
+                                    console.log("Airline Price: " + airlinePrice);
+                                    console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
+                                    console.log("Airline Name: " + AirLine);
+
                                     document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
+                                    document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
+                                    document.getElementById('airline').innerHTML = airLine;
                                     checkedNextDay = true;
                                 }
                             })

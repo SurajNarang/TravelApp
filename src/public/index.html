@@ -12,9 +12,20 @@
 </head>
 
 <body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="sk-chase">
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+        </div>
+    </div>
     <h1 id="webtitle"> Turbo Travel (USA Edition)</h1>
-    <p id="directions"> <b>Directions: </b>Please enter a start and end location to determine the most cost-effective
-        way of travel to your destination, via Ridesharing or Air Travel. </p>
+    <p id="directions"> <b>Directions: </b>Please enter a start and end location to determine the most cost-effective way of travel to your destination, via Ridesharing or Air Travel. </p>
     <div id="canvas">
         <canvas id="canvas-box" width="800" height="745">
         </canvas>
@@ -33,8 +44,7 @@
             <input type="hidden" name="business" value="V9M9HCZTGSWCL" />
             <input type="hidden" name="currency_code" value="USD" />
             <input type="hidden" name="amount" value="1" />
-            <input type="image" src="https://i.postimg.cc/fTMDWWgV/Donate-Button-4.png" border="0" name="submit"
-                title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+            <input type="image" src="https://i.postimg.cc/fTMDWWgV/Donate-Button-4.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
             <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
         </form>
         <br></br>
@@ -102,12 +112,13 @@
 
             </td>
             <td>
-                <p>One-way Airfare: <b><span id="flightcost"></span></b></p>
+                One-way Airfare: <b><span id="flightcost"></span></b><br></br>
+                Date & Time: <b><span id="flightdate"></span></b>
             </td>
             <td>
-                <p>Nearest Starting Airport: <b><span id="startnearestairport"></span></b></p>
-                <p>Nearest Ending Airport: <b><span id="endnearestairport"></span></b></p>
-                <p>Airline: <b><span id="airline"></span></b></p>
+                Nearest Starting Airport: <b><span id="startnearestairport"></span></b><br></br>
+                Nearest Ending Airport: <b><span id="endnearestairport"></span></b><br></br>
+                Airline: <b><span id="airline"></span></b><br></br>
             </td>
 
         </tr>
@@ -146,22 +157,13 @@
             <h2 class="title"> <u>About</u></h2>
             <div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
                 <p class="description">
-                    Turbo Travel provides an elegant solution to a modern traveling problem. To find the most
-                    cost-effective means of travel, we often spend countless minutes, sometimes hours, scouring
-                    different apps/websites for the best prices, whether it be for ride-hailing
+                    Turbo Travel provides an elegant solution to a modern traveling problem. To find the most cost-effective means of travel, we often spend countless minutes, sometimes hours, scouring different apps/websites for the best prices, whether it be for ride-hailing
                     or air travel. Turbo Travel is a cost-effective mobility guidance product!
                     <br></br>
-                    With Turbo Travel, you simply input your start address and your destination address and you will be
-                    shown the real-time estimated price of UBER and LYFT side-by-side, allowing you to choose the most
-                    cost-efficient travel method. If your trip is greater
-                    than 150 miles, it will automatically provide you with the cheapest airfare ticket, along with the
-                    Airline name. Turbo Travel has also been developed to handle long-distance travel as well. When your
-                    travel trip is greater than 150
-                    miles, Turbo Travel automatically grabs the nearest airport of your starting location as well as the
-                    nearest airport to your destination location. From there, it seamlessly provides you with the
-                    cheapest Airfare, along with providing
-                    you with the airline, starting/destination airport, and the respective link to the Airline's
-                    website, all for ease of booking.
+                    With Turbo Travel, you simply input your start address and your destination address and you will be shown the real-time estimated price of UBER and LYFT side-by-side, allowing you to choose the most cost-efficient travel method. If your trip is greater
+                    than 150 miles, it will automatically provide you with the cheapest airfare ticket, along with the Airline name. Turbo Travel has also been developed to handle long-distance travel as well. When your travel trip is greater than 150
+                    miles, Turbo Travel automatically grabs the nearest airport of your starting location as well as the nearest airport to your destination location. From there, it seamlessly provides you with the cheapest Airfare, along with providing
+                    you with the airline, starting/destination airport, and the respective link to the Airline's website, all for ease of booking.
                 </p>
                 <h3 class="subtitle"><u>Developers</u></h3>
             </div>
@@ -202,7 +204,15 @@
             </div>
         </div>
     </div>
-
+    <script>
+        $(window).on('load', function() { // makes sure the whole site is loaded 
+            $('sk-chase').fadeOut(); // will first fade out the loading animation 
+            $('#preloader').delay(1000).fadeOut('slow'); // will fade out the white DIV that covers the website. 
+            $('body').delay(1500).css({
+                'overflow': 'visible'
+            });
+        })
+    </script>
     <script type='text/javascript' src='config.js'></script>
     <script>
         const infoBtn = document.getElementById('info-button');
@@ -216,9 +226,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 
     <script src="LatLong.js"></script>
-
-
 </body>
+
 <div id="disclaimer">
     <footer>
         *Turbo Travel is not affiliated with Uber, Lyft, or any Airlines.
