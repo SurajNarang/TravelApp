@@ -28,11 +28,9 @@ async function printResult() {
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
-        const travelMiles = await getDistanceGoogle(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
-
         await GetFlightCost(StartingAirportCode, EndingAirportCode);
-        await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, travelMiles);
-        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID, travelMiles);
+        await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
         checkIfSameAirport();
     }
 }
@@ -253,10 +251,24 @@ async function GetFlightCost() {
                         }
                         airlinePrice = min;
                     }
-                    console.log(airlinePrice);
+
+                    const AirLine = jresponce3.Carriers[0].Name;
+                    const date = jresponce3.Quotes[0].QuoteDateTime;
+
+                    date.toString();
+                    var StringDate = date.substr(0, date.indexOf('T'));
+                    var StringTime = date.substr(date.indexOf('T') + 1);
+                    console.log("Airline Price: " + airlinePrice);
+                    console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
+                    console.log("Airline Name: " + AirLine);
+
+                    document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
+                    document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
+                    document.getElementById('airline').innerHTML = airLine;
+
                     if (jresponce.Quotes.length === 0) {
                         console.log("Attention Attention, we must check the mext day")
-                        var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+                        var currentDate = new Date(new Date().getTime() + 2 * (24 * 60 * 60 * 1000));
                         var day = String(currentDate.getDate()).padStart(2, '0');
                         var month = String(currentDate.getMonth() + 1).padStart(2, '0');
                         var year = currentDate.getFullYear();
@@ -286,8 +298,19 @@ async function GetFlightCost() {
                                         }
                                         airlinePrice = min;
                                     }
-                                    console.log(airlinePrice);
-                                    document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
+                                    // const AirLine = jresponce3.Carriers[0].Name;
+                                    // const date = jresponce3.Quotes[0].QuoteDateTime;
+
+                                    // date.toString();
+                                    // var StringDate = date.substr(0, date.indexOf('T'));
+                                    // var StringTime = date.substr(date.indexOf('T') + 1);
+                                    // console.log("Airline Price: " + airlinePrice);
+                                    // console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
+                                    // console.log("Airline Name: " + AirLine);
+
+                                    // document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
+                                    // document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
+                                    // document.getElementById('airline').innerHTML = airLine;
                                 })
                             })
                             .catch(err => {
@@ -298,7 +321,7 @@ async function GetFlightCost() {
                 })
                 .catch(error => {
                     console.log(" 2nd catch error occurred");
-                    var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+                    var currentDate = new Date(new Date().getTime() + 2 * (24 * 60 * 60 * 1000));
                     var day = String(currentDate.getDate()).padStart(2, '0');
                     var month = String(currentDate.getMonth() + 1).padStart(2, '0');
                     var year = currentDate.getFullYear();
@@ -345,7 +368,7 @@ async function GetFlightCost() {
 
                                     document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
                                     document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
-                                    document.getElementById('airline').innerHTML = airLine;
+                                    document.getElementById('airline').innerHTML = AirLine;
                                     checkedNextDay = true;
                                 }
                             })
@@ -360,9 +383,9 @@ async function GetFlightCost() {
         });
 }
 
-async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong, travelMiles) {
+async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong) {
 
-    // const travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
+    const travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
     console.log(travelMiles + " Travel Miles");
     if (travelMiles < 150 && typeof travelMiles !== 'undefined') {
 
@@ -468,11 +491,11 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     return duration;
 }
 
-async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID, travelMiles) {
+async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
 
     //const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
 
-    // const travelMiles = await getDistanceGoogle(uberStartLat, uberStartLong, uberEndLat, uberEndLong);
+    const travelMiles = await getDistanceGoogle(uberStartLat, uberStartLong, uberEndLat, uberEndLong);
     if (travelMiles < 150) {
 
         const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
