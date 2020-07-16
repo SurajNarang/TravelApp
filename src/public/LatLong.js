@@ -252,23 +252,46 @@ async function GetFlightCost() {
                         airlinePrice = min;
                     }
 
-                    const AirLine = jresponce3.Carriers[0].Name;
-                    const date = jresponce3.Quotes[0].QuoteDateTime;
+                    // Getting the Carrier ID associated with min price
+                    var CarrierID = jresponce3.Quotes[0].OutboundLeg.CarrierIds;
+                    var date = jresponce3.Quotes[0].QuoteDateTime;
 
+
+                    for (let y = 0; y < jresponce3.Quotes.length; y++) {
+                        let value = jresponce3.Quotes[y].MinPrice;
+                        if (value = airlinePrice) {
+                            CarrierID = jresponce3.Quotes[y].OutboundLeg.CarrierIds;
+                            date = jresponce3.Quotes[y].QuoteDateTime;
+                        }
+                    }
+                    console.log("Carrier ID: " + CarrierID);
+
+                    // Getting Airline Name associated with min price
+
+                    var AirLineName = jresponce3.Carriers[0].CarrierId;
+                    for (let z = 0; z < jresponce3.Carriers.length; z++) {
+                        let id = jresponce3.Carriers[z].CarrierId;
+                        if (id = CarrierID) {
+                            AirLineName = jresponce3.Carriers[z].Name;
+                        }
+                    }
+
+                    // Getting rid of the T separator between the date and time
                     date.toString();
+
                     var StringDate = date.substr(0, date.indexOf('T'));
                     var StringTime = date.substr(date.indexOf('T') + 1);
                     console.log("Airline Price: " + airlinePrice);
                     console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
-                    console.log("Airline Name: " + AirLine);
+                    console.log("Airline Name: " + AirLineName);
 
                     document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
                     document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
-                    document.getElementById('airline').innerHTML = airLine;
+                    document.getElementById('airline').innerHTML = AirLineName;
 
                     if (jresponce.Quotes.length === 0) {
                         console.log("Attention Attention, we must check the mext day")
-                        var currentDate = new Date(new Date().getTime() + 2 * (24 * 60 * 60 * 1000));
+                        var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
                         var day = String(currentDate.getDate()).padStart(2, '0');
                         var month = String(currentDate.getMonth() + 1).padStart(2, '0');
                         var year = currentDate.getFullYear();
@@ -298,19 +321,42 @@ async function GetFlightCost() {
                                         }
                                         airlinePrice = min;
                                     }
-                                    // const AirLine = jresponce3.Carriers[0].Name;
-                                    // const date = jresponce3.Quotes[0].QuoteDateTime;
+                                    // Getting the Carrier ID associated with min price
+                                    var CarrierID = jresponce3.Quotes[0].OutboundLeg.CarrierIds;
+                                    var date = jresponce3.Quotes[0].QuoteDateTime;
 
-                                    // date.toString();
-                                    // var StringDate = date.substr(0, date.indexOf('T'));
-                                    // var StringTime = date.substr(date.indexOf('T') + 1);
-                                    // console.log("Airline Price: " + airlinePrice);
-                                    // console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
-                                    // console.log("Airline Name: " + AirLine);
 
-                                    // document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
-                                    // document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
-                                    // document.getElementById('airline').innerHTML = airLine;
+                                    for (let y = 0; y < jresponce3.Quotes.length; y++) {
+                                        let value = jresponce3.Quotes[y].MinPrice;
+                                        if (value = airlinePrice) {
+                                            CarrierID = jresponce3.Quotes[y].OutboundLeg.CarrierIds;
+                                            date = jresponce3.Quotes[y].QuoteDateTime;
+                                        }
+                                    }
+                                    console.log("Carrier ID: " + CarrierID);
+
+                                    // Getting Airline Name associated with min price
+
+                                    var AirLineName = jresponce3.Carriers[0].CarrierId;
+                                    for (let z = 0; z < jresponce3.Carriers.length; z++) {
+                                        let id = jresponce3.Carriers[z].CarrierId;
+                                        if (id = CarrierID) {
+                                            AirLineName = jresponce3.Carriers[z].Name;
+                                        }
+                                    }
+
+                                    // Getting rid of the T separator between the date and time
+                                    date.toString();
+
+                                    var StringDate = date.substr(0, date.indexOf('T'));
+                                    var StringTime = date.substr(date.indexOf('T') + 1);
+                                    console.log("Airline Price: " + airlinePrice);
+                                    console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
+                                    console.log("Airline Name: " + AirLineName);
+
+                                    document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
+                                    document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
+                                    document.getElementById('airline').innerHTML = AirLineName;
                                 })
                             })
                             .catch(err => {
@@ -321,7 +367,7 @@ async function GetFlightCost() {
                 })
                 .catch(error => {
                     console.log(" 2nd catch error occurred");
-                    var currentDate = new Date(new Date().getTime() + 2 * (24 * 60 * 60 * 1000));
+                    var currentDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
                     var day = String(currentDate.getDate()).padStart(2, '0');
                     var month = String(currentDate.getMonth() + 1).padStart(2, '0');
                     var year = currentDate.getFullYear();
@@ -348,6 +394,7 @@ async function GetFlightCost() {
                                     const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
 
+                                    // Gets the minimum airline price
                                     if (jresponce3.Quotes.length > 1) {
                                         let min = jresponce3.Quotes[0].MinPrice;
                                         for (let x = 0; x < jresponce3.Quotes.length; x++) {
@@ -356,19 +403,43 @@ async function GetFlightCost() {
                                         }
                                         airlinePrice = min;
                                     }
-                                    const AirLine = jresponce3.Carriers[0].Name;
-                                    const date = jresponce3.Quotes[0].QuoteDateTime;
 
+                                    // Getting the Carrier ID associated with min price
+                                    var CarrierID = jresponce3.Quotes[0].OutboundLeg.CarrierIds;
+                                    var date = jresponce3.Quotes[0].QuoteDateTime;
+
+
+                                    for (let y = 0; y < jresponce3.Quotes.length; y++) {
+                                        let value = jresponce3.Quotes[y].MinPrice;
+                                        if (value = airlinePrice) {
+                                            CarrierID = jresponce3.Quotes[y].OutboundLeg.CarrierIds;
+                                            date = jresponce3.Quotes[y].QuoteDateTime;
+                                        }
+                                    }
+                                    console.log("Carrier ID: " + CarrierID);
+
+                                    // Getting Airline Name associated with min price
+
+                                    var AirLineName = jresponce3.Carriers[0].CarrierId;
+                                    for (let z = 0; z < jresponce3.Carriers.length; z++) {
+                                        let id = jresponce3.Carriers[z].CarrierId;
+                                        if (id = CarrierID) {
+                                            AirLineName = jresponce3.Carriers[z].Name;
+                                        }
+                                    }
+
+                                    // Getting rid of the T separator between the date and time
                                     date.toString();
+
                                     var StringDate = date.substr(0, date.indexOf('T'));
                                     var StringTime = date.substr(date.indexOf('T') + 1);
                                     console.log("Airline Price: " + airlinePrice);
                                     console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
-                                    console.log("Airline Name: " + AirLine);
+                                    console.log("Airline Name: " + AirLineName);
 
                                     document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
                                     document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
-                                    document.getElementById('airline').innerHTML = AirLine;
+                                    document.getElementById('airline').innerHTML = AirLineName;
                                     checkedNextDay = true;
                                 }
                             })
