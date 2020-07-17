@@ -347,7 +347,7 @@
         font-family: 'Arial Bold', sans-serif;
         font-size: 30px;
         left: 690px;
-        bottom: 20px;
+        bottom: 3px;
         /*text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);*/
     }
     
@@ -491,7 +491,7 @@
     
     #TooLongRoute {
         position: absolute;
-        top: 800px;
+        top: 790px;
         left: 450px;
     }
     
