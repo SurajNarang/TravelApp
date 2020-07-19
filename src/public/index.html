@@ -12,6 +12,7 @@
 </head>
 
 <body>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <!-- Preloader -->
     <div id="preloader">
@@ -31,9 +32,11 @@
         </canvas>
     </div>
     <button id="info-button" class="button info-button">More</button>
+
     <button id="about-button" class="button about-button">About <a href="#about">
             <li data-menuanchor="about" class="btn btn-lg btn-default about"></li>
         </a> </button>
+
 
     <div id="info" class="info">
         <p>
@@ -202,6 +205,7 @@
                 </div>
             </div>
         </div>
+        <button onclick="topFunction()" id="myBtn" title="Go to top">Back to Top</button>
     </div>
     <script>
         $(window).on('load', function() { // makes sure the whole site is loaded 
@@ -214,6 +218,26 @@
     </script>
     <script type='text/javascript' src='config.js'></script>
     <script>
+        mybutton = document.getElementById("myBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {
+            scrollFunction()
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 900 || document.documentElement.scrollTop > 900) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
         const infoBtn = document.getElementById('info-button');
         const closeBtn = document.getElementById('close-button');
         const info = document.getElementById('info');

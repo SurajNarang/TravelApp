@@ -18,6 +18,11 @@
         /*no margin or paddings for body */
         overflow-x: hidden;
         width: 700px;
+        /* background-image: url('https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?ixlib=rb-1.2.1&w=1000&q=80');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 1.0; */
     }
     
     #webtitle {
@@ -327,10 +332,29 @@
     .about-button {
         position: absolute;
         top: 35px;
-        /*
-    bottom: 670px;
-    */
         left: 1330px;
+    }
+    
+    #myBtn {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Fixed/sticky position */
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        border: none;
+        outline: none;
+        background-color: #3498db;
+        color: #f1f1f1;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+    
+    #myBtn:hover {
+        background-color: #555;
     }
     
     html {
