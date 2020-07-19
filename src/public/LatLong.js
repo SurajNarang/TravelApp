@@ -31,8 +31,7 @@ async function printResult() {
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
-
-        await fetchCalc();
+        console.log("Here is the current LUFT key: " + lufthansaKey);
         await GetFlightCost(StartingAirportCode, EndingAirportCode);
         await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
         await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
@@ -528,6 +527,7 @@ async function fetchCalc() {  
     }).then(responce => {    
         responce.json().then(data => {   
             var accessToken = data.access_token;
+            lufthansaKey = accessToken;
             console.log("Refreshed token: " + accessToken);  
         })  
     }).catch(err => {    
@@ -539,9 +539,10 @@ async function fetchCalc() {  
 
 // Regenerates token every 36 hours
 
-setInterval(function() {
-    fetchCalc();
-}, 129600000);
+setInterval(async function() {
+    await fetchCalc();
+}, 3600000);
+//129600000 = 36 hours
 
 function addZeroes(num) {
     // Cast as number
@@ -631,12 +632,16 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                         "longitude": uberStartLong,
                         "provider": "google_places"
                     }
-
                 })
+
             }).then(async responce => {
+                console.log("return json response line");
                 return responce.json()
             }).then(async data => {
-                var finalData = data;
+                console.log("Start Lat: " + uberStartLat + ", Start long: " + uberStartLong + ", End lat:" + uberEndLat + ", End long:" + uberEndLong + ", StartID: " + startID + ", EndID: " + endID);
+                console.log(data);
+                console.log("Reached Uber data")
+                const finalData = data;
                 const uberXcost = await finalData.data.prices[1].total;
                 console.log("UberX Price: " + uberXcost);
                 document.getElementById('ubercost').innerHTML = "$" + uberXcost;
