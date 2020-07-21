@@ -28,7 +28,7 @@
         top: 400px; */
         margin: auto;
         top: 0px;
-        z-index: -1;
+        z-index: 0;
     }
     
     #Rideshare {
@@ -40,6 +40,21 @@
         margin: auto;
         top: 920px;
         z-index: 0;
+    }
+    
+    #clickMe {
+        position: absolute;
+        overflow: hidden;
+        left: 650px;
+        top: 398px;
+        font-size: 13px;
+        background-color: rgb(64, 166, 244);
+        border: none;
+        color: white;
+        /* padding: 16px 32px; */
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
     }
     
     h2,
@@ -111,9 +126,9 @@
     
     table {
         position: absolute;
-        width: 700px;
+        width: 720px;
         left: 350px;
-        top: 425px;
+        top: 440px;
         /**/
         /*bottom: 0px;*/
         border-collapse: collapse;
@@ -412,6 +427,7 @@
         width: 1040px;
         line-height: 25px;
         font-family: 'Arial', sans-serif;
+        font-weight: 520;
     }
     
     .subtitle {
@@ -545,7 +561,7 @@
     
     #TooLongRoute {
         position: absolute;
-        top: 790px;
+        top: 795px;
         left: 450px;
     }
     

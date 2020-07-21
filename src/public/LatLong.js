@@ -28,6 +28,7 @@ async function Overall() {
 Overall();
 
 async function printResult() {
+
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
@@ -37,6 +38,7 @@ async function printResult() {
         await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
         checkIfSameAirport();
     }
+
 }
 
 async function determiningLatLong() {
@@ -144,7 +146,12 @@ async function determiningLatLong() {
                 }
             });
 
-            printResult();
+            $(document).ready(function() {
+                $('#clickMe').click(function() {
+                    printResult();
+                });
+            });
+
         });
     });
 
@@ -527,8 +534,11 @@ async function fetchCalc() {  
     }).then(responce => {    
         responce.json().then(data => {   
             var accessToken = data.access_token;
+            var expiresIn = data.expires_in;
             lufthansaKey = accessToken;
             console.log("Refreshed token: " + accessToken);  
+            console.log("Token expires in: " + expiresIn); 
+            writeToken(accessToken, expires_in);
         })  
     }).catch(err => {    
         console.log(err)  
@@ -536,6 +546,24 @@ async function fetchCalc() {  
 
     return NewToken;
 }
+
+// async function writeToken(access_token, expires_in) {
+//     const customer = {
+//         "luftkey": access_token,
+//         "expiresin": expires_in
+//     }
+
+//     const jsonString = JSON.stringify(customer)
+//     console.log(jsonString)
+// }
+
+// fs.writeFile('keys.json', jsonString, err => {
+//     if (err) {
+//         console.log('Error writing file', err)
+//     } else {
+//         console.log('Successfully wrote file')
+//     }
+// })
 
 // Regenerates token every 36 hours
 
@@ -663,11 +691,11 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
 }
 
 function checkIfSameAirport() {
-    if (StartingAirportCode === EndingAirportCode) {
-        document.getElementById('startnearestairport').innerHTML = "-_-";
-        document.getElementById('endnearestairport').innerHTML = "-_-";
-    } else {
-        document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
-        document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
-    }
+    // if (StartingAirportCode === EndingAirportCode) {
+    //     document.getElementById('startnearestairport').innerHTML = "-_-";
+    //     document.getElementById('endnearestairport').innerHTML = "-_-";
+    // } else {
+    document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
+    document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
+    // }
 }
