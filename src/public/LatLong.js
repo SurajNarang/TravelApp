@@ -33,9 +33,9 @@ async function printResult() {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         console.log("Here is the current LUFT key: " + lufthansaKey);
-        await GetFlightCost(StartingAirportCode, EndingAirportCode);
-        await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
-        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
+         await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
+         GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+         GetFlightCost(StartingAirportCode, EndingAirportCode);
         checkIfSameAirport();
     }
 
@@ -228,7 +228,7 @@ async function GetFlightCost() {
     if (StartingAirportCode == undefined || EndingAirportCode == undefined) {
 
         console.log('Taking a break...');
-        await sleep(4000);
+        await sleep(500);
 
     }
     console.log("cost in running");
@@ -523,25 +523,25 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
     }
 }
 
-async function fetchCalc() {  
+async function fetchCalc() {  
 
-    const NewToken = await fetch("https://api.lufthansa.com/v1/oauth/token", {    
+    const NewToken = await fetch("https://api.lufthansa.com/v1/oauth/token", {    
         body: "client_id=yz6q8w4ppkd42xkhkvkddh8s&client_secret=5WHNjTWeFy&grant_type=client_credentials",
-        headers: {      
-            "Content-Type": "application/x-www-form-urlencoded"    
+        headers: {      
+            "Content-Type": "application/x-www-form-urlencoded"    
         },
-        method: "POST"  
-    }).then(responce => {    
-        responce.json().then(data => {   
+        method: "POST"  
+    }).then(responce => {    
+        responce.json().then(data => {   
             var accessToken = data.access_token;
             var expiresIn = data.expires_in;
             lufthansaKey = accessToken;
-            console.log("Refreshed token: " + accessToken);  
-            console.log("Token expires in: " + expiresIn); 
+            console.log("Refreshed token: " + accessToken);  
+            console.log("Token expires in: " + expiresIn); 
             writeToken(accessToken, expires_in);
-        })  
-    }).catch(err => {    
-        console.log(err)  
+        })  
+    }).catch(err => {    
+        console.log(err)  
     });
 
     return NewToken;
@@ -567,9 +567,9 @@ async function fetchCalc() {  
 
 // Regenerates token every 36 hours
 
-setInterval(async function() {
-    await fetchCalc();
-}, 3600000);
+// setInterval(async function() {
+//     await fetchCalc();
+// }, 3600000);
 //129600000 = 36 hours
 
 function addZeroes(num) {
@@ -670,11 +670,11 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                 console.log(data);
                 console.log("Reached Uber data")
                 const finalData = data;
-                const uberXcost = await finalData.data.prices[1].total;
+                const uberXcost = await addZeroes(finalData.data.prices[1].total);
                 console.log("UberX Price: " + uberXcost);
                 document.getElementById('ubercost').innerHTML = "$" + uberXcost;
 
-                const uberXLcost = await finalData.data.prices[5].total;
+                const uberXLcost = await addZeroes(finalData.data.prices[5].total);
                 console.log("UberXL Price: " + uberXLcost);
                 document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
             })
