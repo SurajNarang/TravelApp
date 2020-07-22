@@ -11,7 +11,7 @@ var RouteTooFar = new Boolean(true);
 var checkedNextDay = new Boolean(false);
 
 // Credentials
-const lufthansaKey = config.LUFT_KEY;
+const lufthansaKey = 'Bearer me7aqjtaa7tyhwbwqzrpzzum';
 const clientID = config.CLIENT_ID;
 const clientSec = config.CLIENT_SECRET;
 const skyScannerKey = config.SKYSCAN_KEY;
@@ -34,8 +34,8 @@ async function printResult() {
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         console.log("Here is the current LUFT key: " + lufthansaKey);
         await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
-        await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
-        await GetFlightCost(StartingAirportCode, EndingAirportCode);
+         GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+         GetFlightCost(StartingAirportCode, EndingAirportCode);
         checkIfSameAirport();
     }
 
@@ -625,7 +625,7 @@ async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
 
         var num = Number(StringData);
         console.log("DISTANCE METHOD: " + num);
-        return num;
+        return addZeroes(num);
 
     }).catch(err => {
         console.log(err);
