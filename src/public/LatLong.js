@@ -33,9 +33,9 @@ async function printResult() {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         console.log("Here is the current LUFT key: " + lufthansaKey);
-         await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
-         GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
-         GetFlightCost(StartingAirportCode, EndingAirportCode);
+        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
+        await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
+        await GetFlightCost(StartingAirportCode, EndingAirportCode);
         checkIfSameAirport();
     }
 
@@ -148,8 +148,16 @@ async function determiningLatLong() {
 
             $(document).ready(function() {
                 $('#clickMe').click(function() {
+                    $("#display_loading").show();
+
+                    setTimeout(function() {
+
+                        document.getElementById("display_loading").style.display = "none";
+                    }, 7000);
+
                     printResult();
                 });
+
             });
 
         });
@@ -160,6 +168,20 @@ async function determiningLatLong() {
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
     });
+}
+
+function hideGif() {
+
+    show = function() {
+            myDiv.style.display = "block";
+            setTimeout(hide, 5000); // 5 seconds
+        },
+
+        hide = function() {
+            myDiv.style.display = "none";
+        };
+
+    show();
 }
 
 function GetNearestStartingAirport(LatFinal, LongFinal) {
@@ -301,8 +323,8 @@ async function GetFlightCost() {
                     console.log("Airline Name: " + AirLineName);
 
                     document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
-                    document.getElementById('flightdate').innerHTML = "Date & Time: " + StringDate + ", " + StringTime;
-                    document.getElementById('airline').innerHTML = "Airline: " + AirLineName;
+                    document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
+                    document.getElementById('airline').innerHTML = AirLineName;
 
                     if (jresponce.Quotes.length === 0) {
                         console.log("Attention Attention, we must check the mext day")
@@ -403,8 +425,10 @@ async function GetFlightCost() {
                             data2.then(jresponce3 => {
                                 if ((jresponce3.Quotes.length) == 0) {
                                     var message = "*No Flights Yet*"
+                                    var NAmessage = "N/A"
                                     document.getElementById('flightcost').innerHTML = message.fontcolor("#00008B");
-
+                                    document.getElementById('flightdate').innerHTML = NAmessage.fontcolor("#00008B");
+                                    document.getElementById('airline').innerHTML = NAmessage.fontcolor("#00008B");
                                     // alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
                                 } else {
                                     const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
@@ -523,25 +547,25 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
     }
 }
 
-async function fetchCalc() {  
+async function fetchCalc() {
 
-    const NewToken = await fetch("https://api.lufthansa.com/v1/oauth/token", {    
+    const NewToken = await fetch("https://api.lufthansa.com/v1/oauth/token", {
         body: "client_id=yz6q8w4ppkd42xkhkvkddh8s&client_secret=5WHNjTWeFy&grant_type=client_credentials",
-        headers: {      
-            "Content-Type": "application/x-www-form-urlencoded"    
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
         },
-        method: "POST"  
-    }).then(responce => {    
-        responce.json().then(data => {   
+        method: "POST"
+    }).then(responce => {
+        responce.json().then(data => {
             var accessToken = data.access_token;
             var expiresIn = data.expires_in;
             lufthansaKey = accessToken;
-            console.log("Refreshed token: " + accessToken);  
-            console.log("Token expires in: " + expiresIn); 
+            console.log("Refreshed token: " + accessToken);
+            console.log("Token expires in: " + expiresIn);
             writeToken(accessToken, expires_in);
-        })  
-    }).catch(err => {    
-        console.log(err)  
+        })
+    }).catch(err => {
+        console.log(err)
     });
 
     return NewToken;
@@ -628,17 +652,36 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     return duration;
 }
 
+// try {
+//     const uberFetch = await ...
+//     // uberFetch should have the response object
+//     // make sure call is successful 
+//     // can use .status === 200 or .ok 
+//     if (uberFetch.ok){
+//     // deserialize json response 
+//     const data = await uberFetch.json()
+//     // we are all good return data 
+//     return { uberX : data...total, uberXl: data...total }
+//     } else {
+//     // non 2xx status code 
+//     console.log("Status code", uberFetch.status)
+//     }
+//     } catch(err){
+//     console.log("An error occurred", err)
+//     }
+//     // if we are here something went wrong
+//     // return empty result possibly retry later
+//     return { uberX : 0, uberXl: 0 }
+
+
 async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
-
-    //const url = 'https://api.uber.com/v1.2/estimates/price?start_latitude=37.7752315&start_longitude=-122.418075&end_latitude=37.7752415&end_longitude=-122.518075';
-
     const travelMiles = await getDistanceGoogle(uberStartLat, uberStartLong, uberEndLat, uberEndLong);
     if (travelMiles < 150) {
 
         const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
         console.log(url);
-
-        const uberFetch = await fetch(url, {
+        try {
+            const uberFetch = await fetch(url, {
                 "method": "POST",
                 "mode": "cors",
                 "headers": {
@@ -661,14 +704,12 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                         "provider": "google_places"
                     }
                 })
-
-            }).then(async responce => {
-                console.log("return json response line");
-                return responce.json()
-            }).then(async data => {
-                console.log("Start Lat: " + uberStartLat + ", Start long: " + uberStartLong + ", End lat:" + uberEndLat + ", End long:" + uberEndLong + ", StartID: " + startID + ", EndID: " + endID);
-                console.log(data);
-                console.log("Reached Uber data")
+            })
+            console.log("Status of uber: " + uberFetch.status);
+            if (uberFetch.ok) { // or status == 200
+                //deserializes json response 
+                const data = await uberFetch.json();
+                console.log("Status of data: " + data.status);
                 const finalData = data;
                 const uberXcost = await addZeroes(finalData.data.prices[1].total);
                 console.log("UberX Price: " + uberXcost);
@@ -677,18 +718,44 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                 const uberXLcost = await addZeroes(finalData.data.prices[5].total);
                 console.log("UberXL Price: " + uberXLcost);
                 document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
-            })
-            .catch(err => {
-                console.log(err);
-            });
-
-        return uberFetch;
-
+                // return { uberX: uberXcost, uberXl: uberXLcost }
+            } else {
+                // non 2xx status code 
+                console.log("Status code", uberFetch.status)
+            }
+        } catch (err) {
+            console.log("An error occured", err);
+        }
+        // return { uberX: 0, uberXl: 0 };
     } else {
         document.getElementById('ubercost').innerHTML = "***";
         document.getElementById('uberXLcost').innerHTML = "***";
     }
 }
+
+
+
+//     }).then(async responce => {
+//         console.log("return json response line");
+//         return responce.json()
+//     }).then(async data => {
+
+//         console.log("Reached Uber data")
+
+//         const finalData = data;
+//         const uberXcost = await addZeroes(finalData.data.prices[1].total);
+//         console.log("UberX Price: " + uberXcost);
+//         document.getElementById('ubercost').innerHTML = "$" + uberXcost;
+
+//         const uberXLcost = await addZeroes(finalData.data.prices[5].total);
+//         console.log("UberXL Price: " + uberXLcost);
+//         document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
+//     })
+//     .catch(err => {
+//         console.log(err);
+//     });
+
+// return uberFetch;
 
 function checkIfSameAirport() {
     // if (StartingAirportCode === EndingAirportCode) {

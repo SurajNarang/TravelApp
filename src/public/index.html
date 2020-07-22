@@ -45,6 +45,8 @@
         </a> </button>
 
     <input type="button" value="Calculate Travel Data" id="clickMe">
+    <div id="display_loading" style="display:none"> <img src="https://media1.giphy.com/media/3y0oCOkdKKRi0/200.gif?cid=ecf05e47hqqs66nwj9ub32rtlu26wn1mugbundwbx3ee4wwm&rid=200.gif" height="400px" width="720px"></div>
+
     <div id="info" class="info">
         <p>
             Thanks for checking out our Travel Webapp! Would you like to help us keep the site running?
@@ -123,12 +125,12 @@
             </td>
             <td>
                 One-way Airfare: <b><span id="flightcost"></span></b><br></br>
-                <b><span id="flightdate"></span></b>
+                Date & Time: <b><span id="flightdate"></span></b>
             </td>
             <td>
                 Nearest Starting Airport: <b><span id="startnearestairport"></span></b><br></br>
                 Nearest Ending Airport: <b><span id="endnearestairport"></span></b><br></br>
-                <b><span id="airline"></span></b><br></br>
+                Airline: <b><span id="airline"></span></b><br></br>
             </td>
 
         </tr>
@@ -214,6 +216,7 @@
         </div>
         <button onclick="topFunction()" id="myBtn" title="Go to top">Back to Top</button>
     </div>
+
     <script>
         $(window).on('load', function() { // makes sure the whole site is loaded 
             $('sk-chase').fadeOut(); // will first fade out the loading animation 
@@ -224,6 +227,22 @@
         })
     </script>
     <script type='text/javascript' src='config.js'></script>
+    <!-- <script type="text/javascript">
+        (function() {
+            var myDiv = document.getElementById("display_loading"),
+
+                show = function() {
+                    myDiv.style.display = "block";
+                    setTimeout(hide, 5000); // 5 seconds
+                },
+
+                hide = function() {
+                    myDiv.style.display = "none";
+                };
+
+            show();
+        })();
+    </script> -->
     <script>
         mybutton = document.getElementById("myBtn");
 
@@ -245,6 +264,7 @@
             document.body.scrollTop = 0; // For Safari
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         }
+
         const infoBtn = document.getElementById('info-button');
         const closeBtn = document.getElementById('close-button');
         const info = document.getElementById('info');
