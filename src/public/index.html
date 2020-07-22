@@ -45,7 +45,7 @@
         </a> </button>
 
     <input type="button" value="Calculate Travel Data" id="clickMe">
-    <div id="display_loading" style="display:none"> <img src="https://media1.giphy.com/media/3y0oCOkdKKRi0/200.gif?cid=ecf05e47hqqs66nwj9ub32rtlu26wn1mugbundwbx3ee4wwm&rid=200.gif" height="400px" width="720px"></div>
+    <div id="display_loading" style="display:none"> <img src="loading.gif"></div>
 
     <div id="info" class="info">
         <p>
@@ -101,18 +101,18 @@
 
         </tr>
         <tr>
-            <td>
+            <td id="uber1">
                 <img id="uber" src="uber.png" alt="uber"></td>
-            <td>UberX (Max: 4 Riders): <b> <span id="ubercost"></span></b>
+            <td id>UberX (Max: 4 Riders): <b> <span id="ubercost"></span></b>
                 <br></br>
                 UberXL (Max: 6 Riders): <b><span id="uberXLcost"></span></b></td>
             </td>
-            <td>Duration: <b><span id="uberduration"></span></b><br></br>
+            <td id="durationdistance">Duration: <b><span id="uberduration"></span></b><br></br>
                 Distance: <b><span id="uberdistance"></span></b></td>
 
         </tr>
         <tr>
-            <td><img id="lyft" src="lyft3.png" width="70px" alt="lyft"></td>
+            <td><img id="lyft" src="lyft3.png" alt="lyft"></td>
             <td>Lyft (Max: 4 Riders): <b><span id="lyftcost"></span></b><br></br>
                 Lyft XL (Max: 6 Riders): <b><span id="lyftXLcost"></span></b></td>
             <td>Duration: <b><span id="lyftduration"></span></b><br></br>

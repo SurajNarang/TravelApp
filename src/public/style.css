@@ -46,8 +46,8 @@ body {
     position: absolute;
     overflow: hidden;
     left: 650px;
-    top: 374px;
-    font-size: 15px;
+    top: 380px;
+    font-size: 16px;
     background-color: rgb(64, 166, 244);
     border: none;
     color: white;
@@ -106,7 +106,7 @@ th {
     position: absolute;
     overflow: hidden;
     left: 860px;
-    top: 225px;
+    top: 213px;
     /*
     bottom: 460px;
     */
@@ -118,7 +118,7 @@ th {
     position: absolute;
     overflow: hidden;
     left: 860px;
-    top: 300px;
+    top: 293px;
     /*
     bottom: 380px;
     */
@@ -135,12 +135,12 @@ th {
 
 #display_loading {
     position: absolute;
-    top: 155px;
-    left: 890px;
+    top: 80px;
+    left: 1440px;
     transform: translate(-50%, 50%);
-    display: table;
-    height: 600px ;
-    width : 820px ;
+    display: none;
+    height: 775px;
+    width: 1800px;
     z-index: 1;
 }
 
@@ -148,16 +148,17 @@ table,
 td,
 th {
     border: 4px solid #89cdf2;
-    text-align: left;      
+    text-align: left;
 }
 
 table {
     position: absolute;
-    width: 720px;
-    left: 350px;
-    top: 416px;
+    width: 680px;
+    left: 370px;
+    top: 437px;
     /*bottom: 0px;*/
     border-collapse: collapse;
+    font-size: 16px;
 }
 
 th,
@@ -169,7 +170,6 @@ td {
     height: 10%;
     display: block;
     margin: 0 auto;
-    
 }
 
 #lyft {
@@ -194,6 +194,14 @@ td {
     text-align: center;
 }
 
+#uber1 {
+    width: 100px;
+}
+
+#durationdistance {
+    width: 250px;
+}
+
 
 /* First text box */
 
@@ -202,7 +210,7 @@ td {
     position: absolute;
     height: 50px;
     overflow: hidden;
-    top: 240px;
+    top: 220px;
     /*
     bottom: 470px;
     */
@@ -267,7 +275,7 @@ td {
     position: absolute;
     height: 50px;
     overflow: hidden;
-    top: 310px;
+    top: 300px;
     /*
     bottom: 390px;
     */
@@ -308,7 +316,7 @@ td {
 #directions {
     position: absolute;
     overflow: hidden;
-    top: 150px;
+    top: 130px;
     /*
     bottom: 540px;
     */
@@ -408,10 +416,10 @@ h1 {
 
 .about-button {
     position: absolute;
-    top: 5%;
-    left: 92%;
-    /* top: 35px;
-    left: 1330px; */
+    /* top: 5%;
+    left: 92%; */
+    top: 35px;
+    left: 1330px;
 }
 
 #myBtn {
@@ -593,7 +601,7 @@ h2.title {
 
 #TooLongRoute {
     position: absolute;
-    top: 795px;
+    top: 783px;
     left: 450px;
 }
 
