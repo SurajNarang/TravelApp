@@ -11,7 +11,7 @@ var RouteTooFar = new Boolean(true);
 var checkedNextDay = new Boolean(false);
 
 // Credentials
-var lufthansaKey = 'Bearer e77g7fattdps7cwqaxeqd7e4';
+var lufthansaKey;
 const clientID = config.CLIENT_ID;
 const clientSec = config.CLIENT_SECRET;
 const skyScannerKey = config.SKYSCAN_KEY;
@@ -19,29 +19,33 @@ const mykey = config.GOOGLE_KEY;
 
 document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
 
+async function getToken(callback) {
+    await fetchCalc();
 
-async function Overall() { 
-       await fetchCalc();
-
-    await determiningLatLong();
-    //GetFlightCost("PHL", "LAX");
-    //getDistanceGoogle(37.7752315, -122.418075, 37.7752415, -122.518075);
+    return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+            console.log("fetchCalc function executed first");
+            resolve();
+        }, 1000);
+    })
 }
-Overall();
+
+async function LatLongData() {
+    await determiningLatLong();
+}
+
+getToken().then(LatLongData); // Grabs a new token before data printed
 
 async function printResult() {
-    
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         console.log("Here is the current LUFT key: " + lufthansaKey);
+        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
         await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
         await GetFlightCost(StartingAirportCode, EndingAirportCode);
-        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
-
-        checkIfSameAirport();
+        await printAirports();
     }
-
 }
 
 async function determiningLatLong() {
@@ -92,9 +96,6 @@ async function determiningLatLong() {
                     window.alert('Geocoder failed due to: ' + status);
                 }
             });
-
-            // printResult();
-
         });
     });
 
@@ -160,9 +161,7 @@ async function determiningLatLong() {
 
                     printResult();
                 });
-
             });
-
         });
     });
 
@@ -171,20 +170,6 @@ async function determiningLatLong() {
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
     });
-}
-
-function hideGif() {
-
-    show = function() {
-            myDiv.style.display = "block";
-            setTimeout(hide, 5000); // 5 seconds
-        },
-
-        hide = function() {
-            myDiv.style.display = "none";
-        };
-
-    show();
 }
 
 function GetNearestStartingAirport(LatFinal, LongFinal) {
@@ -213,7 +198,6 @@ function GetNearestStartingAirport(LatFinal, LongFinal) {
 }
 
 function GetNearestEndingAirport(LatFinal1, LongFinal1) {
-
     fetch("https://api.lufthansa.com/v1/references/airports/nearest/" + LatFinal1 + "," + LongFinal1, {
             "method": "GET",
             "headers": {
@@ -225,12 +209,7 @@ function GetNearestEndingAirport(LatFinal1, LongFinal1) {
             const test = response.json().then(response2 => {
                     EndingAirportCode = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
                     console.log('Taking a break...');
-                    //sleep(4000);
                     console.log(EndingAirportCode + " -Destination airport");
-                    //  var CurrentAirport = test1;
-                    //  EndingAirportCode = CurrentAirport;
-                    // document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
-
                 })
                 .catch(err => {
                     console.log(err);
@@ -241,10 +220,6 @@ function GetNearestEndingAirport(LatFinal1, LongFinal1) {
         });
 }
 
-
-
-
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -254,8 +229,8 @@ async function GetFlightCost() {
 
         console.log('Taking a break...');
         await sleep(500);
-
     }
+
     console.log("cost in running");
     var skipDay = 0;
     var skipMonth = 0;
@@ -278,41 +253,41 @@ async function GetFlightCost() {
         })
         .then(response => {
             const data = response.json();
-            data.then(jresponce => {
-                    console.log(jresponce);
-                    const minPriceToday = jresponce.Quotes[0].MinPrice;
+            data.then(jresponse => {
+                    console.log(jresponse);
+                    const minPriceToday = jresponse.Quotes[0].MinPrice;
                     airlinePrice = minPriceToday;
 
-                    if (jresponce.Quotes.length > 1) {
-                        let min = jresponce.Quotes[0].MinPrice;
-                        for (let x = 0; x < jresponce.Quotes.length; x++) {
-                            let value = jresponce.Quotes[x].MinPrice;
+                    if (jresponse.Quotes.length > 1) {
+                        let min = jresponse.Quotes[0].MinPrice;
+                        for (let x = 0; x < jresponse.Quotes.length; x++) {
+                            let value = jresponse.Quotes[x].MinPrice;
                             min = (value < min) ? value : min
                         }
                         airlinePrice = min;
                     }
 
                     // Getting the Carrier ID associated with min price
-                    var CarrierID = jresponce3.Quotes[0].OutboundLeg.CarrierIds;
-                    var date = jresponce3.Quotes[0].QuoteDateTime;
+                    var CarrierID = jresponse3.Quotes[0].OutboundLeg.CarrierIds;
+                    var date = jresponse3.Quotes[0].QuoteDateTime;
 
 
-                    for (let y = 0; y < jresponce3.Quotes.length; y++) {
-                        let value = jresponce3.Quotes[y].MinPrice;
+                    for (let y = 0; y < jresponse3.Quotes.length; y++) {
+                        let value = jresponse3.Quotes[y].MinPrice;
                         if (value = airlinePrice) {
-                            CarrierID = jresponce3.Quotes[y].OutboundLeg.CarrierIds;
-                            date = jresponce3.Quotes[y].QuoteDateTime;
+                            CarrierID = jresponse3.Quotes[y].OutboundLeg.CarrierIds;
+                            date = jresponse3.Quotes[y].QuoteDateTime;
                         }
                     }
                     console.log("Carrier ID: " + CarrierID);
 
                     // Getting Airline Name associated with min price
 
-                    var AirLineName = jresponce3.Carriers[0].CarrierId;
-                    for (let z = 0; z < jresponce3.Carriers.length; z++) {
-                        let id = jresponce3.Carriers[z].CarrierId;
+                    var AirLineName = jresponse3.Carriers[0].CarrierId;
+                    for (let z = 0; z < jresponse3.Carriers.length; z++) {
+                        let id = jresponse3.Carriers[z].CarrierId;
                         if (id = CarrierID) {
-                            AirLineName = jresponce3.Carriers[z].Name;
+                            AirLineName = jresponse3.Carriers[z].Name;
                         }
                     }
 
@@ -329,8 +304,8 @@ async function GetFlightCost() {
                     document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
                     document.getElementById('airline').innerHTML = AirLineName;
 
-                    if (jresponce.Quotes.length === 0) {
-                        console.log("Attention Attention, we must check the mext day")
+                    if (jresponse.Quotes.length === 0) {
+                        console.log("Attention Attention, we must check the next day");
                         var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
                         var day = String(currentDate.getDate()).padStart(2, '0');
                         var month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -347,45 +322,47 @@ async function GetFlightCost() {
                                     "x-rapidapi-key": skyScannerKey
                                 }
                             })
-                            .then(responce2 => {
-                                const data2 = responce2.json();
-                                data2.then(jresponce2 => {
-                                    const MinPriceForTm = jresponce2.Quotes[0].MinPrice;
+                            .then(response2 => {
+                                const data2 = response2.json();
+                                data2.then(jresponse2 => {
+                                    const MinPriceForTm = jresponse2.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
 
-                                    if (jresponce2.Quotes.length > 1) {
-                                        let min = jresponce2.Quotes[0].MinPrice;
-                                        for (let x = 0; x < jresponce2.Quotes.length; x++) {
-                                            let value = jresponce2.Quotes[x].MinPrice;
+                                    if (jresponse2.Quotes.length > 1) {
+                                        let min = jresponse2.Quotes[0].MinPrice;
+                                        for (let x = 0; x < jresponse2.Quotes.length; x++) {
+                                            let value = jresponse2.Quotes[x].MinPrice;
                                             min = (value < min) ? value : min
                                         }
                                         airlinePrice = min;
                                     }
                                     // Getting the Carrier ID associated with min price
-                                    var CarrierID = jresponce3.Quotes[0].OutboundLeg.CarrierIds;
-                                    var date = jresponce3.Quotes[0].QuoteDateTime;
+
+                                    var CarrierID = jresponse3.Quotes[0].OutboundLeg.CarrierIds;
+                                    var date = jresponse3.Quotes[0].QuoteDateTime;
 
 
-                                    for (let y = 0; y < jresponce3.Quotes.length; y++) {
-                                        let value = jresponce3.Quotes[y].MinPrice;
+                                    for (let y = 0; y < jresponse3.Quotes.length; y++) {
+                                        let value = jresponse3.Quotes[y].MinPrice;
                                         if (value = airlinePrice) {
-                                            CarrierID = jresponce3.Quotes[y].OutboundLeg.CarrierIds;
-                                            date = jresponce3.Quotes[y].QuoteDateTime;
+                                            CarrierID = jresponse3.Quotes[y].OutboundLeg.CarrierIds;
+                                            date = jresponse3.Quotes[y].QuoteDateTime;
                                         }
                                     }
                                     console.log("Carrier ID: " + CarrierID);
 
                                     // Getting Airline Name associated with min price
 
-                                    var AirLineName = jresponce3.Carriers[0].CarrierId;
-                                    for (let z = 0; z < jresponce3.Carriers.length; z++) {
-                                        let id = jresponce3.Carriers[z].CarrierId;
+                                    var AirLineName = jresponse3.Carriers[0].CarrierId;
+                                    for (let z = 0; z < jresponse3.Carriers.length; z++) {
+                                        let id = jresponse3.Carriers[z].CarrierId;
                                         if (id = CarrierID) {
-                                            AirLineName = jresponce3.Carriers[z].Name;
+                                            AirLineName = jresponse3.Carriers[z].Name;
                                         }
                                     }
 
                                     // Getting rid of the T separator between the date and time
+
                                     date.toString();
 
                                     var StringDate = date.substr(0, date.indexOf('T'));
@@ -397,6 +374,7 @@ async function GetFlightCost() {
                                     document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
                                     document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
                                     document.getElementById('airline').innerHTML = AirLineName;
+
                                 })
                             })
                             .catch(err => {
@@ -423,10 +401,10 @@ async function GetFlightCost() {
                                 "x-rapidapi-key": skyScannerKey
                             }
                         })
-                        .then(responce2 => {
-                            const data2 = responce2.json();
-                            data2.then(jresponce3 => {
-                                if ((jresponce3.Quotes.length) == 0) {
+                        .then(response2 => {
+                            const data2 = response2.json();
+                            data2.then(jresponse3 => {
+                                if ((jresponse3.Quotes.length) == 0) {
                                     var message = "*No Flights Yet*"
                                     var NAmessage = "N/A"
                                     document.getElementById('flightcost').innerHTML = message.fontcolor("#00008B").fontsize(2.5);
@@ -434,44 +412,47 @@ async function GetFlightCost() {
                                     document.getElementById('airline').innerHTML = NAmessage.fontcolor("#00008B");
                                     // alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
                                 } else {
-                                    const MinPriceForTm = jresponce3.Quotes[0].MinPrice;
+                                    const MinPriceForTm = jresponse3.Quotes[0].MinPrice;
                                     airlinePrice = MinPriceForTm;
 
                                     // Gets the minimum airline price
-                                    if (jresponce3.Quotes.length > 1) {
-                                        let min = jresponce3.Quotes[0].MinPrice;
-                                        for (let x = 0; x < jresponce3.Quotes.length; x++) {
-                                            let value = jresponce3.Quotes[x].MinPrice;
+
+                                    if (jresponse3.Quotes.length > 1) {
+                                        let min = jresponse3.Quotes[0].MinPrice;
+                                        for (let x = 0; x < jresponse3.Quotes.length; x++) {
+                                            let value = jresponse3.Quotes[x].MinPrice;
                                             min = (value < min) ? value : min
                                         }
                                         airlinePrice = min;
                                     }
 
                                     // Getting the Carrier ID associated with min price
-                                    var CarrierID = jresponce3.Quotes[0].OutboundLeg.CarrierIds;
-                                    var date = jresponce3.Quotes[0].QuoteDateTime;
+
+                                    var CarrierID = jresponse3.Quotes[0].OutboundLeg.CarrierIds;
+                                    var date = jresponse3.Quotes[0].QuoteDateTime;
 
 
-                                    for (let y = 0; y < jresponce3.Quotes.length; y++) {
-                                        let value = jresponce3.Quotes[y].MinPrice;
+                                    for (let y = 0; y < jresponse3.Quotes.length; y++) {
+                                        let value = jresponse3.Quotes[y].MinPrice;
                                         if (value = airlinePrice) {
-                                            CarrierID = jresponce3.Quotes[y].OutboundLeg.CarrierIds;
-                                            date = jresponce3.Quotes[y].QuoteDateTime;
+                                            CarrierID = jresponse3.Quotes[y].OutboundLeg.CarrierIds;
+                                            date = jresponse3.Quotes[y].QuoteDateTime;
                                         }
                                     }
                                     console.log("Carrier ID: " + CarrierID);
 
                                     // Getting Airline Name associated with min price
 
-                                    var AirLineName = jresponce3.Carriers[0].CarrierId;
-                                    for (let z = 0; z < jresponce3.Carriers.length; z++) {
-                                        let id = jresponce3.Carriers[z].CarrierId;
+                                    var AirLineName = jresponse3.Carriers[0].CarrierId;
+                                    for (let z = 0; z < jresponse3.Carriers.length; z++) {
+                                        let id = jresponse3.Carriers[z].CarrierId;
                                         if (id = CarrierID) {
-                                            AirLineName = jresponce3.Carriers[z].Name;
+                                            AirLineName = jresponse3.Carriers[z].Name;
                                         }
                                     }
 
                                     // Getting rid of the T separator between the date and time
+
                                     date.toString();
 
                                     var StringDate = date.substr(0, date.indexOf('T'));
@@ -520,7 +501,6 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
                 console.log("Duration of Trip (minutes): " + routeTime);
 
                 var standardPrice = addZeroes(data.standardPrice / 100);
-
                 var XLprice = addZeroes(data.XLprice / 100);
                 var finalDuration = routeTime;
 
@@ -551,21 +531,20 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
 }
 
 async function fetchCalc() {
-
     const NewToken = await fetch("https://api.lufthansa.com/v1/oauth/token", {
         body: "client_id=yz6q8w4ppkd42xkhkvkddh8s&client_secret=5WHNjTWeFy&grant_type=client_credentials",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
         method: "POST"
-    }).then(responce => {
-        responce.json().then(data => {
+    }).then(response => {
+        response.json().then(data => {
             var accessToken = data.access_token;
             var expiresIn = data.expires_in;
-            lufthansaKey = "Bearer "+accessToken;
+            lufthansaKey = "Bearer " + accessToken;
             console.log("Refreshed token: " + accessToken);
             console.log("Token expires in: " + expiresIn);
-           // writeToken(accessToken, expires_in);
+            // writeToken(accessToken, expires_in);
         })
     }).catch(err => {
         console.log(err)
@@ -573,31 +552,6 @@ async function fetchCalc() {
 
     return NewToken;
 }
-
-// async function writeToken(access_token, expires_in) {
-//     const customer = {
-//         "luftkey": access_token,
-//         "expiresin": expires_in
-//     }
-
-//     const jsonString = JSON.stringify(customer)
-//     console.log(jsonString)
-// }
-
-// fs.writeFile('keys.json', jsonString, err => {
-//     if (err) {
-//         console.log('Error writing file', err)
-//     } else {
-//         console.log('Successfully wrote file')
-//     }
-// })
-
-// Regenerates token every 36 hours
-
-// setInterval(async function() {
-//     await fetchCalc();
-// }, 3600000);
-//129600000 = 36 hours
 
 function addZeroes(num) {
     // Cast as number
@@ -638,8 +592,8 @@ async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
 }
 
 async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
-
     url = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
+
     const duration = await fetch(url, {
             method: "GET",
             mode: "cors"
@@ -655,28 +609,6 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     return duration;
 }
 
-// try {
-//     const uberFetch = await ...
-//     // uberFetch should have the response object
-//     // make sure call is successful 
-//     // can use .status === 200 or .ok 
-//     if (uberFetch.ok){
-//     // deserialize json response 
-//     const data = await uberFetch.json()
-//     // we are all good return data 
-//     return { uberX : data...total, uberXl: data...total }
-//     } else {
-//     // non 2xx status code 
-//     console.log("Status code", uberFetch.status)
-//     }
-//     } catch(err){
-//     console.log("An error occurred", err)
-//     }
-//     // if we are here something went wrong
-//     // return empty result possibly retry later
-//     return { uberX : 0, uberXl: 0 }
-
-
 async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
     const travelMiles = await getDistanceGoogle(uberStartLat, uberStartLong, uberEndLat, uberEndLong);
     if (travelMiles < 150) {
@@ -684,7 +616,7 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
         const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
         console.log(url);
         var count = 1;
-        const maxTries = 10;
+        const maxTries = 20;
         while (true) {
             //while starts
             try {
@@ -712,7 +644,9 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                         }
                     })
                 })
+
                 console.log("Status of uber: " + uberFetch.status);
+
                 if (uberFetch.ok) { // or status == 200
                     //deserializes json response 
                     console.log("Attempt #: " + count);
@@ -732,6 +666,7 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                     console.log("Status code", uberFetch.status)
                 }
                 break;
+
             } catch (err) {
                 console.log("An error occured", err);
 
@@ -742,43 +677,14 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                 }
             }
         }
-        // return { uberX: 0, uberXl: 0 };
+
     } else {
         document.getElementById('ubercost').innerHTML = "***";
         document.getElementById('uberXLcost').innerHTML = "***";
     }
 }
 
-
-
-//     }).then(async responce => {
-//         console.log("return json response line");
-//         return responce.json()
-//     }).then(async data => {
-
-//         console.log("Reached Uber data")
-
-//         const finalData = data;
-//         const uberXcost = await addZeroes(finalData.data.prices[1].total);
-//         console.log("UberX Price: " + uberXcost);
-//         document.getElementById('ubercost').innerHTML = "$" + uberXcost;
-
-//         const uberXLcost = await addZeroes(finalData.data.prices[5].total);
-//         console.log("UberXL Price: " + uberXLcost);
-//         document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
-//     })
-//     .catch(err => {
-//         console.log(err);
-//     });
-
-// return uberFetch;
-
-function checkIfSameAirport() {
-    // if (StartingAirportCode === EndingAirportCode) {
-    //     document.getElementById('startnearestairport').innerHTML = "-_-";
-    //     document.getElementById('endnearestairport').innerHTML = "-_-";
-    // } else {
+async function printAirports() {
     document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
     document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
-    // }
 }
