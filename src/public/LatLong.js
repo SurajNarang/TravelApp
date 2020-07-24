@@ -11,7 +11,7 @@ var RouteTooFar = new Boolean(true);
 var checkedNextDay = new Boolean(false);
 
 // Credentials
-const lufthansaKey = 'Bearer me7aqjtaa7tyhwbwqzrpzzum';
+var lufthansaKey = 'Bearer e77g7fattdps7cwqaxeqd7e4';
 const clientID = config.CLIENT_ID;
 const clientSec = config.CLIENT_SECRET;
 const skyScannerKey = config.SKYSCAN_KEY;
@@ -20,7 +20,9 @@ const mykey = config.GOOGLE_KEY;
 document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
 
 
-async function Overall() {
+async function Overall() { 
+       await fetchCalc();
+
     await determiningLatLong();
     //GetFlightCost("PHL", "LAX");
     //getDistanceGoogle(37.7752315, -122.418075, 37.7752415, -122.518075);
@@ -28,7 +30,7 @@ async function Overall() {
 Overall();
 
 async function printResult() {
-
+    
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
@@ -560,10 +562,10 @@ async function fetchCalc() {
         responce.json().then(data => {
             var accessToken = data.access_token;
             var expiresIn = data.expires_in;
-            lufthansaKey = accessToken;
+            lufthansaKey = "Bearer "+accessToken;
             console.log("Refreshed token: " + accessToken);
             console.log("Token expires in: " + expiresIn);
-            writeToken(accessToken, expires_in);
+           // writeToken(accessToken, expires_in);
         })
     }).catch(err => {
         console.log(err)
