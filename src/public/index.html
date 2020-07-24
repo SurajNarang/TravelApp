@@ -33,7 +33,7 @@
         </div>
     </div>
     <h1 id="webtitle"> Turbo Travel (USA Edition)</h1>
-    <p id="directions"> <b>Directions: </b>Please enter a start and end location below </p>
+    <p id="directions"> <b>Directions: </b>Please enter a start and end location to determine the most cost-effective way of travel to your destination, via Ridesharing or Air Travel. </p>
     <div id="canvas">
         <canvas id="canvas-box" width="800" height="745">
         </canvas>
@@ -45,6 +45,8 @@
         </a> </button>
 
     <input type="button" value="Calculate Travel Data" id="clickMe">
+    <input type="button" value="Reset" id="reset-button" onClick="window.location.reload();">
+
     <div id="display_loading" style="display:none"> <img src="loading.gif"></div>
 
     <div id="info" class="info">
@@ -280,7 +282,7 @@
 
 <div id="disclaimer">
     <footer>
-        * Turbo Travel is not affiliated with Uber, Lyft, or any Airlines.
+        *Turbo Travel is not affiliated with Uber, Lyft, or any Airlines.
     </footer>
 </div>
 
