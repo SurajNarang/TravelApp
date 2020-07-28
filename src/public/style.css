@@ -114,9 +114,7 @@ h3 {
 
 p,
 div,
-table,
-td,
-th {
+table {
     font-family: 'Nobile', Helvetica, Arial, sans-serif;
 }
 
@@ -292,7 +290,7 @@ td {
 .startform input:focus+.label-location1 .content-location1,
 .startform input:valid+.label-location1 .content-location1 {
     transform: translateY(-150%);
-    font-size: 16px;
+    font-size: 14px;
     color: #5fa8d3;
 }
 
@@ -476,6 +474,12 @@ h1 {
     padding: 15px;
     border-radius: 10px;
     font-size: 14px;
+}
+
+#ClickToBook {
+    font-size: 14px;
+    font-style: italic;
+    left: 800px;
 }
 
 #myBtn:hover {
