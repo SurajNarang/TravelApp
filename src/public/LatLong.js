@@ -22,8 +22,8 @@ document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.e
 async function getToken(callback) {
     await fetchCalc();
 
-    return new Promise(function(resolve, reject) {
-        setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
             console.log("fetchCalc function executed first");
             resolve();
         }, 1000);
@@ -53,7 +53,7 @@ async function determiningLatLong() {
     var searchInput2 = 'search_input2';
 
     // Start location autocomplete method
-    $(document).ready(function() {
+    $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
             types: ['geocode'],
@@ -63,7 +63,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -86,7 +86,7 @@ async function determiningLatLong() {
 
             geocoder1.geocode({
                 'location': latlng
-            }, function(results, status) {
+            }, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
                         StartLocPlaceID = results[1].place_id;
@@ -99,14 +99,14 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function() {
+    $(document).on('change', '#' + searchInput, function () {
         document.getElementById('startlatitude_view').innerHTML = '';
         document.getElementById('startlongitude_view').innerHTML = '';
         document.getElementById('startnearestairport').innerHTML = '';
     });
 
     // Final location autocomplete method
-    $(document).ready(function() {
+    $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
             types: ['geocode'],
@@ -116,7 +116,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -139,7 +139,7 @@ async function determiningLatLong() {
 
             geocoder2.geocode({
                 'location': latlng
-            }, function(results, status) {
+            }, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
                         EndLocPlaceID = results[1].place_id;
@@ -150,11 +150,11 @@ async function determiningLatLong() {
                 }
             });
 
-            $(document).ready(function() {
-                $('#clickMe').click(function() {
+            $(document).ready(function () {
+                $('#clickMe').click(function () {
                     $("#display_loading").show();
 
-                    setTimeout(function() {
+                    setTimeout(function () {
 
                         document.getElementById("display_loading").style.display = "none";
                     }, 8000);
@@ -165,7 +165,7 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function() {
+    $(document).on('change', '#' + searchInput, function () {
         document.getElementById('endlatitude_view').innerHTML = '';
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
@@ -225,258 +225,265 @@ function sleep(ms) {
 }
 
 async function GetFlightCost() {
-    if (StartingAirportCode == undefined || EndingAirportCode == undefined) {
-
-        console.log('Taking a break...');
-        await sleep(500);
-    }
-
-    console.log("cost in running");
-    var skipDay = 0;
-    var skipMonth = 0;
-    var skipYear = 0;
-    var todayDate = new Date();
-    var dd = String(todayDate.getDate() + skipDay).padStart(2, '0');
-    var mm = String(todayDate.getMonth() + 1 + skipMonth).padStart(2, '0'); //January is 0!
-    var yyyy = todayDate.getFullYear() + skipYear;
-    checkedNextDay = new Boolean(false);
     var airlinePrice;
+    if (StartingAirportCode == undefined || EndingAirportCode == undefined) {
+  
+      console.log('Taking a break...');
+      await sleep(500);
+    }
+  
+    console.log("cost in running");
+  
+    // (24 * 60 * 60 * 1000)
+  
+    var todayDate = new Date();
+    var dd = String(todayDate.getDate()).padStart(2, '0');
+    var mm = String(todayDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = todayDate.getFullYear();
     todayDate = yyyy + '-' + mm + '-' + dd;
     todayDate = todayDate.toString();
-
+  
     fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAirportCode + "-sky/" + EndingAirportCode + "-sky/" + todayDate, {
+      "method": "GET",
+      "headers": {
+        "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+        "x-rapidapi-key": skyScannerKey
+      }
+    }).then(response => {
+      const data = response.json();
+      data.then(jresponse => {
+        if (jresponse.Quotes.length == 0) {
+  
+          console.log("Empty1");
+  
+          var TomDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+          var day = String(TomDate.getDate()).padStart(2, '0');
+          var month = String(TomDate.getMonth() + 1).padStart(2, '0');
+          var year = TomDate.getFullYear();
+          const tommorowDate = year + '-' + month + '-' + day;
+  
+          fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAirportCode + "-sky/" + EndingAirportCode + "-sky/" + tommorowDate, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-                "x-rapidapi-key": skyScannerKey
+              "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+              "x-rapidapi-key": skyScannerKey
             }
-        })
-        .then(response => {
-            const data = response.json();
-            data.then(jresponse => {
-                    console.log(jresponse);
-                    const minPriceToday = jresponse.Quotes[0].MinPrice;
-                    airlinePrice = minPriceToday;
-
-                    if (jresponse.Quotes.length > 1) {
-                        let min = jresponse.Quotes[0].MinPrice;
-                        for (let x = 0; x < jresponse.Quotes.length; x++) {
-                            let value = jresponse.Quotes[x].MinPrice;
-                            min = (value < min) ? value : min
+          }).then(response1 => {
+            response1.json().then(response2 => {
+              if (response2.Quotes.length == 0) {
+                console.log("Empty2");
+  
+                var Third = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000));
+                var day = String(Third.getDate()).padStart(2, '0');
+                var month = String(Third.getMonth() + 1).padStart(2, '0');
+                var year = Third.getFullYear();
+                const ThirdDate = year + '-' + month + '-' + day;
+  
+                fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAirportCode + "-sky/" + EndingAirportCode + "-sky/" + ThirdDate, {
+                  "method": "GET",
+                  "headers": {
+                    "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+                    "x-rapidapi-key": skyScannerKey
+                  }
+                }).then(response3 => {
+                  response3.json().then(response4 => {
+                    if (response4.Quotes.length == 0) {
+                      console.log("Empty3");
+  
+                      // alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
+  
+                      var message = "*No Flights Yet*"
+                      var NAmessage = "N/A"
+                      document.getElementById('flightcost').innerHTML = message.fontcolor("#00008B").fontsize(2.5);
+                      document.getElementById('flightdate').innerHTML = NAmessage.fontcolor("#00008B");
+                      document.getElementById('airline').innerHTML = NAmessage.fontcolor("#00008B");
+  
+                    } else {
+                      console.log("FULL3");
+                      const MinPriceForThird = response4.Quotes[0].MinPrice;
+                      airlinePrice = MinPriceForThird;
+  
+                      if (response4.Quotes.length > 1) {
+                        let min = response4.Quotes[0].MinPrice;
+                        for (let x = 0; x < response4.Quotes.length; x++) {
+                          let value = response4.Quotes[x].MinPrice;
+                          min = (value < min) ? value : min
                         }
                         airlinePrice = min;
-                    }
-
-                    // Getting the Carrier ID associated with min price
-                    var CarrierID = jresponse3.Quotes[0].OutboundLeg.CarrierIds;
-                    var date = jresponse3.Quotes[0].QuoteDateTime;
-
-
-                    for (let y = 0; y < jresponse3.Quotes.length; y++) {
-                        let value = jresponse3.Quotes[y].MinPrice;
-                        if (value = airlinePrice) {
-                            CarrierID = jresponse3.Quotes[y].OutboundLeg.CarrierIds;
-                            date = jresponse3.Quotes[y].QuoteDateTime;
+                      }
+  
+                      // Getting the Carrier ID associated with min price
+  
+                      var CarrierID = response4.Quotes[0].OutboundLeg.CarrierIds;
+                      var date = response4.Quotes[0].OutboundLeg.DepartureDate;
+  
+  
+                      for (let y = 0; y < response4.Quotes.length; y++) {
+                        let value = response4.Quotes[y].MinPrice;
+                        if (value === airlinePrice) {
+                          CarrierID = response4.Quotes[y].OutboundLeg.CarrierIds;
+                          date = response4.Quotes[y].OutboundLeg.DepartureDate;
                         }
-                    }
-                    console.log("Carrier ID: " + CarrierID);
-
-                    // Getting Airline Name associated with min price
-
-                    var AirLineName = jresponse3.Carriers[0].CarrierId;
-                    for (let z = 0; z < jresponse3.Carriers.length; z++) {
-                        let id = jresponse3.Carriers[z].CarrierId;
-                        if (id = CarrierID) {
-                            AirLineName = jresponse3.Carriers[z].Name;
+                      }
+                      console.log("Carrier ID: " + CarrierID);
+  
+                      // Getting Airline Name associated with min price
+  
+                      var AirLineName = response4.Carriers[0].Name;
+                      for (let z = 0; z < response4.Carriers.length; z++) {
+                        let id = response4.Carriers[z].CarrierId;
+                        if (id === CarrierID) {
+                          AirLineName = response4.Carriers[z].Name;
                         }
+                      }
+                      // Getting rid of the T separator between the date and time
+  
+                      date.toString();
+  
+                      var StringDate = date.substr(0, date.indexOf('T'));
+                      var StringTime = date.substr(date.indexOf('T') + 1);
+                      console.log("Airline Price: " + airlinePrice);
+                      console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
+                      console.log("Airline Name: " + AirLineName);
+  
+                      document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
+                      document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
+                      document.getElementById('airline').innerHTML = AirLineName;
                     }
-
-                    // Getting rid of the T separator between the date and time
-                    date.toString();
-
-                    var StringDate = date.substr(0, date.indexOf('T'));
-                    var StringTime = date.substr(date.indexOf('T') + 1);
-                    console.log("Airline Price: " + airlinePrice);
-                    console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
-                    console.log("Airline Name: " + AirLineName);
-
-                    document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
-                    document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
-                    document.getElementById('airline').innerHTML = AirLineName;
-
-                    if (jresponse.Quotes.length === 0) {
-                        console.log("Attention Attention, we must check the next day");
-                        var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-                        var day = String(currentDate.getDate()).padStart(2, '0');
-                        var month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                        var year = currentDate.getFullYear();
-                        const tommorowDate = year + '-' + month + '-' + day;
-                        tommorowDate = tommorowDate.toString();
-                        console.log(tommorowDate);
-                        checkedNextDay = true;
-
-                        fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAirportCode + "-sky/" + EndingAirportCode + "-sky/" + tommorowDate, {
-                                "method": "GET",
-                                "headers": {
-                                    "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-                                    "x-rapidapi-key": skyScannerKey
-                                }
-                            })
-                            .then(response2 => {
-                                const data2 = response2.json();
-                                data2.then(jresponse2 => {
-                                    const MinPriceForTm = jresponse2.Quotes[0].MinPrice;
-                                    airlinePrice = MinPriceForTm;
-
-                                    if (jresponse2.Quotes.length > 1) {
-                                        let min = jresponse2.Quotes[0].MinPrice;
-                                        for (let x = 0; x < jresponse2.Quotes.length; x++) {
-                                            let value = jresponse2.Quotes[x].MinPrice;
-                                            min = (value < min) ? value : min
-                                        }
-                                        airlinePrice = min;
-                                    }
-                                    // Getting the Carrier ID associated with min price
-
-                                    var CarrierID = jresponse3.Quotes[0].OutboundLeg.CarrierIds;
-                                    var date = jresponse3.Quotes[0].QuoteDateTime;
-
-
-                                    for (let y = 0; y < jresponse3.Quotes.length; y++) {
-                                        let value = jresponse3.Quotes[y].MinPrice;
-                                        if (value = airlinePrice) {
-                                            CarrierID = jresponse3.Quotes[y].OutboundLeg.CarrierIds;
-                                            date = jresponse3.Quotes[y].QuoteDateTime;
-                                        }
-                                    }
-                                    console.log("Carrier ID: " + CarrierID);
-
-                                    // Getting Airline Name associated with min price
-
-                                    var AirLineName = jresponse3.Carriers[0].CarrierId;
-                                    for (let z = 0; z < jresponse3.Carriers.length; z++) {
-                                        let id = jresponse3.Carriers[z].CarrierId;
-                                        if (id = CarrierID) {
-                                            AirLineName = jresponse3.Carriers[z].Name;
-                                        }
-                                    }
-
-                                    // Getting rid of the T separator between the date and time
-
-                                    date.toString();
-
-                                    var StringDate = date.substr(0, date.indexOf('T'));
-                                    var StringTime = date.substr(date.indexOf('T') + 1);
-                                    console.log("Airline Price: " + airlinePrice);
-                                    console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
-                                    console.log("Airline Name: " + AirLineName);
-
-                                    document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
-                                    document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
-                                    document.getElementById('airline').innerHTML = AirLineName;
-
-                                })
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            });
-                    }
-
+                  }).catch(err => {
+                    console.log("ERROR6 " + err)
+                  })
+                }).catch(err => {
+                  console.log("ERROR5 " + err)
                 })
-                .catch(error => {
-                    console.log(" 2nd catch error occurred");
-                    var currentDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
-                    var day = String(currentDate.getDate()).padStart(2, '0');
-                    var month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                    var year = currentDate.getFullYear();
-                    const tommorowDate = year + '-' + month + '-' + day;
-                    //tommorowDate = tommorowDate.toString();
-                    console.log(tommorowDate);
-                    checkedNextDay = true;
-
-                    fetch("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + StartingAirportCode + "-sky/" + EndingAirportCode + "-sky/" + tommorowDate, {
-                            "method": "GET",
-                            "headers": {
-                                "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-                                "x-rapidapi-key": skyScannerKey
-                            }
-                        })
-                        .then(response2 => {
-                            const data2 = response2.json();
-                            data2.then(jresponse3 => {
-                                if ((jresponse3.Quotes.length) == 0) {
-                                    var message = "*No Flights Yet*"
-                                    var NAmessage = "N/A"
-                                    document.getElementById('flightcost').innerHTML = message.fontcolor("#00008B").fontsize(2.5);
-                                    document.getElementById('flightdate').innerHTML = NAmessage.fontcolor("#00008B");
-                                    document.getElementById('airline').innerHTML = NAmessage.fontcolor("#00008B");
-                                    // alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
-                                } else {
-                                    const MinPriceForTm = jresponse3.Quotes[0].MinPrice;
-                                    airlinePrice = MinPriceForTm;
-
-                                    // Gets the minimum airline price
-
-                                    if (jresponse3.Quotes.length > 1) {
-                                        let min = jresponse3.Quotes[0].MinPrice;
-                                        for (let x = 0; x < jresponse3.Quotes.length; x++) {
-                                            let value = jresponse3.Quotes[x].MinPrice;
-                                            min = (value < min) ? value : min
-                                        }
-                                        airlinePrice = min;
-                                    }
-
-                                    // Getting the Carrier ID associated with min price
-
-                                    var CarrierID = jresponse3.Quotes[0].OutboundLeg.CarrierIds;
-                                    var date = jresponse3.Quotes[0].QuoteDateTime;
-
-
-                                    for (let y = 0; y < jresponse3.Quotes.length; y++) {
-                                        let value = jresponse3.Quotes[y].MinPrice;
-                                        if (value = airlinePrice) {
-                                            CarrierID = jresponse3.Quotes[y].OutboundLeg.CarrierIds;
-                                            date = jresponse3.Quotes[y].QuoteDateTime;
-                                        }
-                                    }
-                                    console.log("Carrier ID: " + CarrierID);
-
-                                    // Getting Airline Name associated with min price
-
-                                    var AirLineName = jresponse3.Carriers[0].CarrierId;
-                                    for (let z = 0; z < jresponse3.Carriers.length; z++) {
-                                        let id = jresponse3.Carriers[z].CarrierId;
-                                        if (id = CarrierID) {
-                                            AirLineName = jresponse3.Carriers[z].Name;
-                                        }
-                                    }
-
-                                    // Getting rid of the T separator between the date and time
-
-                                    date.toString();
-
-                                    var StringDate = date.substr(0, date.indexOf('T'));
-                                    var StringTime = date.substr(date.indexOf('T') + 1);
-                                    console.log("Airline Price: " + airlinePrice);
-                                    console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
-                                    console.log("Airline Name: " + AirLineName);
-
-                                    document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
-                                    document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
-                                    document.getElementById('airline').innerHTML = AirLineName;
-                                    checkedNextDay = true;
-                                }
-                            })
-                        })
-                        .catch(err => {
-                            console.log("error error");
-                        });
-                });
-        })
-        .catch(err => {
-            console.log(" an error occurred");
-        });
-}
+  
+              } else {
+                console.log("FULL2");
+  
+                const MinPriceForTM = response2.Quotes[0].MinPrice;
+                airlinePrice = MinPriceForTM;
+  
+                if (response2.Quotes.length > 1) {
+                  let min = response2.Quotes[0].MinPrice;
+                  for (let x = 0; x < response2.Quotes.length; x++) {
+                    let value = response2.Quotes[x].MinPrice;
+                    min = (value < min) ? value : min
+                  }
+                  airlinePrice = min;
+                }
+  
+                // Getting the Carrier ID associated with min price
+  
+                var CarrierID = response2.Quotes[0].OutboundLeg.CarrierIds;
+                var date = response2.Quotes[0].OutboundLeg.DepartureDate;
+  
+  
+                for (let y = 0; y < response2.Quotes.length; y++) {
+                  let value = response2.Quotes[y].MinPrice;
+                  if (value === airlinePrice) {
+                    CarrierID = response2.Quotes[y].OutboundLeg.CarrierIds;
+                    date = response2.Quotes[y].OutboundLeg.DepartureDate;
+                  }
+                }
+                console.log("Carrier ID: " + CarrierID);
+  
+                // Getting Airline Name associated with min price
+  
+                var AirLineName = response2.Carriers[0].Name;
+                for (let z = 0; z < response2.Carriers.length; z++) {
+                  let id = response2.Carriers[z].CarrierId;
+                  if (id === CarrierID) {
+                    AirLineName = response2.Carriers[z].Name;
+                  }
+                }
+                // Getting rid of the T separator between the date and time
+  
+                date.toString();
+  
+                var StringDate = date.substr(0, date.indexOf('T'));
+                var StringTime = date.substr(date.indexOf('T') + 1);
+                console.log("Airline Price: " + airlinePrice);
+                console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
+                console.log("Airline Name: " + AirLineName);
+  
+                document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
+                document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
+                document.getElementById('airline').innerHTML = AirLineName;
+  
+  
+              }
+            }).catch(err => {
+              console.log("ERROR4 " + err);
+            })
+          }).catch(err => {
+            console.log("ERROR3 " + err);
+          })
+  
+        } else {
+          console.log("FULL1");
+  
+          const MinPriceForToday = jresponse.Quotes[0].MinPrice;
+          airlinePrice = MinPriceForToday;
+  
+          if (jresponse.Quotes.length > 1) {
+            let min = jresponse.Quotes[0].MinPrice;
+            for (let x = 0; x < jresponse.Quotes.length; x++) {
+              let value = jresponse.Quotes[x].MinPrice;
+              min = (value < min) ? value : min
+            }
+            airlinePrice = min;
+          }
+  
+          // Getting the Carrier ID associated with min price
+  
+          var CarrierID = jresponse.Quotes[0].OutboundLeg.CarrierIds;
+          var date = jresponse.Quotes[0].OutboundLeg.DepartureDate;
+  
+  
+          for (let y = 0; y < jresponse.Quotes.length; y++) {
+            let value = jresponse.Quotes[y].MinPrice;
+            if (value === airlinePrice) {
+              CarrierID = jresponse.Quotes[y].OutboundLeg.CarrierIds;
+              date = jresponse.Quotes[y].OutboundLeg.DepartureDate;
+            }
+          }
+          console.log("Carrier ID: " + CarrierID);
+  
+          // Getting Airline Name associated with min price
+  
+          var AirLineName = jresponse.Carriers[0].Name;
+          for (let z = 0; z < jresponse.Carriers.length; z++) {
+            let id = jresponse.Carriers[z].CarrierId;
+            if (id === CarrierID) {
+              AirLineName = jresponse.Carriers[z].Name;
+            
+            }
+          }
+          // Getting rid of the T separator between the date and time
+  
+          date.toString();
+  
+          var StringDate = date.substr(0, date.indexOf('T'));
+          var StringTime = date.substr(date.indexOf('T') + 1);
+          console.log("Airline Price: " + airlinePrice);
+          console.log("Airline Date & Time: " + StringDate + ", " + StringTime)
+          console.log("Airline Name: " + AirLineName);
+  
+          document.getElementById('flightcost').innerHTML = "$" + airlinePrice;
+          document.getElementById('flightdate').innerHTML = StringDate + ", " + StringTime;
+          document.getElementById('airline').innerHTML = AirLineName;
+  
+  
+        }
+      }).catch(err => {
+        console.log("ERROR2 " + err);
+  
+      })
+    }).catch(err => {
+      console.log("ERROR1 " + err);
+    })
+  
+  }
 
 async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong) {
 
@@ -492,7 +499,7 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
                 mode: "no-cors"
             })
             .then(r => r.json())
-            .then(async(data) => {
+            .then(async (data) => {
                 const routeTime = await getRouteDurationGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
                 console.log("Route time: " + routeTime);
 
