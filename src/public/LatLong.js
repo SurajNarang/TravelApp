@@ -236,7 +236,7 @@ async function GetFlightCost() {
 
     // (24 * 60 * 60 * 1000)
 
-    var todayDate = new Date();
+    var todayDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
     var dd = String(todayDate.getDate()).padStart(2, '0');
     var mm = String(todayDate.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = todayDate.getFullYear();
@@ -256,7 +256,7 @@ async function GetFlightCost() {
 
                 console.log("Empty1");
 
-                var TomDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+                var TomDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)+ (24 * 60 * 60 * 1000));
                 var day = String(TomDate.getDate()).padStart(2, '0');
                 var month = String(TomDate.getMonth() + 1).padStart(2, '0');
                 var year = TomDate.getFullYear();
@@ -273,7 +273,7 @@ async function GetFlightCost() {
                         if (response2.Quotes.length == 0) {
                             console.log("Empty2");
 
-                            var Third = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000));
+                            var Third = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000)+ (24 * 60 * 60 * 1000));
                             var day = String(Third.getDate()).padStart(2, '0');
                             var month = String(Third.getMonth() + 1).padStart(2, '0');
                             var year = Third.getFullYear();
