@@ -56,6 +56,7 @@ body {
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
+    box-shadow: 0 2px #999;
 }
 
 #reset-button:hover {
@@ -82,6 +83,7 @@ body {
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
+    box-shadow: 0 2px #999;
 }
 
 #clickMe:hover {
@@ -93,12 +95,17 @@ body {
     transition: all 0.4s ease 0s;
 }
 
+#clickMe:active {
+    background-color: rgb(64, 166, 244);
+    box-shadow: 0 3px #666;
+    transform: translateY(2px);
+}
 
-/* #clickMe:active {
-    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-    top: 3px;
-    transform: scale(0.98);
-} */
+#reset-button:active {
+    background-color: rgb(64, 166, 244);
+    box-shadow: 0 3px #666;
+    transform: translateY(2px);
+}
 
 h2,
 h3 {
@@ -162,12 +169,12 @@ th {
 
 #display_loading {
     position: absolute;
-    top: 80px;
-    left: 1440px;
+    top: 89px;
+    left: 1362px;
     transform: translate(-50%, 50%);
     display: none;
     height: 775px;
-    width: 1800px;
+    width: 1700px;
     z-index: 1;
 }
 
@@ -180,12 +187,12 @@ th {
 
 table {
     position: absolute;
-    width: 680px;
-    left: 370px;
+    width: 700px;
+    left: 355px;
     top: 437px;
     /*bottom: 0px;*/
     border-collapse: collapse;
-    font-size: 14.5px;
+    font-size: 16px;
 }
 
 th,
@@ -226,7 +233,7 @@ td {
 }
 
 #durationdistance {
-    width: 240px;
+    width: 250px;
 }
 
 
@@ -285,7 +292,7 @@ td {
 .startform input:focus+.label-location1 .content-location1,
 .startform input:valid+.label-location1 .content-location1 {
     transform: translateY(-150%);
-    font-size: 14px;
+    font-size: 16px;
     color: #5fa8d3;
 }
 
@@ -430,6 +437,10 @@ h1 {
 
 .info.appear {
     transform: translateX(0);
+}
+
+#airportbox {
+    padding-top: 15px;
 }
 
 .about {
