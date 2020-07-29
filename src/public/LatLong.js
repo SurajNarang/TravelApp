@@ -256,7 +256,7 @@ async function GetFlightCost() {
 
                 console.log("Empty1");
 
-                var TomDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)+ (24 * 60 * 60 * 1000));
+                var TomDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000));
                 var day = String(TomDate.getDate()).padStart(2, '0');
                 var month = String(TomDate.getMonth() + 1).padStart(2, '0');
                 var year = TomDate.getFullYear();
@@ -273,7 +273,7 @@ async function GetFlightCost() {
                         if (response2.Quotes.length == 0) {
                             console.log("Empty2");
 
-                            var Third = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000)+ (24 * 60 * 60 * 1000));
+                            var Third = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000));
                             var day = String(Third.getDate()).padStart(2, '0');
                             var month = String(Third.getMonth() + 1).padStart(2, '0');
                             var year = Third.getFullYear();
@@ -348,8 +348,8 @@ async function GetFlightCost() {
                                         document.getElementById('airline').innerHTML = AirLineName;
 
                                         var str = "Click here to book!";
-                                        var result = str.link("https://www.expedia.com/Flights");
-                                        document.getElementById('ClickToBook').innerHTML = result;
+                                        // var result = str.link("https://www.expedia.com/Flights");
+                                        document.getElementById('ClickToBook').innerHTML = str;
 
                                     }
                                 }).catch(err => {
@@ -411,8 +411,8 @@ async function GetFlightCost() {
 
                             document.getElementById('flightdate').innerHTML = StringDate;
                             var str = "Click here to book!";
-                            var result = str.link("https://www.expedia.com/Flights");
-                            document.getElementById('ClickToBook').innerHTML = result;
+                            // var result = str.link("https://www.expedia.com/Flights");
+                            document.getElementById('ClickToBook').innerHTML = str;
                         }
                     }).catch(err => {
                         console.log("ERROR4 " + err);
@@ -474,8 +474,8 @@ async function GetFlightCost() {
 
                 document.getElementById('flightdate').innerHTML = StringDate;
                 var str = "Click here to book!";
-                var result = str.link("https://www.expedia.com/Flights");
-                document.getElementById('ClickToBook').innerHTML = result;
+                // var result = str.link("https://www.expedia.com/Flights");
+                document.getElementById('ClickToBook').innerHTML = str;
 
             }
         }).catch(err => {
