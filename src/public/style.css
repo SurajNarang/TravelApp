@@ -20,6 +20,11 @@ body {
     width: 700px;
 }
 
+#container {
+    align-content: center;
+    left: 50%;
+}
+
 #GlobeBackground {
     opacity: 0.3;
     border-radius: 15px;
@@ -29,6 +34,7 @@ body {
     margin: auto;
     top: 0px;
     z-index: 0;
+    width: 100%;
 }
 
 #Rideshare {
@@ -40,6 +46,7 @@ body {
     margin: auto;
     top: 920px;
     z-index: 0;
+    width: 100%;
 }
 
 #reset-button {
@@ -388,7 +395,11 @@ h1 {
     background: #f0f0f0;
     display: block;
     border-radius: 5px;
-    align-items: stretch !important;
+    align-items: center;
+}
+
+#canvas {
+    align-content: center;
 }
 
 .button {
@@ -479,7 +490,6 @@ h1 {
 #ClickToBook {
     font-size: 14px;
     font-style: italic;
-    left: 800px;
 }
 
 #myBtn:hover {
