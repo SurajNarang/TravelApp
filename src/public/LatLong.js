@@ -707,3 +707,29 @@ async function printAirports() {
     document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
     document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
 }
+
+// Clears data when reset button is clicked
+
+$(document).ready(function() {
+    $('#reset-button').click(function() {
+        document.getElementById('startnearestairport').innerHTML = "";
+        document.getElementById('endnearestairport').innerHTML = "";
+        document.getElementById('startlatitude_view').innerHTML = "";
+        document.getElementById('startlongitude_view').innerHTML = "";
+        document.getElementById('endlatitude_view').innerHTML = "";
+        document.getElementById('endlongitude_view').innerHTML = "";
+        document.getElementById('ubercost').innerHTML = "";
+        document.getElementById('uberXLcost').innerHTML = "";
+        document.getElementById('lyftcost').innerHTML = "";
+        document.getElementById('lyftXLcost').innerHTML = "";
+        document.getElementById('lyftduration').innerHTML = "";
+        document.getElementById('uberduration').innerHTML = "";
+        document.getElementById('uberdistance').innerHTML = "";
+        document.getElementById('lyftdistance').innerHTML = "";
+        document.getElementById('flightcost').innerHTML = "";
+        document.getElementById('flightdate').innerHTML = "";
+        document.getElementById('airline').innerHTML = "";
+        document.getElementById('search_input').value = "";
+        document.getElementById('search_input2').value = "";
+    });
+});

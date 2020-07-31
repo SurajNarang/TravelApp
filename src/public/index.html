@@ -47,8 +47,7 @@
         </div>
     </div>
     <h1 id="webtitle"> Turbo Travel (USA Edition)</h1>
-    <p id="directions"> <b>Directions: </b>Please enter a start and end location to determine the most cost-effective
-        way of travel to your destination, via Ridesharing or Air Travel. </p>
+    <p id="directions"> <b>Directions: </b>Please enter a start and end location to determine the most cost-effective way of travel to your destination, via Ridesharing or Air Travel. </p>
     <div id="canvas">
         <canvas id="canvas-box" width="800" height="745">
         </canvas>
@@ -60,7 +59,8 @@
         </a> </button>
 
     <input type="button" value="Calculate Travel Data" id="clickMe">
-    <input type="button" value="Reset" id="reset-button" onClick="window.location.reload();">
+    <input type="button" value="Reset" id="reset-button">
+    <!-- Refresh webpage with: onClick="window.location.reload(); -->
 
     <div id="display_loading" style="display:none"> <img src="loading copy.gif"></div>
 
@@ -73,8 +73,7 @@
             <input type="hidden" name="business" value="V9M9HCZTGSWCL" />
             <input type="hidden" name="currency_code" value="USD" />
             <input type="hidden" name="amount" value="1" />
-            <input type="image" src="https://i.postimg.cc/fTMDWWgV/Donate-Button-4.png" border="0" name="submit"
-                title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+            <input type="image" src="https://i.postimg.cc/fTMDWWgV/Donate-Button-4.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
             <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
         </form>
         <br></br>
@@ -187,20 +186,12 @@
             <h2 class="title"> <u>About</u></h2>
             <div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
                 <p class="description">
-                    Turbo Travel is a cost-effective mobility guidance product that provides an elegant solution to a
-                    modern traveling problem. To find the most cost-effective means of travel, we often spend countless
-                    minutes, sometimes hours scouring different apps/websites
+                    Turbo Travel is a cost-effective mobility guidance product that provides an elegant solution to a modern traveling problem. To find the most cost-effective means of travel, we often spend countless minutes, sometimes hours scouring different apps/websites
                     for the best prices, whether it be for ride-hailing or air travel.
                     <br></br>
-                    With Turbo Travel, you simply input your start address and your destination address and you will be
-                    shown the real-time estimated price of UBER and LYFT side-by-side, allowing you to choose the most
-                    cost-efficient travel method. If your travel trip is
-                    greater than 150 miles, it will automatically provide you with the cheapest airfare ticket, along
-                    with the Airline name. Turbo Travel has also been developed to handle long-distance travel as well,
-                    so Turbo Travel automatically
-                    grabs the nearest airport of your starting location as well as the nearest airport to your
-                    destination location. From there, it seamlessly provides you with the cheapest Airfare, along with
-                    providing you with the airline, starting/destination
+                    With Turbo Travel, you simply input your start address and your destination address and you will be shown the real-time estimated price of UBER and LYFT side-by-side, allowing you to choose the most cost-efficient travel method. If your travel trip is
+                    greater than 150 miles, it will automatically provide you with the cheapest airfare ticket, along with the Airline name. Turbo Travel has also been developed to handle long-distance travel as well, so Turbo Travel automatically grabs
+                    the nearest airport of your starting location as well as the nearest airport to your destination location. From there, it seamlessly provides you with the cheapest Airfare, along with providing you with the airline, starting/destination
                     airport, and the respective link to the Airline's website, all for ease of booking.
                 </p>
                 <h3 class="subtitle"><u>Developers</u></h3>
@@ -245,10 +236,10 @@
     </div>
 
     <script>
-        $(window).on('load', function () { // makes sure the whole site is loaded 
+        $(window).on('load', function() { // makes sure the whole site is loaded 
             $('sk-chase').fadeOut(); // will first fade out the loading animation 
             $('#preloader').delay(1000).fadeOut(
-            'slow'); // will fade out the white DIV that covers the website. 
+                'slow'); // will fade out the white DIV that covers the website. 
             $('body').delay(1500).css({
                 'overflow': 'visible'
             });
@@ -258,16 +249,13 @@
     <!-- <script type="text/javascript">
         (function() {
             var myDiv = document.getElementById("display_loading"),
-
                 show = function() {
                     myDiv.style.display = "block";
                     setTimeout(hide, 5000); // 5 seconds
                 },
-
                 hide = function() {
                     myDiv.style.display = "none";
                 };
-
             show();
         })();
     </script> -->
@@ -275,7 +263,7 @@
         mybutton = document.getElementById("myBtn");
 
         // When the user scrolls down 20px from the top of the document, show the button
-        window.onscroll = function () {
+        window.onscroll = function() {
             scrollFunction()
         };
 
