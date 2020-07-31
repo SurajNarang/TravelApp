@@ -9,6 +9,8 @@ var StartLocPlaceID;
 var EndLocPlaceID;
 var RouteTooFar = new Boolean(true);
 var checkedNextDay = new Boolean(false);
+var finalUberPrice;
+var finalUberXLPrice;
 
 // Credentials
 var lufthansaKey;
@@ -41,10 +43,10 @@ async function printResult() {
         console.log("all numbers found");
         console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
         console.log("Here is the current LUFT key: " + lufthansaKey);
-        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
         await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
         await GetFlightCost(StartingAirportCode, EndingAirportCode);
         await printAirports();
+        await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
     }
 }
 
@@ -157,7 +159,7 @@ async function determiningLatLong() {
                     setTimeout(function() {
 
                         document.getElementById("display_loading").style.display = "none";
-                    }, 9000);
+                    }, 10000);
 
                     printResult();
                 });
@@ -536,7 +538,7 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
             boldText = boldText.bold();
             setTimeout(function() {
                 document.getElementById('route').innerHTML = boldText + " = This route is not accessible by Uber/Lyft ( > 150 miles)";
-            }, 9000);
+            }, 10000);
         }
     }
 }
@@ -627,7 +629,7 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
         const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
         console.log(url);
         var count = 1;
-        const maxTries = 20;
+        const maxTries = 15;
         while (true) {
             //while starts
             try {
@@ -666,10 +668,12 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                     const finalData = data;
                     const uberXcost = await addZeroes(finalData.data.prices[1].total);
                     console.log("UberX Price: " + uberXcost);
+                    finalUberPrice = uberXcost;
                     document.getElementById('ubercost').innerHTML = "$" + uberXcost;
 
                     const uberXLcost = await addZeroes(finalData.data.prices[5].total);
                     console.log("UberXL Price: " + uberXLcost);
+                    finalUberXLPrice = uberXLcost;
                     document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
                     // return { uberX: uberXcost, uberXl: uberXLcost }
                 } else {
@@ -682,8 +686,12 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                 console.log("An error occured", err);
 
                 if (++count == maxTries) {
-                    document.getElementById('ubercost').innerHTML = "<font size='1'> Unable to compute! </font>";
-                    document.getElementById('uberXLcost').innerHTML = "<font size='1'> Unable to compute! </font>";
+                    if (isNaN(finalUberPrice)) {
+                        document.getElementById('ubercost').innerHTML = "<font size='1'> Unable to compute! </font>";
+                    }
+                    if (isNaN(finalUberXLPrice)) {
+                        document.getElementById('uberXLcost').innerHTML = "<font size='1'> Unable to compute! </font>";
+                    }
                     throw err;
                 }
             }
