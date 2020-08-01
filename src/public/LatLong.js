@@ -154,14 +154,17 @@ async function determiningLatLong() {
 
             $(document).ready(function() {
                 $('#clickMe').click(function() {
-                    $("#display_loading").show();
+                    if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
 
-                    setTimeout(function() {
+                        $("#display_loading").show();
 
-                        document.getElementById("display_loading").style.display = "none";
-                    }, 10000);
+                        setTimeout(function() {
 
-                    printResult();
+                            document.getElementById("display_loading").style.display = "none";
+                        }, 11000);
+
+                        printResult();
+                    }
                 });
             });
         });
@@ -538,7 +541,7 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
             boldText = boldText.bold();
             setTimeout(function() {
                 document.getElementById('route').innerHTML = boldText + " = This route is not accessible by Uber/Lyft ( > 150 miles)";
-            }, 10000);
+            }, 11000);
         }
     }
 }
@@ -678,13 +681,16 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                     // return { uberX: uberXcost, uberXl: uberXLcost }
                 } else {
                     // non 2xx status code 
-                    console.log("Status code", uberFetch.status)
+                    console.log("Status code", uberFetch.status);
+                    if (uberFetch.status = 429) {
+                        document.getElementById('ubercost').innerHTML = "<font size='1'> Unable to compute! </font>";
+                        document.getElementById('uberXLcost').innerHTML = "<font size='1'> Unable to compute! </font>";
+                    }
                 }
                 break;
 
             } catch (err) {
                 console.log("An error occured", err);
-
                 if (++count == maxTries) {
                     if (isNaN(finalUberPrice)) {
                         document.getElementById('ubercost').innerHTML = "<font size='1'> Unable to compute! </font>";
@@ -692,10 +698,11 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                     if (isNaN(finalUberXLPrice)) {
                         document.getElementById('uberXLcost').innerHTML = "<font size='1'> Unable to compute! </font>";
                     }
-                    throw err;
+                    // throw err;
+                    break;
                 }
             }
-        }
+        } // while close
 
     } else {
         document.getElementById('ubercost').innerHTML = "***";
@@ -731,5 +738,10 @@ $(document).ready(function() {
         document.getElementById('airline').innerHTML = "";
         document.getElementById('search_input').value = "";
         document.getElementById('search_input2').value = "";
+        StartLongFinal = null;
+        StartLatFinal = null;
+        EndLongFinal = null;
+        EndLatFinal = null;
+
     });
 });
