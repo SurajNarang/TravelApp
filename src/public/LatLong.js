@@ -154,6 +154,13 @@ async function determiningLatLong() {
 
             $(document).ready(function() {
                 $('#clickMe').click(function() {
+
+                    document.getElementById("reset-button").disabled = true;
+                    setTimeout(function() {
+                        document.getElementById("reset-button").disabled = false;
+                    }, 11500);
+                    // Disables reset button until fully loaded
+
                     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
 
                         $("#display_loading").show();
@@ -738,6 +745,9 @@ $(document).ready(function() {
         document.getElementById('airline').innerHTML = "";
         document.getElementById('search_input').value = "";
         document.getElementById('search_input2').value = "";
+        document.getElementById('route').innerHTML = "";
+        document.getElementById('ClickToBook').innerHTML = "";
+
         StartLongFinal = null;
         StartLatFinal = null;
         EndLongFinal = null;
