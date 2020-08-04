@@ -14,8 +14,8 @@ var finalUberXLPrice;
 
 // Credentials
 var lufthansaKey;
-const clientID = config.CLIENT_ID;
-const clientSec = config.CLIENT_SECRET;
+// const clientID = config.CLIENT_ID;
+// const clientSec = config.CLIENT_SECRET;
 const skyScannerKey = config.SKYSCAN_KEY;
 const mykey = config.GOOGLE_KEY;
 
@@ -24,8 +24,8 @@ document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.e
 async function getToken(callback) {
     await fetchCalc();
 
-    return new Promise(function(resolve, reject) {
-        setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
             console.log("fetchCalc function executed first");
             resolve();
         });
@@ -37,6 +37,7 @@ async function LatLongData() {
 }
 
 getToken().then(LatLongData); // Grabs a new token before data printed
+
 
 async function printResult() {
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
@@ -55,7 +56,7 @@ async function determiningLatLong() {
     var searchInput2 = 'search_input2';
 
     // Start location autocomplete method
-    $(document).ready(function() {
+    $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
             types: ['geocode'],
@@ -65,7 +66,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -88,7 +89,7 @@ async function determiningLatLong() {
 
             geocoder1.geocode({
                 'location': latlng
-            }, function(results, status) {
+            }, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
                         StartLocPlaceID = results[1].place_id;
@@ -101,14 +102,14 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function() {
+    $(document).on('change', '#' + searchInput, function () {
         document.getElementById('startlatitude_view').innerHTML = '';
         document.getElementById('startlongitude_view').innerHTML = '';
         document.getElementById('startnearestairport').innerHTML = '';
     });
 
     // Final location autocomplete method
-    $(document).ready(function() {
+    $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput2)), {
             types: ['geocode'],
@@ -118,7 +119,7 @@ async function determiningLatLong() {
             }
         });
 
-        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
             document.getElementById('loc_lat').value = near_place.geometry.location.lat();
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
@@ -141,7 +142,7 @@ async function determiningLatLong() {
 
             geocoder2.geocode({
                 'location': latlng
-            }, function(results, status) {
+            }, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
                         EndLocPlaceID = results[1].place_id;
@@ -152,11 +153,11 @@ async function determiningLatLong() {
                 }
             });
 
-            $(document).ready(function() {
-                $('#clickMe').click(function() {
+            $(document).ready(function () {
+                $('#clickMe').click(function () {
 
                     document.getElementById("reset-button").disabled = true;
-                    setTimeout(function() {
+                    setTimeout(function () {
                         document.getElementById("reset-button").disabled = false;
                     }, 11500);
                     // Disables reset button until fully loaded
@@ -165,7 +166,7 @@ async function determiningLatLong() {
 
                         $("#display_loading").show();
 
-                        setTimeout(function() {
+                        setTimeout(function () {
 
                             document.getElementById("display_loading").style.display = "none";
                         }, 11000);
@@ -177,7 +178,7 @@ async function determiningLatLong() {
         });
     });
 
-    $(document).on('change', '#' + searchInput, function() {
+    $(document).on('change', '#' + searchInput, function () {
         document.getElementById('endlatitude_view').innerHTML = '';
         document.getElementById('endlongitude_view').innerHTML = '';
         document.getElementById('endnearestairport').innerHTML = '';
@@ -501,7 +502,8 @@ async function GetFlightCost() {
 
 async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong) {
 
-    const travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
+    var travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
+    
     console.log(travelMiles + " Travel Miles");
     if (travelMiles < 150 && typeof travelMiles !== 'undefined') {
 
@@ -513,7 +515,7 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
                 mode: "no-cors"
             })
             .then(r => r.json())
-            .then(async(data) => {
+            .then(async (data) => {
                 const routeTime = await getRouteDurationGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
                 console.log("Route time: " + routeTime);
 
@@ -546,7 +548,7 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
         if (RouteTooFar == true) {
             var boldText = "***"
             boldText = boldText.bold();
-            setTimeout(function() {
+            setTimeout(function () {
                 document.getElementById('route').innerHTML = boldText + " = This route is not accessible by Uber/Lyft ( > 150 miles)";
             }, 11000);
         }
@@ -554,26 +556,15 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
 }
 
 async function fetchCalc() {
-    const NewToken = await fetch("https://api.lufthansa.com/v1/oauth/token", {
-        body: "client_id=yz6q8w4ppkd42xkhkvkddh8s&client_secret=5WHNjTWeFy&grant_type=client_credentials",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        method: "POST"
-    }).then(response => {
-        response.json().then(data => {
-            var accessToken = data.access_token;
-            var expiresIn = data.expires_in;
-            lufthansaKey = "Bearer " + accessToken;
-            console.log("Refreshed token: " + accessToken);
-            console.log("Token expires in: " + expiresIn);
-            // writeToken(accessToken, expires_in);
+    fetch("/luftkey", {
+            mode: "no-cors"
         })
-    }).catch(err => {
-        console.log(err)
-    });
-
-    return NewToken;
+        .then(r => r.text()).then(key => {
+            lufthansaKey = key;
+        })
+        .catch(err => {
+            console.log("Unable to retrieve price data");
+        })
 }
 
 function addZeroes(num) {
@@ -586,50 +577,56 @@ function addZeroes(num) {
     // Return the number
     return num;
 }
-
+//getDistanceGoogle(39.770358, -75.60997499999999, 39.8311059, -75.540419);
 async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
 
-    url = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
-    console.log(url);
-    const test = await fetch(url, {
+    const dynamicUrl = "/getDistanceGoogle?startLat=" + lat1 + "&startLong=" + lon1 + "&endLat=" + lat2 + "&endLong=" + lon2;
+
+    const request = await fetch(dynamicUrl, {
         method: "GET",
-        mode: "cors"
-    }).then(async response => {
-        console.log("Response", response)
-
-        const data = await response.json();
-        var data1 = (data.rows[0].elements[0].distance.text);
-        console.log(data1 + " data1");
-        data1.toString();
-        var StringData = data1.substr(0, data1.indexOf(' '));
-
-        var num = Number(StringData);
-        console.log("DISTANCE METHOD: " + num);
-        return addZeroes(num);
-
+        mode: "no-cors"
+    })
+    .then(async function (response) {
+        const distance = await response.text();
+        try {
+            const data = JSON.parse(distance);
+            console.log(data);
+            return addZeroes(data);
+        }
+        catch (err) {
+            var distanceNumber = Number(distance);
+            console.log(distanceNumber);
+            return addZeroes(distanceNumber);
+        }
     }).catch(err => {
         console.log(err);
-    })
-
-    return test;
+    });
+    return request;
 }
 
 async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
-    url = 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat1 + ',' + lon1 + '&destinations=' + lat2 + ',' + lon2 + '&key=' + mykey;
+    const dynamicUrl = "/getRouteDurationGoogle?startLat=" + lat1 + "&startLong=" + lon1 + "&endLat=" + lat2 + "&endLong=" + lon2;
 
-    const duration = await fetch(url, {
-            method: "GET",
-            mode: "cors"
-        }).then(response => response.json())
-        .then((data) => {
-            var time = (data.rows[0].elements[0].duration.text);
-            console.log("TIME METHOD" + time);
-            return time;
-        }).catch(err => {
-            console.log(err);
-        });
-
-    return duration;
+    const request = await fetch(dynamicUrl, {
+        method: "GET",
+        mode: "no-cors"
+    })
+    .then(async function (response) {
+        const duration = await response.text();
+        try {
+            const data = JSON.parse(duration);
+            console.log(data);
+            return data;
+        }
+        catch (err) {
+            //var distanceNumber = Number(duration);
+            console.log(duration);
+            return duration;
+        }
+    }).catch(err => {
+        console.log(err);
+    });
+    return request;
 }
 
 async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
@@ -724,8 +721,8 @@ async function printAirports() {
 
 // Clears data when reset button is clicked
 
-$(document).ready(function() {
-    $('#reset-button').click(function() {
+$(document).ready(function () {
+    $('#reset-button').click(function () {
         document.getElementById('startnearestairport').innerHTML = "";
         document.getElementById('endnearestairport').innerHTML = "";
         document.getElementById('startlatitude_view').innerHTML = "";
