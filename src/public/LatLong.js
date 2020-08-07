@@ -7,26 +7,37 @@ var EndingAirportCode;
 var FlightCost;
 var StartLocPlaceID;
 var EndLocPlaceID;
+
 var RouteTooFar = new Boolean(true);
 var checkedNextDay = new Boolean(false);
 var finalUberPrice;
 var finalUberXLPrice;
-
-// Credentials
 var lufthansaKey;
-// const clientID = config.CLIENT_ID;
-// const clientSec = config.CLIENT_SECRET;
 const skyScannerKey = config.SKYSCAN_KEY;
-const mykey = config.GOOGLE_KEY;
+//const mykey = config.GOOGLE_KEY;
 
-document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(mykey) + "'\>\</script\>");
+var layer3;
+
+async function layer() {
+    fetch("/layer", {
+        // mode: "no-cors"
+    })
+    .then(r => r.text()).then(key => {
+        var layer2 = key;
+        console.log( JSON.stringify(layer2));
+        layer3 = JSON.stringify(layer2);
+    })
+    .catch(err => {console.log(err)})
+}
+
+document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + (layer3) + "'\>\</script\>");
 
 async function getToken(callback) {
+    await layer();
     await fetchCalc();
 
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
-            console.log("fetchCalc function executed first");
             resolve();
         });
     })
@@ -36,14 +47,11 @@ async function LatLongData() {
     await determiningLatLong();
 }
 
-getToken().then(LatLongData); // Grabs a new token before data printed
+getToken().then(LatLongData);
 
 
 async function printResult() {
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
-        console.log("all numbers found");
-        console.log(StartLongFinal + " ," + StartLatFinal + " ," + EndLongFinal + " ," + EndLatFinal);
-        console.log("Here is the current LUFT key: " + lufthansaKey);
         await GetLyftCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal);
         await GetFlightCost(StartingAirportCode, EndingAirportCode);
         await printAirports();
@@ -72,7 +80,7 @@ async function determiningLatLong() {
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
             document.getElementById('loc_startflight').value = StartingAirportCode;
 
-            // Updates Latitude and Longitude
+            // Updates Start Latitude and Longitude
             document.getElementById('startlatitude_view').innerHTML = near_place.geometry.location.lat();
             document.getElementById('startlongitude_view').innerHTML = near_place.geometry.location.lng();
             console.log(near_place.geometry.location.lat());
@@ -93,7 +101,6 @@ async function determiningLatLong() {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
                         StartLocPlaceID = results[1].place_id;
-                        console.log("Origin Place ID: " + StartLocPlaceID);
                     }
                 } else {
                     window.alert('Geocoder failed due to: ' + status);
@@ -125,7 +132,7 @@ async function determiningLatLong() {
             document.getElementById('loc_long').value = near_place.geometry.location.lng();
             document.getElementById('loc_endflight').value = EndingAirportCode;
 
-            // Updates Latitude and Longitude
+            // Updates End Latitude and Longitude
             document.getElementById('endlatitude_view').innerHTML = near_place.geometry.location.lat();
             document.getElementById('endlongitude_view').innerHTML = near_place.geometry.location.lng();
             console.log(near_place.geometry.location.lat());
@@ -146,7 +153,6 @@ async function determiningLatLong() {
                 if (status === google.maps.GeocoderStatus.OK) {
                     if (results[1]) {
                         EndLocPlaceID = results[1].place_id;
-                        console.log("Destination Place ID: " + EndLocPlaceID);
                     }
                 } else {
                     window.alert('Geocoder failed due to: ' + status);
@@ -155,12 +161,12 @@ async function determiningLatLong() {
 
             $(document).ready(function () {
                 $('#clickMe').click(function () {
-
+                    // Disables reset button until fully loaded
                     document.getElementById("reset-button").disabled = true;
                     setTimeout(function () {
                         document.getElementById("reset-button").disabled = false;
                     }, 11500);
-                    // Disables reset button until fully loaded
+
 
                     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
 
@@ -185,6 +191,8 @@ async function determiningLatLong() {
     });
 }
 
+// Fetches nearest airport code according to user's start location
+
 function GetNearestStartingAirport(LatFinal, LongFinal) {
     fetch("https://api.lufthansa.com/v1/references/airports/nearest/" + LatFinal + "," + LongFinal, {
             "method": "GET",
@@ -199,16 +207,13 @@ function GetNearestStartingAirport(LatFinal, LongFinal) {
                     console.log(test1 + " - Starting airport");
                     var CurrentAirport = test1;
                     StartingAirportCode = CurrentAirport;
-                    // document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
                 })
-                .catch(err => {
-                    console.log(err);
-                });
+                .catch(err => {});
         })
-        .catch(err => {
-            console.log(err);
-        });
+        .catch(err => {});
 }
+
+// Fetches nearest airport code according to user's end location
 
 function GetNearestEndingAirport(LatFinal1, LongFinal1) {
     fetch("https://api.lufthansa.com/v1/references/airports/nearest/" + LatFinal1 + "," + LongFinal1, {
@@ -221,33 +226,25 @@ function GetNearestEndingAirport(LatFinal1, LongFinal1) {
         .then(response => {
             const test = response.json().then(response2 => {
                     EndingAirportCode = response2.NearestAirportResource.Airports.Airport[0].AirportCode;
-                    console.log('Taking a break...');
                     console.log(EndingAirportCode + " -Destination airport");
                 })
-                .catch(err => {
-                    console.log(err);
-                });
+                .catch(err => {});
         })
-        .catch(err => {
-            console.log(err);
-        });
+        .catch(err => {});
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+// Retrieves most cost-efficient airfare according to the user's start and end location
+
 async function GetFlightCost() {
     var airlinePrice;
     if (StartingAirportCode == undefined || EndingAirportCode == undefined) {
-
-        console.log('Taking a break...');
         await sleep(500);
     }
-
-    console.log("cost in running");
-
-    // (24 * 60 * 60 * 1000)
 
     var todayDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000))
     var dd = String(todayDate.getDate()).padStart(2, '0');
@@ -267,7 +264,6 @@ async function GetFlightCost() {
         data.then(jresponse => {
             if (jresponse.Quotes.length == 0) {
 
-                console.log("Empty1");
 
                 var TomDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000));
                 var day = String(TomDate.getDate()).padStart(2, '0');
@@ -284,7 +280,6 @@ async function GetFlightCost() {
                 }).then(response1 => {
                     response1.json().then(response2 => {
                         if (response2.Quotes.length == 0) {
-                            console.log("Empty2");
 
                             var Third = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000));
                             var day = String(Third.getDate()).padStart(2, '0');
@@ -301,10 +296,6 @@ async function GetFlightCost() {
                             }).then(response3 => {
                                 response3.json().then(response4 => {
                                     if (response4.Quotes.length == 0) {
-                                        console.log("Empty3");
-
-                                        // alert("There are no more flights available from your current address to your destination for for the current day nor the next day");
-
                                         var message = "*No Flights Yet*"
                                         var NAmessage = "N/A"
                                         document.getElementById('flightcost').innerHTML = message.fontcolor("#00008B");
@@ -312,7 +303,6 @@ async function GetFlightCost() {
                                         document.getElementById('airline').innerHTML = NAmessage.fontcolor("#00008B");
 
                                     } else {
-                                        console.log("FULL3");
                                         const MinPriceForThird = response4.Quotes[0].MinPrice;
                                         airlinePrice = MinPriceForThird;
 
@@ -337,7 +327,6 @@ async function GetFlightCost() {
                                                 date = response4.Quotes[y].OutboundLeg.DepartureDate;
                                             }
                                         }
-                                        console.log("Carrier ID: " + CarrierID);
 
                                         // Getting Airline Name associated with min price
                                         var AirLineName = response4.Carriers[0].Name;
@@ -351,7 +340,6 @@ async function GetFlightCost() {
                                         date.toString();
 
                                         var StringDate = date.substr(0, date.indexOf('T'));
-                                        // var StringTime = date.substr(date.indexOf('T') + 1);
                                         console.log("Airline Price: " + airlinePrice);
                                         console.log("Airline Departure Date: " + StringDate);
                                         console.log("Airline Name: " + AirLineName);
@@ -361,19 +349,13 @@ async function GetFlightCost() {
                                         document.getElementById('airline').innerHTML = AirLineName;
 
                                         var str = "Click here to book!";
-                                        // var result = str.link("https://www.expedia.com/Flights");
                                         document.getElementById('ClickToBook').innerHTML = str;
 
                                     }
-                                }).catch(err => {
-                                    console.log("ERROR6 " + err)
-                                })
-                            }).catch(err => {
-                                console.log("ERROR5 " + err)
-                            })
+                                }).catch(err => {})
+                            }).catch(err => {})
 
                         } else {
-                            console.log("FULL2");
 
                             const MinPriceForTM = response2.Quotes[0].MinPrice;
                             airlinePrice = MinPriceForTM;
@@ -402,6 +384,7 @@ async function GetFlightCost() {
                             console.log("Carrier ID: " + CarrierID);
 
                             // Getting Airline Name associated with min price
+
                             var AirLineName = response2.Carriers[0].Name;
                             for (let z = 0; z < response2.Carriers.length; z++) {
                                 let id = response2.Carriers[z].CarrierId;
@@ -414,7 +397,6 @@ async function GetFlightCost() {
                             date.toString();
 
                             var StringDate = date.substr(0, date.indexOf('T'));
-                            // var StringTime = date.substr(date.indexOf('T') + 1);
                             console.log("Airline Price: " + airlinePrice);
                             console.log("Airline Departure Date: " + StringDate);
                             console.log("Airline Name: " + AirLineName);
@@ -424,18 +406,12 @@ async function GetFlightCost() {
 
                             document.getElementById('flightdate').innerHTML = StringDate;
                             var str = "Click here to book!";
-                            // var result = str.link("https://www.expedia.com/Flights");
                             document.getElementById('ClickToBook').innerHTML = str;
                         }
-                    }).catch(err => {
-                        console.log("ERROR4 " + err);
-                    })
-                }).catch(err => {
-                    console.log("ERROR3 " + err);
-                })
+                    }).catch(err => {})
+                }).catch(err => {})
 
             } else {
-                console.log("FULL1");
 
                 const MinPriceForToday = jresponse.Quotes[0].MinPrice;
                 airlinePrice = MinPriceForToday;
@@ -465,6 +441,7 @@ async function GetFlightCost() {
                 console.log("Carrier ID: " + CarrierID);
 
                 // Getting Airline Name associated with min price
+
                 var AirLineName = jresponse.Carriers[0].Name;
                 for (let z = 0; z < jresponse.Carriers.length; z++) {
                     let id = jresponse.Carriers[z].CarrierId;
@@ -477,7 +454,6 @@ async function GetFlightCost() {
                 date.toString();
 
                 var StringDate = date.substr(0, date.indexOf('T'));
-                // var StringTime = date.substr(date.indexOf('T') + 1);
                 console.log("Airline Price: " + airlinePrice);
                 console.log("Airline Departure Date: " + StringDate);
                 console.log("Airline Name: " + AirLineName);
@@ -487,29 +463,24 @@ async function GetFlightCost() {
 
                 document.getElementById('flightdate').innerHTML = StringDate;
                 var str = "Click here to book!";
-                // var result = str.link("https://www.expedia.com/Flights");
                 document.getElementById('ClickToBook').innerHTML = str;
 
             }
         }).catch(err => {
-            console.log("ERROR2 " + err);
 
         })
-    }).catch(err => {
-        console.log("ERROR1 " + err);
-    })
+    }).catch(err => {})
 }
 
 async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong) {
 
     var travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
-    
+
     console.log(travelMiles + " Travel Miles");
     if (travelMiles < 150 && typeof travelMiles !== 'undefined') {
 
         RouteTooFar = false;
         const dynamicUrl = "/lyft?startLat=" + lyftStartLat + "&startLong=" + lyftStartLong + "&endLat=" + lyftEndLat + "&endLong=" + lyftEndLong;
-        // const dynamicUrl = "http://localhost:3000/lyft?startLat=47.6076018&startLong=-122.3119244&endLat=47.6233218&endLong=-122.3636521";
 
         await fetch(dynamicUrl, {
                 mode: "no-cors"
@@ -517,7 +488,6 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
             .then(r => r.json())
             .then(async (data) => {
                 const routeTime = await getRouteDurationGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
-                console.log("Route time: " + routeTime);
 
                 var price1 = data.price / 100;
                 console.log("Lyft Price (dollars): " + price1);
@@ -534,9 +504,7 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
                 document.getElementById('uberdistance').innerHTML = "~ " + travelMiles + " miles";
                 document.getElementById('lyftdistance').innerHTML = "~ " + travelMiles + " miles";
 
-            }).catch(err => {
-                console.log("Unable to retrieve price data");
-            });
+            }).catch(err => {});
     } else {
         document.getElementById('lyftcost').innerHTML = "***";
         document.getElementById('lyftXLcost').innerHTML = "***";
@@ -562,9 +530,7 @@ async function fetchCalc() {
         .then(r => r.text()).then(key => {
             lufthansaKey = key;
         })
-        .catch(err => {
-            console.log("Unable to retrieve price data");
-        })
+        .catch(err => {})
 }
 
 function addZeroes(num) {
@@ -577,55 +543,46 @@ function addZeroes(num) {
     // Return the number
     return num;
 }
-//getDistanceGoogle(39.770358, -75.60997499999999, 39.8311059, -75.540419);
+
+// Fetches the distance from start to end destination
+
 async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
-
     const dynamicUrl = "/getDistanceGoogle?startLat=" + lat1 + "&startLong=" + lon1 + "&endLat=" + lat2 + "&endLong=" + lon2;
-
     const request = await fetch(dynamicUrl, {
-        method: "GET",
-        mode: "no-cors"
-    })
-    .then(async function (response) {
-        const distance = await response.text();
-        try {
-            const data = JSON.parse(distance);
-            console.log(data);
-            return addZeroes(data);
-        }
-        catch (err) {
-            var distanceNumber = Number(distance);
-            console.log(distanceNumber);
-            return addZeroes(distanceNumber);
-        }
-    }).catch(err => {
-        console.log(err);
-    });
+            method: "GET",
+            mode: "no-cors"
+        })
+        .then(async function (response) {
+            const distance = await response.text();
+            try {
+                const data = JSON.parse(distance);
+                return addZeroes(data);
+            } catch (err) {
+                var distanceNumber = Number(distance);
+                return addZeroes(distanceNumber);
+            }
+        }).catch(err => {});
     return request;
 }
+
+// Fetches the route time from start to end destination
 
 async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     const dynamicUrl = "/getRouteDurationGoogle?startLat=" + lat1 + "&startLong=" + lon1 + "&endLat=" + lat2 + "&endLong=" + lon2;
 
     const request = await fetch(dynamicUrl, {
-        method: "GET",
-        mode: "no-cors"
-    })
-    .then(async function (response) {
-        const duration = await response.text();
-        try {
-            const data = JSON.parse(duration);
-            console.log(data);
-            return data;
-        }
-        catch (err) {
-            //var distanceNumber = Number(duration);
-            console.log(duration);
-            return duration;
-        }
-    }).catch(err => {
-        console.log(err);
-    });
+            method: "GET",
+            mode: "no-cors"
+        })
+        .then(async function (response) {
+            const duration = await response.text();
+            try {
+                const data = JSON.parse(duration);
+                return data;
+            } catch (err) {
+                return duration;
+            }
+        }).catch(err => {});
     return request;
 }
 
@@ -634,11 +591,9 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
     if (travelMiles < 150) {
 
         const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
-        console.log(url);
         var count = 1;
         const maxTries = 15;
         while (true) {
-            //while starts
             try {
                 const uberFetch = await fetch(url, {
                     "method": "POST",
@@ -665,11 +620,8 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                     })
                 })
 
-                console.log("Status of uber: " + uberFetch.status);
-
-                if (uberFetch.ok) { // or status == 200
-                    //deserializes json response 
-                    console.log("Attempt #: " + count);
+                if (uberFetch.ok) { // Or status == 200
+                    // Deserializes json response 
                     const data = await uberFetch.json();
                     console.log("Status of data: " + data.status);
                     const finalData = data;
@@ -682,10 +634,8 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                     console.log("UberXL Price: " + uberXLcost);
                     finalUberXLPrice = uberXLcost;
                     document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
-                    // return { uberX: uberXcost, uberXl: uberXLcost }
                 } else {
-                    // non 2xx status code 
-                    console.log("Status code", uberFetch.status);
+                    // Non 2xx status code 
                     if (uberFetch.status = 429) {
                         document.getElementById('ubercost').innerHTML = "<font size='1'> Unable to compute! </font>";
                         document.getElementById('uberXLcost').innerHTML = "<font size='1'> Unable to compute! </font>";
@@ -694,7 +644,6 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                 break;
 
             } catch (err) {
-                console.log("An error occured", err);
                 if (++count == maxTries) {
                     if (isNaN(finalUberPrice)) {
                         document.getElementById('ubercost').innerHTML = "<font size='1'> Unable to compute! </font>";
@@ -702,11 +651,10 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                     if (isNaN(finalUberXLPrice)) {
                         document.getElementById('uberXLcost').innerHTML = "<font size='1'> Unable to compute! </font>";
                     }
-                    // throw err;
                     break;
                 }
             }
-        } // while close
+        }
 
     } else {
         document.getElementById('ubercost').innerHTML = "***";
@@ -752,3 +700,4 @@ $(document).ready(function () {
 
     });
 });
+

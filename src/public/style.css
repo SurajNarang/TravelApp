@@ -159,6 +159,29 @@ table {
     width: 800px;
 }
 
+@-moz-document url-prefix() {
+    #uber {
+        /* height: 1%; */
+        display: block;
+        margin: 0 auto;
+        width: 85px;
+    }
+    
+    #lyft {
+        /* height: 1%; */
+        display: block;
+        margin: 0 auto;
+        width: 80px;
+    }
+    
+    #planePic {
+        /* height: 1%; */
+        display: block;
+        width: 120px;
+        margin: 0 auto;
+    }
+}
+
 .form-group {
     width: 150px;
     position: absolute;

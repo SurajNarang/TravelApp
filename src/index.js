@@ -4,6 +4,12 @@ const path = require("path");
 const app = express();
 const rateLimit = require("express-rate-limit");
 const GoogleKey = 'AIzaSyAIWfF7WRt4NxiFMCAX_EmGdLh9zG72ygY';
+var fs = require('fs');
+
+// fs.appendFile('./public/index.html', '<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="'+GoogleKey + '></script>', function (err) {
+//     if (err) throw err;
+//     console.log('Saved!');
+//   });
 
 // Enabled for heroku reverse proxy
 // app.set('trust proxy', 1);
@@ -100,7 +106,7 @@ app.get("/getDistanceGoogle", (req, response) => {
     } = req.query;
     //const url = `https://www.lyft.com/api/costs?start_lat=${startLat}&start_lng=${startLong}&end_lat=${endLat}&end_lng=${endLong}`;
     const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + startLat + ',' + startLong + '&destinations=' + endLat + ',' + endLong + '&key=' + GoogleKey;
-console.log(url)
+    console.log(url)
     const test = fetch(url, {
         method: "GET",
         mode: "cors"
@@ -155,7 +161,7 @@ app.get("/getRouteDurationGoogle", (req, response) => {
     } = req.query;
 
     const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + startLat + ',' + startLong + '&destinations=' + endLat + ',' + endLong + '&key=' + GoogleKey;
-console.log(url)
+    console.log(url)
     const test = fetch(url, {
         method: "GET",
         mode: "cors"
@@ -165,7 +171,7 @@ console.log(url)
                 const data = response;
 
                 var data1 = (data.rows[0].elements[0].duration.text);
-               var finalTime = data1.toString();
+                var finalTime = data1.toString();
                 //var StringData = data1.substr(0, data1.indexOf(' '));
 
                 //var num = Number(StringData);
@@ -186,6 +192,23 @@ console.log(url)
             })
     })
 });
+
+app.get("/layer", (req, response) => {
+
+    const layer1 = 'AIzaSyAIWfF7WRt4NxiFMCAX_EmGdLh9zG72ygY';
+    console.log(layer1 + " we r in the server boys");
+    response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
+    response.send(layer1);
+    return layer1;
+
+    // try {
+    //     
+    //     // response.status(200).send((layer1).toString());
+    // } catch {
+    //     console.log("Unable to deliver layer");
+
+    // }
+})
 
 
 app.use('/', express.static(path.join(__dirname, 'public')));
