@@ -27,6 +27,25 @@
 </head>
 
 <body>
+
+    <script>
+        var layer3;
+function layer() {
+    fetch("/layer", {
+        // mode: "no-cors"
+    })
+    .then(r => r.text()).then(key => {
+        
+        layer3 = key
+        console.log(layer3);
+        return layer3;
+    })
+    .catch(err => {console.log(err)})
+}
+layer()
+src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key='+layer3
+    </script>
+
     <div id="GlobeBackground">
         <img src="globebackground.jpg" alt="globe" height="920" width="100%">
     </div>

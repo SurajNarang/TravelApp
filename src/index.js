@@ -197,17 +197,18 @@ app.get("/layer", (req, response) => {
 
     const layer1 = 'AIzaSyAIWfF7WRt4NxiFMCAX_EmGdLh9zG72ygY';
     console.log(layer1 + " we r in the server boys");
-    response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
-    response.send(layer1);
-    return layer1;
 
-    // try {
-    //     
-    //     // response.status(200).send((layer1).toString());
-    // } catch {
-    //     console.log("Unable to deliver layer");
 
-    // }
+    try {
+        response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
+        response.send(layer1);
+        // response.status(200).send((layer1).toString());
+
+        return layer1;
+    } catch {
+        console.log("Unable to deliver layer");
+
+    }
 })
 
 

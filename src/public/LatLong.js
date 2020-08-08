@@ -7,7 +7,6 @@ var EndingAirportCode;
 var FlightCost;
 var StartLocPlaceID;
 var EndLocPlaceID;
-
 var RouteTooFar = new Boolean(true);
 var checkedNextDay = new Boolean(false);
 var finalUberPrice;
@@ -18,19 +17,20 @@ const skyScannerKey = config.SKYSCAN_KEY;
 
 var layer3;
 
-async function layer() {
-    fetch("/layer", {
-        // mode: "no-cors"
-    })
-    .then(r => r.text()).then(key => {
-        var layer2 = key;
-        console.log( JSON.stringify(layer2));
-        layer3 = JSON.stringify(layer2);
-    })
-    .catch(err => {console.log(err)})
-}
+// async function layer() {
+//     fetch("/layer", {
+//         // mode: "no-cors"
+//     })
+//     .then(r => r.text()).then(key => {
+//         wind
+//         window.layer3 = key
+//         console.log(layer3);
+//         // return layer3;
+//     })
+//     .catch(err => {console.log(err)})
+// }
 
-document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + (layer3) + "'\>\</script\>");
+document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(layer3) + "'\>\</script\>");
 
 async function getToken(callback) {
     await layer();
