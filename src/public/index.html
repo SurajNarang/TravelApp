@@ -27,24 +27,25 @@
 </head>
 
 <body>
+    <!-- <script >
+        var layer3 =layer();
+        function layer() {
+            fetch("/layer", {
+                    // mode: "no-cors"
+                })
+                .then(r => r.text()).then(key => {
 
-    <script>
-        var layer3;
-function layer() {
-    fetch("/layer", {
-        // mode: "no-cors"
-    })
-    .then(r => r.text()).then(key => {
-        
-        layer3 = key
-        console.log(layer3);
-        return layer3;
-    })
-    .catch(err => {console.log(err)})
-}
-layer()
-src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key='+layer3
+                    layer3 = key
+                    console.log(layer3+" in the web");
+                    return layer3;
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+      //  layer()
     </script>
+    <script src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=' +layer3></script>  -->
 
     <div id="GlobeBackground">
         <img src="globebackground.jpg" alt="globe" height="920" width="100%">
@@ -63,7 +64,8 @@ src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;ke
         </div>
     </div>
     <h1 id="webtitle"> Turbo Travel (USA Edition)</h1>
-    <p id="directions"> <b>Directions: </b>Please enter a start and end location to find the most cost-effective travel method. </p>
+    <p id="directions"> <b>Directions: </b>Please enter a start and end location to find the most cost-effective travel
+        method. </p>
     <div id="canvas">
         <canvas id="canvas-box" width="800" height="745">
         </canvas>
@@ -89,7 +91,8 @@ src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;ke
             <input type="hidden" name="business" value="V9M9HCZTGSWCL" />
             <input type="hidden" name="currency_code" value="USD" />
             <input type="hidden" name="amount" value="1" />
-            <input type="image" src="https://i.postimg.cc/fTMDWWgV/Donate-Button-4.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+            <input type="image" src="https://i.postimg.cc/fTMDWWgV/Donate-Button-4.png" border="0" name="submit"
+                title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
             <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
         </form>
         <br></br>
@@ -202,13 +205,21 @@ src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;ke
             <h2 class="title"> <u>About</u></h2>
             <div class="col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
                 <p class="description">
-                    Here at TurboTech Innovations, LLC we strive to address modern technological problems and provide heightened efficiency for common actions in the lives of our users. Therefore, we have decided to create <b>
-                        Turbo Travel. </b>
-                    <br><br> Turbo Travel is a cost-effective mobility guidance product that provides an elegant solution to a modern traveling problem. In the past, we have found that to find the most cost-effective means of travel, we often spend countless
-                    time, sometimes hours, scouring different apps and websites for the best prices, whether it be for ride-hailing or air travel. With Turbo Travel, you simply enter your start and destination address will be shown the real-time estimated
-                    price of UBER and LYFT side-by-side, allowing you to choose the best travel method. Turbo Travel has also been developed to handle long-distance travel as well!
-                    <br><br> If your travel trip is accessible by flight, then you will be provided with the cheapest airfare currently available, along with any important flight details (flight date, Airline name, start/destination airport names). With
-                    your inputted start and destination addresses, the appropriate closest airports will also be provided. To further help you experience the smoothest and hassle-free travel experience, we even provide you a link to book your flight.
+                    TurboTravel, product of TurboTech Innovations, LLC, is a cost-effective mobility guidance
+                    application that provides an elegant solution to a modern traveling problem. In the past, we have
+                    found that, to find the most cost-effective means of travel, we often spend countless hours,
+                    scouring different apps and websites for the best prices, whether it be for ride-hailing or air
+                    travel. With Turbo Travel, you simply enter your start and end destination address, and you will be
+                    shown the real-time estimated price of UBER and LYFT side-by-side, allowing you to choose the best
+                    travel method. Turbo Travel has also been developed to detect and price compare for long-distance
+                    travel.
+                    <br><br>
+                    If your travel trip is accessible by flight, then you will be provided with the cheapest airfare
+                    currently available, along with any important flight details (flight date, Airline name,
+                    start/destination airport names). Based on your start and destination addresses, the closest
+                    airports will also be provided. To further help you experience the smoothest and hassle-free travel
+                    experience, we even provide you a link to book your flight!
+
                     <br><br>
                 </p>
                 <h3 class="subtitle"><u>Developers</u></h3>
@@ -254,7 +265,7 @@ src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;ke
     </div>
 
     <script>
-        $(window).on('load', function() { // makes sure the whole site is loaded 
+        $(window).on('load', function () { // makes sure the whole site is loaded 
             $('sk-chase').fadeOut(); // will first fade out the loading animation 
             $('#preloader').delay(1000).fadeOut(
                 'slow'); // will fade out the white DIV that covers the website. 
@@ -281,7 +292,7 @@ src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;ke
         mybutton = document.getElementById("myBtn");
 
         // When the user scrolls down 20px from the top of the document, show the button
-        window.onscroll = function() {
+        window.onscroll = function () {
             scrollFunction()
         };
 
@@ -311,12 +322,48 @@ src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;ke
 
     <script src="LatLong.js"></script>
 </body>
-<div id="disclaimer">
+<!-- <div id="disclaimer">
     <footer>
         *Turbo Travel is not affiliated with Uber, Lyft, or any Airlines.<br>
         © 2020 BY TurboTech Innovations, LLC.
     </footer>
-</div>
+</div> -->
+<footer>
+    <p>
+       Contact: <i><a href="mailto:TurboTravelInc@gmail.com" id="email">TurboTravelInc@gmail.com</a></i><br>
+        <img src='LLC-Logo2.png' width="250px" id="LLCLogo"><br>
+        ©2020 BY TurboTech Innovations, LLC. <br>
+        *Turbo Travel is not affiliated with Uber, Lyft, or any Airlines.<br>
+        </p>
+</footer>
+<style>
+    footer {
+        top: 365px;
+        position: relative;
+        text-align: center;
+        /* padding: 15px; */
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 15px;
+        padding-right: 15px;
+        background-color:#a5b7bd; 
 
+        /* background-color: #44a8de; */
+        color: #1B2036;
+        margin-left: 350px;
+        border: 5px solid black;
+        width: 750px;
+        align-items: center;
+        
+    }
+    #LLCLogo{
+        display: inline;
+    }
+    #email{
+        text-decoration: none;
+        color: #1B2036;
+        
+    }
+</style>
 
 </html>

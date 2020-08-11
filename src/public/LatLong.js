@@ -15,29 +15,28 @@ var lufthansaKey;
 const skyScannerKey = config.SKYSCAN_KEY;
 //const mykey = config.GOOGLE_KEY;
 
-var layer3;
-
-// async function layer() {
-//     fetch("/layer", {
-//         // mode: "no-cors"
-//     })
-//     .then(r => r.text()).then(key => {
-//         wind
-//         window.layer3 = key
-//         console.log(layer3);
-//         // return layer3;
-//     })
-//     .catch(err => {console.log(err)})
-// }
-
+var layer3 ;
+async function layer() {
+     return fetch("/layer", {
+        // mode: "no-cors"
+    })
+    .then(r => r.text()).then(key => {
+        layer3 = key
+        console.log(layer3);
+        return layer3;
+    })
+    .catch(err => {console.log(err)})
+}
+//layer3 =  layer() ;
 document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(layer3) + "'\>\</script\>");
 
 async function getToken(callback) {
-    await layer();
+    layer3 = await layer()
     await fetchCalc();
 
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
+            console.log("time out")
             resolve();
         });
     })

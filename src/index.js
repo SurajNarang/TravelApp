@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const path = require("path");
 const app = express();
 const rateLimit = require("express-rate-limit");
-const GoogleKey = 'AIzaSyAIWfF7WRt4NxiFMCAX_EmGdLh9zG72ygY';
+const GoogleKey = 'AIzaSyANKKZzVJKmMaw_DKo-V6cm6Qkcijy84hQ';
 var fs = require('fs');
 
 // fs.appendFile('./public/index.html', '<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="'+GoogleKey + '></script>', function (err) {
