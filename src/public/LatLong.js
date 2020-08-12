@@ -13,25 +13,33 @@ var finalUberPrice;
 var finalUberXLPrice;
 var lufthansaKey;
 const skyScannerKey = config.SKYSCAN_KEY;
-//const mykey = config.GOOGLE_KEY;
 
-var layer3 ;
-async function layer() {
-     return fetch("/layer", {
-        // mode: "no-cors"
-    })
-    .then(r => r.text()).then(key => {
-        layer3 = key
-        console.log(layer3);
-        return layer3;
-    })
-    .catch(err => {console.log(err)})
-}
-//layer3 =  layer() ;
-document.write("\<script src='" + "https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=" + encodeURIComponent(layer3) + "'\>\</script\>");
+const part7 = 'AIzaSy';
+const part19 = 'ABIN';
+const part10 ='4TNl4';
+const part14 = '4gDDY';
+const part12 = 'Y4iD_';
+const part6 = 'Ql7Dw';
+const part17 = 'qsp93';
+const part20 = '6mKo';
+
+const part18 = part7 +part19;
+const part23 = part10+part14;
+const part21 = part12+part6;
+const part3 = part17 +part20;
+
+const part29 = part18+part23;
+const part16 = part21+part3;
+
+const part8=part29+part16;
+
+const mapLink = 'https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=';
+
+const autofillRequest = mapLink+part8;
+
+document.write("\<script src='" + autofillRequest + "'\>\</script\>");
 
 async function getToken(callback) {
-    layer3 = await layer()
     await fetchCalc();
 
     return new Promise(function (resolve, reject) {
@@ -47,7 +55,6 @@ async function LatLongData() {
 }
 
 getToken().then(LatLongData);
-
 
 async function printResult() {
     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
@@ -94,6 +101,7 @@ async function determiningLatLong() {
                 lng: Number(StartLongFinal)
             };
 
+            // Fetches the place ID for start location
             geocoder1.geocode({
                 'location': latlng
             }, function (results, status) {
@@ -146,6 +154,7 @@ async function determiningLatLong() {
                 lng: Number(EndLongFinal)
             };
 
+            // Fetches the place ID for end location
             geocoder2.geocode({
                 'location': latlng
             }, function (results, status) {
@@ -166,13 +175,10 @@ async function determiningLatLong() {
                         document.getElementById("reset-button").disabled = false;
                     }, 11500);
 
-
                     if ((StartLongFinal != null) && (StartLatFinal != null) && (EndLongFinal != null) && (EndLatFinal != null)) {
-
                         $("#display_loading").show();
 
                         setTimeout(function () {
-
                             document.getElementById("display_loading").style.display = "none";
                         }, 11000);
 
@@ -191,7 +197,6 @@ async function determiningLatLong() {
 }
 
 // Fetches nearest airport code according to user's start location
-
 function GetNearestStartingAirport(LatFinal, LongFinal) {
     fetch("https://api.lufthansa.com/v1/references/airports/nearest/" + LatFinal + "," + LongFinal, {
             "method": "GET",
@@ -213,7 +218,6 @@ function GetNearestStartingAirport(LatFinal, LongFinal) {
 }
 
 // Fetches nearest airport code according to user's end location
-
 function GetNearestEndingAirport(LatFinal1, LongFinal1) {
     fetch("https://api.lufthansa.com/v1/references/airports/nearest/" + LatFinal1 + "," + LongFinal1, {
             "method": "GET",
@@ -236,9 +240,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
 // Retrieves most cost-efficient airfare according to the user's start and end location
-
 async function GetFlightCost() {
     var airlinePrice;
     if (StartingAirportCode == undefined || EndingAirportCode == undefined) {
@@ -262,8 +264,6 @@ async function GetFlightCost() {
         const data = response.json();
         data.then(jresponse => {
             if (jresponse.Quotes.length == 0) {
-
-
                 var TomDate = new Date(new Date().getTime() + (24 * 60 * 60 * 1000) + (24 * 60 * 60 * 1000));
                 var day = String(TomDate.getDate()).padStart(2, '0');
                 var month = String(TomDate.getMonth() + 1).padStart(2, '0');
@@ -355,7 +355,6 @@ async function GetFlightCost() {
                             }).catch(err => {})
 
                         } else {
-
                             const MinPriceForTM = response2.Quotes[0].MinPrice;
                             airlinePrice = MinPriceForTM;
 
@@ -411,7 +410,6 @@ async function GetFlightCost() {
                 }).catch(err => {})
 
             } else {
-
                 const MinPriceForToday = jresponse.Quotes[0].MinPrice;
                 airlinePrice = MinPriceForToday;
 
@@ -425,7 +423,6 @@ async function GetFlightCost() {
                 }
 
                 // Getting the Carrier ID associated with min price
-
                 var CarrierID = jresponse.Quotes[0].OutboundLeg.CarrierIds;
                 var date = jresponse.Quotes[0].OutboundLeg.DepartureDate;
 
@@ -440,7 +437,6 @@ async function GetFlightCost() {
                 console.log("Carrier ID: " + CarrierID);
 
                 // Getting Airline Name associated with min price
-
                 var AirLineName = jresponse.Carriers[0].Name;
                 for (let z = 0; z < jresponse.Carriers.length; z++) {
                     let id = jresponse.Carriers[z].CarrierId;
@@ -544,7 +540,6 @@ function addZeroes(num) {
 }
 
 // Fetches the distance from start to end destination
-
 async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
     const dynamicUrl = "/getDistanceGoogle?startLat=" + lat1 + "&startLong=" + lon1 + "&endLat=" + lat2 + "&endLong=" + lon2;
     const request = await fetch(dynamicUrl, {
@@ -565,7 +560,6 @@ async function getDistanceGoogle(lat1, lon1, lat2, lon2) {
 }
 
 // Fetches the route time from start to end destination
-
 async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     const dynamicUrl = "/getRouteDurationGoogle?startLat=" + lat1 + "&startLong=" + lon1 + "&endLat=" + lat2 + "&endLong=" + lon2;
 
@@ -585,13 +579,14 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
     return request;
 }
 
+// Retrieves the Uber cost based on user's start, end location, and place IDs
 async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
     const travelMiles = await getDistanceGoogle(uberStartLat, uberStartLong, uberEndLat, uberEndLong);
     if (travelMiles < 150) {
 
         const url = 'https://cors-anywhere.herokuapp.com/https://www.uber.com/api/loadFEEstimates';
         var count = 1;
-        const maxTries = 15;
+        const maxTries = 20;
         while (true) {
             try {
                 const uberFetch = await fetch(url, {
@@ -620,6 +615,7 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                 })
 
                 if (uberFetch.ok) { // Or status == 200
+
                     // Deserializes json response 
                     const data = await uberFetch.json();
                     console.log("Status of data: " + data.status);
@@ -633,6 +629,7 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                     console.log("UberXL Price: " + uberXLcost);
                     finalUberXLPrice = uberXLcost;
                     document.getElementById('uberXLcost').innerHTML = "$" + uberXLcost;
+
                 } else {
                     // Non 2xx status code 
                     if (uberFetch.status = 429) {
@@ -667,7 +664,6 @@ async function printAirports() {
 }
 
 // Clears data when reset button is clicked
-
 $(document).ready(function () {
     $('#reset-button').click(function () {
         document.getElementById('startnearestairport').innerHTML = "";
@@ -696,7 +692,5 @@ $(document).ready(function () {
         StartLatFinal = null;
         EndLongFinal = null;
         EndLatFinal = null;
-
     });
 });
-

@@ -3,16 +3,7 @@ const fetch = require("node-fetch");
 const path = require("path");
 const app = express();
 const rateLimit = require("express-rate-limit");
-const GoogleKey = 'AIzaSyANKKZzVJKmMaw_DKo-V6cm6Qkcijy84hQ';
-var fs = require('fs');
-
-// fs.appendFile('./public/index.html', '<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key="'+GoogleKey + '></script>', function (err) {
-//     if (err) throw err;
-//     console.log('Saved!');
-//   });
-
-// Enabled for heroku reverse proxy
-// app.set('trust proxy', 1);
+const layer = 'AIzaSyABIN4TNl44gDDYY4iD_Ql7Dwqsp936mKo';
 
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -67,10 +58,6 @@ app.get("/lyft", (req, response) => {
 
 app.get("/luftkey", (req, response) => {
 
-    console.log(req.url);
-    // const { startLat, startLong, endLat, endLong } = req.query;
-    //const url = `https://www.lyft.com/api/costs?start_lat=${startLat}&start_lng=${startLong}&end_lat=${endLat}&end_lng=${endLong}`;
-
     fetch("https://api.lufthansa.com/v1/oauth/token", {
             body: "client_id=yz6q8w4ppkd42xkhkvkddh8s&client_secret=5WHNjTWeFy&grant_type=client_credentials",
             headers: {
@@ -80,16 +67,13 @@ app.get("/luftkey", (req, response) => {
         }).then(response => {
             return response.json().then(data => {
                 var accessToken = data.access_token;
-                //var expiresIn = data.expires_in;
                 lufthansaKey = "Bearer " + accessToken;
-                console.log(lufthansaKey + " the server")
                 return lufthansaKey;
             })
         })
         .then(r => {
             response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
             response.send(r);
-            //response.status(200).send((r).toString());
         }).catch(err => {
             console.log("Unable to send luft key");
         })
@@ -104,14 +88,12 @@ app.get("/getDistanceGoogle", (req, response) => {
         endLat,
         endLong
     } = req.query;
-    //const url = `https://www.lyft.com/api/costs?start_lat=${startLat}&start_lng=${startLong}&end_lat=${endLat}&end_lng=${endLong}`;
-    const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + startLat + ',' + startLong + '&destinations=' + endLat + ',' + endLong + '&key=' + GoogleKey;
+    const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + startLat + ',' + startLong + '&destinations=' + endLat + ',' + endLong + '&key=' + layer;
     console.log(url)
     const test = fetch(url, {
         method: "GET",
         mode: "cors"
     }).then(response2 => {
-        //console.log("Response", response)
         return response2.json().then(response => {
                 const data = response;
 
@@ -120,7 +102,6 @@ app.get("/getDistanceGoogle", (req, response) => {
                 var StringData = data1.substr(0, data1.indexOf(' '));
 
                 var num = Number(StringData);
-                //console.log("DISTANCE METHOD: " + num);
                 console.log(addZeroes(num));
                 return addZeroes(num);
 
@@ -131,7 +112,6 @@ app.get("/getDistanceGoogle", (req, response) => {
             .then(r => {
                 response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
                 response.send(r);
-                //response.status(200).send((r).toString());
             }).catch(err => {
                 console.log("Unable to retrieve price data");
             })
@@ -149,7 +129,6 @@ function addZeroes(num) {
     return num;
 }
 
-
 app.get("/getRouteDurationGoogle", (req, response) => {
 
     console.log(req.url);
@@ -160,22 +139,17 @@ app.get("/getRouteDurationGoogle", (req, response) => {
         endLong
     } = req.query;
 
-    const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + startLat + ',' + startLong + '&destinations=' + endLat + ',' + endLong + '&key=' + GoogleKey;
+    const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + startLat + ',' + startLong + '&destinations=' + endLat + ',' + endLong + '&key=' + layer;
     console.log(url)
     const test = fetch(url, {
         method: "GET",
         mode: "cors"
     }).then(response2 => {
-        //console.log("Response", response)
         return response2.json().then(response => {
                 const data = response;
 
                 var data1 = (data.rows[0].elements[0].duration.text);
                 var finalTime = data1.toString();
-                //var StringData = data1.substr(0, data1.indexOf(' '));
-
-                //var num = Number(StringData);
-                //console.log("DISTANCE METHOD: " + num);
                 console.log(finalTime);
                 return finalTime;
 
@@ -193,23 +167,21 @@ app.get("/getRouteDurationGoogle", (req, response) => {
     })
 });
 
-app.get("/layer", (req, response) => {
+// app.get("/layer", (req, response) => {
 
-    const layer1 = 'AIzaSyAIWfF7WRt4NxiFMCAX_EmGdLh9zG72ygY';
-    console.log(layer1 + " we r in the server boys");
+//     console.log(layer1 + " server reached");
 
 
-    try {
-        response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
-        response.send(layer1);
-        // response.status(200).send((layer1).toString());
+//     try {
+//         response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
+//         response.json({key:layer1 });
+//         // response.status(200).send((layer1).toString());
 
-        return layer1;
-    } catch {
-        console.log("Unable to deliver layer");
+//         return layer1;
+//     } catch {
+//         console.log("Unable to deliver layer");
 
-    }
-})
-
+//     }
+// })
 
 app.use('/', express.static(path.join(__dirname, 'public')));
