@@ -4,7 +4,7 @@ const path = require("path");
 const app = express();
 const rateLimit = require("express-rate-limit");
 const sourceFile = require('./config2');
-const layer = sourceFile.key
+const layer = sourceFile.key;
 
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -53,7 +53,6 @@ app.get("/lyft", (req, response) => {
             response.send(r);
             //response.status(200).send((r).toString());
         }).catch(err => {
-            console.log("Unable to retrieve price data");
         })
 });
 
@@ -76,13 +75,11 @@ app.get("/luftkey", (req, response) => {
             response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
             response.send(r);
         }).catch(err => {
-            console.log("Unable to send luft key");
         })
 });
 
 app.get("/getDistanceGoogle", (req, response) => {
 
-    console.log(req.url);
     const {
         startLat,
         startLong,
@@ -90,7 +87,6 @@ app.get("/getDistanceGoogle", (req, response) => {
         endLong
     } = req.query;
     const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + startLat + ',' + startLong + '&destinations=' + endLat + ',' + endLong + '&key=' + layer;
-    console.log(url)
     const test = fetch(url, {
         method: "GET",
         mode: "cors"
@@ -103,18 +99,15 @@ app.get("/getDistanceGoogle", (req, response) => {
                 var StringData = data1.substr(0, data1.indexOf(' '));
 
                 var num = Number(StringData);
-                console.log(addZeroes(num));
                 return addZeroes(num);
 
             }).catch(err => {
-                console.log(err);
             })
 
             .then(r => {
                 response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
                 response.send(r);
             }).catch(err => {
-                console.log("Unable to retrieve price data");
             })
     })
 });
@@ -132,7 +125,6 @@ function addZeroes(num) {
 
 app.get("/getRouteDurationGoogle", (req, response) => {
 
-    console.log(req.url);
     const {
         startLat,
         startLong,
@@ -141,7 +133,6 @@ app.get("/getRouteDurationGoogle", (req, response) => {
     } = req.query;
 
     const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + startLat + ',' + startLong + '&destinations=' + endLat + ',' + endLong + '&key=' + layer;
-    console.log(url)
     const test = fetch(url, {
         method: "GET",
         mode: "cors"
@@ -151,11 +142,9 @@ app.get("/getRouteDurationGoogle", (req, response) => {
 
                 var data1 = (data.rows[0].elements[0].duration.text);
                 var finalTime = data1.toString();
-                console.log(finalTime);
                 return finalTime;
 
             }).catch(err => {
-                console.log(err);
             })
 
             .then(r => {
@@ -163,7 +152,6 @@ app.get("/getRouteDurationGoogle", (req, response) => {
                 response.send(r);
                 //response.status(200).send((r).toString());
             }).catch(err => {
-                console.log("Unable to retrieve price data");
             })
     })
 });
