@@ -3,7 +3,8 @@ const fetch = require("node-fetch");
 const path = require("path");
 const app = express();
 const rateLimit = require("express-rate-limit");
-const layer = 'AIzaSyABIN4TNl44gDDYY4iD_Ql7Dwqsp936mKo';
+const sourceFile = require('./config2');
+const layer = sourceFile.key
 
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
