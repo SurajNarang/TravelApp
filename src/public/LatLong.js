@@ -13,42 +13,20 @@ var finalUberPrice;
 var finalUberXLPrice;
 var lufthansaKey;
 const skyScannerKey = config.SKYSCAN_KEY;
-
-const part7 = 'AIzaSy';
-const part19 = 'ABIN';
-const part10 ='4TNl4';
-const part14 = '4gDDY';
-const part12 = 'Y4iD_';
-const part6 = 'Ql7Dw';
-const part17 = 'qsp93';
-const part20 = '6mKo';
-
-const part18 = part7 +part19;
-const part23 = part10+part14;
-const part21 = part12+part6;
-const part3 = part17 +part20;
-
-const part29 = part18+part23;
-const part16 = part21+part3;
-
-const part8=part29+part16;
-
 const mapLink = 'https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places&amp;key=';
-
-const autofillRequest = mapLink+part8;
-
-document.write("\<script src='" + autofillRequest + "'\>\</script\>");
 
 async function getToken(callback) {
     await fetchCalc();
 
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
-            console.log("time out")
             resolve();
         });
     })
 }
+
+const part19 = 'ABIN';
+const part7 = 'AIzaSy';
 
 async function LatLongData() {
     await determiningLatLong();
@@ -64,6 +42,9 @@ async function printResult() {
         await GetUberCost(StartLatFinal, StartLongFinal, EndLatFinal, EndLongFinal, StartLocPlaceID, EndLocPlaceID);
     }
 }
+
+const part14 = '4gDDY';
+const part10 ='4TNl4';
 
 async function determiningLatLong() {
     var searchInput = 'search_input';
@@ -236,9 +217,17 @@ function GetNearestEndingAirport(LatFinal1, LongFinal1) {
         .catch(err => {});
 }
 
+const part12 = 'Y4iD_';
+const part6 = 'Ql7Dw';
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+const part20 = '6mKo';
+const part17 = 'qsp93';
+const part18 = part7 +part19;
+const part23 = part10+part14;
 
 // Retrieves most cost-efficient airfare according to the user's start and end location
 async function GetFlightCost() {
@@ -467,6 +456,9 @@ async function GetFlightCost() {
     }).catch(err => {})
 }
 
+const part21 = part12+part6;
+const part3 = part17 +part20;
+
 async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong) {
 
     var travelMiles = await getDistanceGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
@@ -483,13 +475,11 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
             .then(r => r.json())
             .then(async (data) => {
                 const routeTime = await getRouteDurationGoogle(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong);
-
-                var price1 = data.price / 100;
-                console.log("Lyft Price (dollars): " + price1);
                 console.log("Duration of Trip (minutes): " + routeTime);
-
                 var standardPrice = addZeroes(data.standardPrice / 100);
+                console.log("Lyft Standard Price: " + standardPrice);
                 var XLprice = addZeroes(data.XLprice / 100);
+                console.log("Lyft XL Price: " + XLprice);
                 var finalDuration = routeTime;
 
                 document.getElementById('lyftcost').innerHTML = "$" + standardPrice;
@@ -517,6 +507,9 @@ async function GetLyftCost(lyftStartLat, lyftStartLong, lyftEndLat, lyftEndLong)
         }
     }
 }
+
+const part29 = part18+part23;
+const part16 = part21+part3;
 
 async function fetchCalc() {
     fetch("/luftkey", {
@@ -578,6 +571,8 @@ async function getRouteDurationGoogle(lat1, lon1, lat2, lon2) {
         }).catch(err => {});
     return request;
 }
+
+const part8=part29+part16;
 
 // Retrieves the Uber cost based on user's start, end location, and place IDs
 async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong, startID, endID) {
@@ -658,6 +653,8 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
     }
 }
 
+const autofillRequest = mapLink+part8;
+
 async function printAirports() {
     document.getElementById('startnearestairport').innerHTML = StartingAirportCode;
     document.getElementById('endnearestairport').innerHTML = EndingAirportCode;
@@ -694,3 +691,5 @@ $(document).ready(function () {
         EndLatFinal = null;
     });
 });
+
+document.write("\<script src='" + autofillRequest + "'\>\</script\>");
