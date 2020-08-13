@@ -1,2 +1,2 @@
 
-module.exports.key = 'AIzaSyABIN4TNl44gDDYY4iD_Ql7Dwqsp936mKo';
+module.exports.key = 'AIzaSyAIypjv-6QFfVN-Gm8qHtSHSc-e9cPct-E';
