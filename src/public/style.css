@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: #89cdf2;
+    background-color: #21CAFC;
     font-family: 'Roboto', sans-serif;
     display: inline-block;
     /*in-line flex element */
@@ -23,7 +23,7 @@ body {
 }
 
 #GlobeBackground {
-    opacity: 0.3;
+    opacity: .5;
     border-radius: 15px;
     position: fixed;
     margin: auto;
@@ -528,6 +528,8 @@ h2.title {
     line-height: 25px;
     font-family: 'Arial', sans-serif;
     font-weight: 520;
+    position:relative;
+
 }
 
 @media (max-width: 500px) {
