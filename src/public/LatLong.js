@@ -592,17 +592,16 @@ async function GetUberCost(uberStartLat, uberStartLong, uberEndLat, uberEndLong,
                         'Content-type': 'application/json',
                     },
                     "body": JSON.stringify({
+                        "locale": "en",
                         'destination': {
                             "id": endID,
                             "latitude": uberEndLat,
-                            "locale": "en",
                             "longitude": uberEndLong,
                             "provider": "google_places"
                         },
                         "origin": {
                             "id": startID,
                             'latitude': uberStartLat,
-                            "locale": "en",
                             "longitude": uberStartLong,
                             "provider": "google_places"
                         }
