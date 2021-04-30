@@ -147,6 +147,30 @@ table {
     width: 800px;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #uber {
+        display: block;
+        margin: 0 auto;
+        width: 85px;
+        max-height: 30px;
+    }
+
+    #lyft {
+        display: block;
+        margin: 0 auto;
+        width: 70px;
+        max-height: 40px;
+
+    }
+
+    #planePic {
+        display: block;
+        width: 120px;
+        margin: 0 auto;
+        max-height: 50px;
+    }
+}
+
 @-moz-document url-prefix() {
     #uber {
         display: block;
